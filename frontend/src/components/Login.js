@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { fetchUserProfile } from '../api/UserAPI';
+import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const Login = () => {
-  const [user, setUser] = useState(null);
+const LoginButton = () => {
+  const { loginWithRedirect, isLoading } = useAuth0();
 
-  useEffect(() => {
-    const loadUserProfile = async () => {
-      try {
-        const profileData = await fetchUserProfile('auth0|66e4aef1240d3d47021a4133');
-        setUser(profileData);
-      } catch (error) {
-        console.error('Error loading profile:', error);
-      }
-    };
-
-    loadUserProfile();
-  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>; // Display a loading indicator while checking the authentication status
+  }
 
   return (
-    <div>
-      {user ? <h1>Welcome, {user.name}</h1> : <p>Loading user data...</p>}
-    </div>
+    <button
+      onClick={() =>
+        loginWithRedirect({
+          authorizationParams: {
+            redirect_uri: 'http://localhost:3000/', // Change this to your redirect URL after login
+          },
+        })
+      }
+      className="navbutton"
+    >
+      Logg inn
+    </button>
   );
 };
 
-export default Login;
+export default LoginButton;

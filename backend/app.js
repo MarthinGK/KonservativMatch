@@ -11,13 +11,13 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse incoming JSON requests
-
+ 
 // Routes
 app.use('/users', usersRoutes);  // Attach users route
 app.use('/photos', photosRoutes); // Attach photos route
 app.use('/profile', profileRoutes); // Attach profile route
 
-// Serve static files (for profile photos, etc.)
+// Serve static files (for profile photos, etc.)l
 app.use('/images', express.static('public/images'));
 
 // Error handling middleware

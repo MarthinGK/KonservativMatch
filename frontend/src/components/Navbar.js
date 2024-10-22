@@ -4,9 +4,10 @@ import { Link, Navigate } from 'react-router-dom';
 import '../styles/NavBar.css';
 import LogoutButton from './LogoutButton';
 import { checkIfProfileIsComplete, checkUserInDB } from '../api/UserAPI';
+import LoginButton from './Login';
 
 const NavBar = () => {
-  const { isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const savedTheme = localStorage.getItem('theme');
   const [theme, setTheme] = useState(savedTheme || 'light');
@@ -61,17 +62,7 @@ const NavBar = () => {
           </li>
         ) : (
           <li>
-            <button
-              onClick={() => loginWithRedirect({
-                authorizationParams: {
-                  redirect_uri: 'http://localhost:3000/'
-                }
-              })}
-              className='navbutton'
-              style={{ backgroundColor: theme.backgroundColor, color: theme.color }}
-            >
-              Logg inn
-            </button>
+            <LoginButton />
           </li>
         )}
         <button onClick={toggleTheme}>
