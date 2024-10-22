@@ -1,0 +1,45 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 15px 30px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    transition: background-color 0.3s ease; /* For transition when scrolling */
+  }
+  
+  .navbar-logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+  
+  .navbar-menu li {
+    display: inline-block;
+  }
+  
+  .navbar-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-menu a:hover {
+    color: #b3b3b3; /* Lighter grey on hover */
+  }
+  
+  /* Optional: If you want the navbar to become more solid when scrolling */
+  .navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.9); /* Darker background when scrolled */
+  }
