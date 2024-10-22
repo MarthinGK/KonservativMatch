@@ -6,7 +6,7 @@ const pool = new Pool({
   host: 'localhost',
   database: 'konservativdatingdb',
   password: '1728',
-  port: 5432,  // Default port for PostgreSQL
+  port: 5432,  // Default port for PostgreSQL d
 });
 
 module.exports = pool;
