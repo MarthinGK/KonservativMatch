@@ -65,7 +65,7 @@ const PhotosUploadGrid = ({ userId }) => {
       try {
         await deleteProfilePhoto(userId, photos[index]); // Call API to delete photo
         const newPhotos = [...photos];
-        newPhotos[index] = null; // Clear the photo from the grid
+        newPhotos[index] = null; // Clear the photo from the grid 
         setPhotos(newPhotos);
       } catch (error) {
         console.error('Error deleting photo:', error);
