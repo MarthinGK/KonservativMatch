@@ -3,10 +3,6 @@ const pool = require('../config/db'); // Assuming you are using a PostgreSQL poo
 // Function to check if user exists or create a new one if not
 const checkOrCreateUser = async (req, res) => {
   const { userId, email } = req.body;
-
-  console.log('userController checkOrCreateUser - userId = ', userId);
-  console.log('userController checkOrCreateUser - email = ', email);
-
   try {
     // Check if the user exists in the database
     const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
@@ -31,20 +27,24 @@ const checkOrCreateUser = async (req, res) => {
 };
 
 // Function to get the profile completion status of a user
-const getProfileComplete = async (req, res) => {
-  const { userId } = req.query; // userId from query params
-
+const getProfileComplete = async (userId) => {
   try {
-    const result = await pool.query('SELECT profile_complete FROM users WHERE user_id = $1', [userId]);
+    const query = 'SELECT profile_complete FROM users WHERE user_id = $1';
+    const values = [userId];  // Array of values for the parameterized query
 
+    // Execute the query
+    const result = await pool.query(query, values);
+
+    // Check if user is found and return profile_complete
     if (result.rows.length > 0) {
-      res.status(200).json({ profile_complete: result.rows[0].profile_complete });
+      return result.rows[0].profile_complete;  // Return the profile_complete value
     } else {
-      res.status(404).json({ error: 'User not found' });
+      return null;  // Return null or handle if user is not found
     }
-  } catch (error) {
-    console.error('Error fetching profile_complete:', error);
-    res.status(500).json({ error: 'Database error' });
+
+  } catch (err) {
+    console.error('Error fetching profile_complete:', err);
+    throw err;  // You can handle this differently depending on your error-handling logic
   }
 };
 

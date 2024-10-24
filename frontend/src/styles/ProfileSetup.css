@@ -1,124 +1,86 @@
 /* Profile Setup Page Styles */
-.profile-setup-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .profile-setup-card {
-    background-color: var(--background-color);
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
-  }
-  
-  .profile-setup-header {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-    color: var(--text-color);
-  }
-  
-  .profile-setup-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid var(--button-bg-color);
-    border-radius: 5px;
-    background-color: var(--input-bg-color);
-    color: var(--input-text-color);
-  }
-  
-  .profile-setup-button {
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.15s ease-in-out;
-    width: 100%;
-  }
-  
-  .profile-setup-button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-  }
-  
-  .profile-setup-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  /* Progress Bar Styles */
-  .profile-setup-progress {
-    height: 10px;
-    background-color: #e0e0e0;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  
-  .profile-setup-progress-bar {
-    height: 100%;
-    background-color: var(--button-bg-color);
-    width: 0%; /* Set dynamically */
-    transition: width 0.3s ease-in-out;
-    border-radius: 5px;
-  }
-  
-  /* File Upload Styles */
-  .profile-photo-upload {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
-  .profile-photo-preview {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    border: 2px solid var(--button-bg-color);
-  }
-  
-  .profile-photo-upload-button {
-    padding: 10px 20px;
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.15s ease-in-out;
-  }
-  
-  .profile-photo-upload-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    margin-bottom: 10px;
-    font-size: 0.9em;
-    text-align: center;
-  }
-  
-  @media (max-width: 768px) {
-    .profile-setup-card {
-      padding: 20px;
-    }
-  
-    .profile-setup-header {
-      font-size: 1.2em;
-    }
-  }
-  
+.progress-bar {
+  width: 94%; 
+  background-color: #e0e0e0;
+  height: 12px;
+  margin-top: 98px;
+  margin-left: auto;  /* Auto margin for horizontal centering */
+  margin-right: auto; /* Auto margin for horizontal centering */
+  border-radius: 5px; 
+}
+
+.no-scroll {
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.progress {
+  height: 100%;
+  background-color: #007bff; /* Blue progress color */
+  transition: width 0.3s ease-in-out;
+  border-radius: 5px; /* Match the outer container rounding */
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease-in-out;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;  /* Stack items vertically */
+  justify-content: center;  /* Center items vertically */
+  align-items: center;  /* Center items horizontally */
+  height: 80vh;  /* Full viewport height */
+  text-align: center;  /* Optional: Center-align the text */
+}
+
+.slide .nextbutton {
+  background-color: #007bff;  /* Blue button color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease-in-out;
+  margin: 10px;
+}
+
+.slide .nextbutton:hover {
+  background-color: #0056b3;  /* Darker blue on hover */
+}
+
+.divider {
+  width: 20%;            /* Adjust the width as needed */
+  margin: 20px auto;      /* Adds margin to give space around the divider */
+  border: 0;             /* Remove default border */
+  height: 1px;           /* Thickness of the line */
+  background-color: #ccc; /* Color of the line */
+}
+
+input {
+  width: 15%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: none;
+  transition: box-shadow 0.3s ease-in-out;
+  margin-bottom: 20px;  /* Space between input and button */
+}
+
+input:focus {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}

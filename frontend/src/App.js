@@ -10,17 +10,19 @@ import Likes from './pages/Likes';
 import Search from './pages/Search';
 import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';
-import EmailVerificationPage from './pages/EmailVerificationPage';
+import EmailVerification from './pages/EmailVerification';
 import { checkUserInDB } from './api/UserAPI';
 import './styles/App.css'; // Global CSS styles
 
 function App() {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     const checkUser = async () => {
       if (isAuthenticated && user) {
+
         try {
+          await getAccessTokenSilently();
           // Await the result of the backend call to check or create user
           await checkUserInDB(user);  
           console.log('User check completed. user found: ', user.given_name);
@@ -43,7 +45,7 @@ function App() {
           <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><Messages /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><Likes /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
-          <Route path="/EmailVerification" element={<EmailVerificationPage />} />
+          <Route path="/EmailVerification" element={<EmailVerification />} />
         </Routes>
       </Router>
     </div>

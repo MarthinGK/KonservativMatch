@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Link, Navigate } from 'react-router-dom';
-import '../styles/NavBar.css';
-import LogoutButton from './LogoutButton';
-import { checkIfProfileIsComplete, checkUserInDB } from '../api/UserAPI';
-import LoginButton from './Login';
+import { Link } from 'react-router-dom';
+import '../styles/Navbar.css';
+import LogoutButton from './Logout';
+import { checkIfProfileIsComplete } from '../api/UserAPI'; // Add your API call for profile completion
 
-const NavBar = () => {
-  const { isAuthenticated, user } = useAuth0();
+const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, user } = useAuth0();
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const savedTheme = localStorage.getItem('theme');
   const [theme, setTheme] = useState(savedTheme || 'light');
@@ -29,13 +28,11 @@ const NavBar = () => {
   }, [theme]);
 
   useEffect(() => {
-    if (isAuthenticated && user && user.email_verified === false) {
-      return <Navigate to="/EmailVerification" />;
-    }
+    // Only check profile completeness if the user is authenticated
     if (isAuthenticated && user) {
       const fetchProfileStatus = async () => {
         const profileComplete = await checkIfProfileIsComplete(user);
-        setIsProfileComplete(profileComplete);
+        setIsProfileComplete(profileComplete);  // Set state based on response
       };
       fetchProfileStatus();
     }
@@ -44,33 +41,41 @@ const NavBar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link to="/" style={{ color: theme.color }}>KonservativMatch</Link>
+        <Link to="/" style={{ color: theme.color }}>Konservativdating</Link>
       </div>
 
+      {/* Only show if user is authenticated and profile is complete */}
       {isAuthenticated && isProfileComplete && (
         <div className="navbar-center">
-          <Link to="/search" className="nav-link">Søk</Link>
           <Link to="/likes" className="nav-link">Likes</Link>
-          <Link to="/messages" className="nav-link">Meldinger</Link>
+          <Link to="/messages" className="nav-link">Messages</Link>
+          <Link to="/search" className="nav-link">Search</Link>
         </div>
       )}
 
       <ul className="navbar-menu">
+        {isAuthenticated && user && (
+          <li>
+            <span style={{ color: theme.color }}>Logged in as {user.name || 'User'}</span>
+          </li>
+        )}
         {isAuthenticated ? (
           <li>
             <LogoutButton />
           </li>
         ) : (
           <li>
-            <LoginButton />
+            <button onClick={() => loginWithRedirect()} className='navbutton' style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>
+              Login
+            </button>
           </li>
         )}
         <button onClick={toggleTheme}>
-          Tema
+          Toggle Theme
         </button>
       </ul>
     </nav>
   );
 };
 
-export default NavBar;
+export default Navbar;

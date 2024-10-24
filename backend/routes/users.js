@@ -14,14 +14,13 @@ router.get('/profile_complete', async (req, res) => {
   }
 
   try {
-    const profileComplete = await getProfileComplete(req);
+    const profileComplete = await getProfileComplete(userId);
     if (profileComplete !== null) {
       res.status(200).json({ profile_complete: profileComplete });
     } else {
       res.status(404).send('User not found');
     }
   } catch (error) {
-    console.error('Error fetching profile_complete status:', error);
     res.status(500).send(`Error fetching profile_complete status: ${error.message}`);
   }
 });

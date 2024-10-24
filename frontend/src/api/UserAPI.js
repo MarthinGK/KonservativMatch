@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL; // Assuming you have a configured environment variable
+const API_URL = 'http://localhost:5000/users'//process.env.REACT_APP_API_URL; // Assuming you have a configured environment variable
 
 // Check if user exists in the database, and create if not
 export const checkUserInDB = async (user) => {
@@ -18,13 +18,17 @@ export const checkUserInDB = async (user) => {
 
 // Check if user's profile is complete
 export const checkIfProfileIsComplete = async (user) => {
+  console.log("UserAPI.js checkIfProfileIsComplete param: ", user);
   try {
+    // Use params to send user.sub as a query parameter
     const response = await axios.get(`${API_URL}/profile_complete`, {
       params: { userId: user.sub }
     });
+
+    console.log("UserAPI.js checkIfProfileIsComplete response.data.profile_complete: ", response.data.profile_complete);
     return response.data.profile_complete;
   } catch (error) {
-    console.error('Error checking if profile is complete:', error);
+    console.error('Error UserAPI.js checkIfProfileIsComplete: ', error);
     throw error;
   }
 };
@@ -83,6 +87,17 @@ export const updateUserActivity = async (userId) => {
     await axios.post(`${API_URL}/update_activity`, { userId });
   } catch (error) {
     console.error('Error updating user activity:', error);
+    throw error;
+  }
+};
+
+export const saveUserProfile = async (profileData) => {
+  console.log("profile data: ", profileData);
+  try {
+    const response = await axios.post(`${API_URL}/profile`, profileData);
+    return response.data;
+  } catch (error) {
+    console.error('Error saving user profile:', error);
     throw error;
   }
 };

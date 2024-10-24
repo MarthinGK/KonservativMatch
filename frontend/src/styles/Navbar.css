@@ -1,45 +1,75 @@
 .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 15px 30px;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    transition: background-color 0.3s ease; /* For transition when scrolling */
-  }
-  
-  .navbar-logo a {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-  }
-  
-  .navbar-menu {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-  }
-  
-  .navbar-menu li {
-    display: inline-block;
-  }
-  
-  .navbar-menu a {
-    text-decoration: none;
-    color: white;
-    font-size: 18px;
-    transition: color 0.3s ease;
-  }
-  
-  .navbar-menu a:hover {
-    color: #b3b3b3; /* Lighter grey on hover */
-  }
-  
-  /* Optional: If you want the navbar to become more solid when scrolling */
-  .navbar.scrolled {
-    background-color: rgba(0, 0, 0, 0.9); /* Darker background when scrolled */
-  }
+  position: fixed;
+  top: 0;
+  width: 100%;
+  /* padding: 12px 30px; */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  display: flex;
+  justify-content: space-between; /* Ensure logo and menu are spaced evenly */
+  align-items: center; /* Center vertically */
+  z-index: 1000;
+}
+
+.navbar-logo a {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  margin-left: 150px;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 30px; /* Space between buttons */
+  margin-right: 150px;
+  padding: 0;
+  align-items: baseline;
+}
+
+.navbar-menu li {
+  display: inline-block;
+}
+
+.navbar-menu a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.navbar-menu a:hover {
+  color: #b3b3b3; /* Lighter grey on hover */
+}
+
+  /* Styling the Next/Back buttons */
+.navbutton {
+  background-color: #007bff;  /* Blue button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Button hover effect */
+.navbutton:hover {
+  background-color: #0056b3;  /* Darker blue on hover */
+}
+
+.navbar-center {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between the buttons */
+}
+
+.nav-link {
+  color: white;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #b3b3b3;
+}
