@@ -1,0 +1,39 @@
+/* Styling for the location dropdown container */
+.location-dropdown {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Label styling */
+  .location-dropdown label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--text-color); /* Uses the global text color based on the theme */
+  }
+  
+  /* Dropdown styling */
+  .location-dropdown select {
+    padding: 10px;
+    border: 2px solid var(--button-bg-color); /* Border color changes with theme */
+    border-radius: 5px;
+    background-color: var(--input-bg-color); /* Background color changes with theme */
+    color: var(--input-text-color); /* Text color changes with theme */
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  /* Dropdown option styling */
+  .location-dropdown option {
+    background-color: var(--input-bg-color);
+    color: var(--input-text-color);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .location-dropdown select {
+      width: 100%;
+    }
+  }  

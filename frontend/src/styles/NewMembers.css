@@ -1,0 +1,84 @@
+/* Container for new members */
+.new-members-container {
+    text-align: center;
+    margin-top: 100px; /* Adjusts based on navbar height */
+  }
+  
+  /* Wrapper for profile cards */
+  .profiles-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0 20px;
+  }
+  
+  /* Layout for profiles, with a gap between them */
+  .profiles {
+    display: flex;
+    gap: 20px;
+  }
+  
+  /* Individual profile styling */
+  .profile {
+    position: relative;
+    width: 200px; /* Adjust width as needed */
+    text-align: center;
+  }
+  
+  /* Styling for the profile picture */
+  .profile-picture {
+    width: 200px;
+    height: 267px; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  /* Background for the name and location */
+  .profile-background {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 123, 255, 0.5); /* Semi-transparent blue background */
+    padding: 5px 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  /* Styling for the name */
+  .profile-name {
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+  }
+  
+  /* Styling for the location */
+  .profile-location {
+    color: white;
+    font-size: 0.8em;
+    margin: 0;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+  }
+  
+  /* Styling for navigation buttons (arrows) */
+  .nextbutton {
+    background-color: #007bff; /* Blue button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.15s ease-in-out;
+    margin: 10px;
+  }
+  
+  .nextbutton:disabled {
+    background-color: grey; /* Disabled state for buttons */
+    cursor: not-allowed;
+  }
+  
