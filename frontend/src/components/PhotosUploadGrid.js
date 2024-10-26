@@ -1,36 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/PhotosUploadGrid.css'; // Assuming there's a CSS file for the grid styling
-import { uploadProfilePhoto, fetchProfilePhotos, deleteProfilePhoto } from '../api/PhotosAPI'; // Adjust API import as needed
+import React, { useEffect, useState } from 'react';
+import { uploadProfilePhoto, fetchProfilePhotos, deleteProfilePhoto } from '../api/PhotosAPI';  // Import API functions
+import '../styles/PhotosUploadGrid.css'; 
 
-const PhotosUploadGrid = ({ userId }) => {
-  const [photos, setPhotos] = useState(Array(6).fill(null)); // Grid with 6 slots
-  const [errorMessages, setErrorMessages] = useState(Array(6).fill(''));
+const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
+  const [errorMessages, setErrorMessages] = useState(Array(6).fill('')); // Initialize an array for error messages
 
   useEffect(() => {
-    // Fetch previously uploaded photos when component loads
-    const loadPhotos = async () => {
+    const fetchUserPhotos = async () => {
       try {
-        const fetchedPhotos = await fetchProfilePhotos(userId);
-        const newPhotos = [...photos];
-        fetchedPhotos.forEach((photoUrl, index) => {
-          if (index < 6) {
-            newPhotos[index] = photoUrl;
-          }
-        });
-        setPhotos(newPhotos);
+        const fetchedPhotos = await fetchProfilePhotos(photosData.userId);
+        setPhotosData((prevState) => ({ 
+          ...prevState, 
+          photoUrls: fetchedPhotos // Store URLs in the state
+        }));
       } catch (error) {
-        console.error('Error fetching profile photos:', error);
+        console.error('Error fetching user photos:', error);
       }
     };
 
-    loadPhotos();
-  }, [userId]);
+    fetchUserPhotos();
+  }, [photosData.userId, setPhotosData]);
 
-  const handlePhotoUpload = async (index, event) => {
+  // Handle photo upload
+  const handlePhotosUpload = async (index, event) => {
     const file = event.target.files[0];
     const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
-    // Validate file type
+    // Validate file type and show error for specific grid slot
     if (!file || !validImageTypes.includes(file.type)) {
       const newErrorMessages = [...errorMessages];
       newErrorMessages[index] = 'Invalid file type. Please upload valid images (JPEG, PNG).';
@@ -43,15 +39,20 @@ const PhotosUploadGrid = ({ userId }) => {
     newErrorMessages[index] = '';
     setErrorMessages(newErrorMessages);
 
-    // Upload the file to the server immediately
+    // Upload the file immediately to the server
     try {
-      const response = await uploadProfilePhoto(userId, file);
-      const uploadedPhotoUrl = response.photos[0]; // Assuming backend returns an array of uploaded photos
+      const response = await uploadProfilePhoto(photosData.userId, file);
+      const uploadedPhotoUrl = response.photos[0]; // Assuming the backend returns an array of uploaded photos
+      console.log("RESPONSE 46: ", response.photos[0])
 
-      // Update photos state with the new photo URL
-      const newPhotos = [...photos];
-      newPhotos[index] = uploadedPhotoUrl;
-      setPhotos(newPhotos);
+      // Update photoUrls state with the new photo URL
+      const newPhotoUrls = [...photosData.photoUrls];
+      newPhotoUrls[index] = uploadedPhotoUrl; // Store the uploaded photo URL
+
+      const newPhotos = [...photosData.photos];
+      newPhotos[index] = file; // Keep the file for display purpose in the grid
+      setPhotosData({ ...photosData, photoUrls: newPhotoUrls, photos: newPhotos });
+
     } catch (error) {
       console.error('Error uploading photo:', error);
       const newErrorMessages = [...errorMessages];
@@ -60,49 +61,180 @@ const PhotosUploadGrid = ({ userId }) => {
     }
   };
 
-  const handleRemovePhoto = async (index) => {
-    if (photos[index]) {
-      try {
-        await deleteProfilePhoto(userId, photos[index]); // Call API to delete photo
-        const newPhotos = [...photos];
-        newPhotos[index] = null; // Clear the photo from the grid 
-        setPhotos(newPhotos);
-      } catch (error) {
-        console.error('Error deleting photo:', error);
-      }
+  // Handle photo removal
+  const handlePhotoRemove = async (index) => {
+    const photoToDelete = photosData.photoUrls[index]; 
+    try {
+      await deleteProfilePhoto(photosData.userId, photoToDelete);
+
+      // Update state after removing the photo
+      const updatedPhotoUrls = [...photosData.photoUrls];
+      updatedPhotoUrls[index] = null;
+
+      const updatedPhotos = [...photosData.photos];
+      updatedPhotos[index] = null;
+
+      setPhotosData({ ...photosData, photoUrls: updatedPhotoUrls, photos: updatedPhotos });
+      
+    } catch (error) {
+      console.error('Error deleting photo:', error);
     }
   };
 
+  
   return (
-    <div className="photos-upload-grid">
-      {photos.map((photo, index) => (
-        <div key={index} className="photo-slot">
-          {photo ? (
-            <div className="photo-container">
-              <img src={`http://localhost:5000${photo}`} alt="Uploaded" className="uploaded-photo" />
-              <button className="remove-photo-button" onClick={() => handleRemovePhoto(index)}>
-                &times;
-              </button>
-            </div>
-          ) : (
-            <div className="photo-placeholder">
-              <label htmlFor={`photo-upload-${index}`} className="photo-upload-label">
-                +
-              </label>
-              <input
-                type="file"
-                id={`photo-upload-${index}`}
-                accept="image/*"
-                className="photo-upload-input"
-                onChange={(event) => handlePhotoUpload(index, event)}
-              />
-            </div>
-          )}
-          {errorMessages[index] && <p className="error-message">{errorMessages[index]}</p>}
-        </div>
-      ))}
+    <div className="image-upload-container">
+      <h2>Last opp profilbilder</h2>
+      <p>Profiler med flere bilder får mer oppmerksomhet. Du kan legge til flere bilder senere.</p>
+      <div className="image-grid">
+        {Array(6).fill(null).map((_, index) => (
+          <div key={index} className="image-slot">
+            {photosData.photos[index] ? (
+              <div className="image-wrapper">
+                <img 
+                  src={URL.createObjectURL(photosData.photos[index])} 
+                  alt={`Uploaded ${index}`} 
+                  className="uploaded-image" 
+                />
+                <button 
+                  className="remove-photo-button" 
+                  onClick={() => handlePhotoRemove(index)}
+                >
+                  X
+                </button>
+              </div>
+            ) : photosData.photoUrls && photosData.photoUrls[index] ? (
+              <div className="image-wrapper">
+                <img 
+                  src={`http://localhost:5000${photosData.photoUrls[index]}`} 
+                  alt={`Fetched ${index}`} 
+                  className="uploaded-image" 
+                />
+                <button 
+                  className="remove-photo-button" 
+                  onClick={() => handlePhotoRemove(index)}
+                >
+                  X
+                </button>
+              </div>
+            ) : (
+              <div>
+                <label className="image-placeholder">
+                  <input 
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handlePhotosUpload(index, e)}
+                    className="image-input"
+                  />
+                  +
+                </label>
+                {/* Display error message for this specific slot */}
+                {errorMessages[index] && <p style={{ color: 'red' }}>{errorMessages[index]}</p>}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
 export default PhotosUploadGrid;
+
+// import React, { useEffect, useState } from 'react';
+// import { fetchProfilePhotos } from '../api/PhotosAPI';
+// import '../styles/PhotosUploadGrid.css'; 
+
+// const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
+//   // Fetch previously uploaded photos when the component loads
+//   const [photos, setPhotos] = useState(Array(6).fill(null)); // Grid with 6 slots
+//   const [errorMessages, setErrorMessages] = useState(Array(6).fill(''));
+
+//   useEffect(() => {
+//     const fetchUserPhotos = async () => {
+//       try {
+//         const fetchedPhotos = await fetchProfilePhotos(photosData.userId);
+//         console.log('Fetched photos: ', fetchedPhotos);
+//         setPhotosData((prevState) => ({ 
+//           ...prevState, 
+//           photoUrls: fetchedPhotos // Store URLs in the state
+//         }));
+//       } catch (error) {
+//         console.error('Error fetching user photos:', error);
+//       }
+//     };
+
+//     fetchUserPhotos();
+//   }, [photosData.userId, setPhotosData]);
+
+//   // Handle photo upload
+//   const handlePhotosUpload = (index, event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const newPhotos = [...photosData.photos];
+//       newPhotos[index] = file; // Store the file in the state for upload
+//       setPhotosData({ ...photosData, photos: newPhotos });
+//     }
+//   };
+
+//   // Handle photo removal
+//   const handlePhotoRemove = (index) => {
+//     const newPhotos = [...photosData.photos];
+//     newPhotos[index] = null; // Remove the photo from the state
+//     setPhotosData({ ...photosData, photos: newPhotos });
+//   };
+
+//   return (
+//     <div className="image-upload-container">
+//       <h2>Last opp profilbilder</h2>
+//       <p>Profiler med flere bilder får mer oppmerksomhet. Du kan legge til flere bilder senere.</p>
+//       <div className="image-grid">
+//         {Array(6).fill(null).map((_, index) => (
+//           <div key={index} className="image-slot">
+//             {photosData.photos[index] ? (
+//               <div className="image-wrapper">
+//                 <img 
+//                   src={URL.createObjectURL(photosData.photos[index])} 
+//                   alt={`Uploaded ${index}`} 
+//                   className="uploaded-image" 
+//                 />
+//                 <button 
+//                   className="remove-photo-button" 
+//                   onClick={() => handlePhotoRemove(index)}
+//                 >
+//                   X
+//                 </button>
+//               </div>
+//             ) : photosData.photoUrls && photosData.photoUrls[index] ? (
+//               <div className="image-wrapper">
+//                 <img 
+//                   src={`../../../backend${photosData.photoUrls[index]}`} 
+//                   alt={`Fetched ${index}`} 
+//                   className="uploaded-image" 
+//                 />
+//                 <button 
+//                   className="remove-photo-button" 
+//                   onClick={() => handlePhotoRemove(index)}
+//                 >
+//                   X
+//                 </button>
+//               </div>
+//             ) : (
+//               <label className="image-placeholder">
+//                 <input 
+//                   type="file"
+//                   accept="image/*"
+//                   onChange={(e) => handlePhotosUpload(index, e)}
+//                   className="image-input"
+//                 />
+//                 +
+//               </label>
+//             )}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PhotosUploadGrid;

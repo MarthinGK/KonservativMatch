@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { fetchNewMembers } from '../api/UserAPI'; // Import the function to fetch new members
-import '../styles/NewMembers.css'; // Custom CSS for the layout
-
+import { useAuth0 } from '@auth0/auth0-react';
+import '../styles/ExploreProfiles.css'; // Custom CSS for the layout
+import { Link } from 'react-router-dom';
 const NewMembers = () => {
   const [newMembers, setNewMembers] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const profilesPerPage = 3;
-
+  const { user, isAuthenticated } = useAuth0();
   useEffect(() => {
     // Fetch new members when the component loads
     const loadNewMembers = async () => {
-      try {
-        const fetchedMembers = await fetchNewMembers(); // Call the API to fetch new members
-        setNewMembers(fetchedMembers); // Store the new members in state
-        console.log("Fetched members: ", fetchedMembers);
-      } catch (error) {
-        console.error('Error fetching new member photos:', error);
+      if (isAuthenticated && user) {
+        try {
+          const response = await fetchNewMembers(user.sub); // Pass user_id (sub) from Auth0
+          setNewMembers(response);
+        } catch (error) {
+          console.error('Error fetching new members:', error);
+        }
       }
     };
 
@@ -34,25 +36,25 @@ const NewMembers = () => {
     }
   };
 
+
+
   return (
-    <div className="new-members-container">
-      <h2>New Members</h2>
-      <div className="profiles-wrapper">
+    <div className="exploreprofiles-topcontainer">
+      <h3>Nye medlemmer</h3>
+      <div className="exploreprofiles-wrapper">
         <button onClick={handlePrev} className="nav-button" disabled={startIndex === 0}>
           &#10094; {/* Left Arrow */}
         </button>
-        <div className="profiles">
+        <div className="exploreprofiles">
           {newMembers.slice(startIndex, startIndex + profilesPerPage).map((member, index) => (
-            <div className="profile" key={index}>
-              <img
-                src={`http://localhost:5000${member.photo_url}`}
-                alt={`${member.first_name}`}
-                className="profile-picture"
-              />
-              <div className="profile-background">
-                <p className="profile-name">{member.first_name}, {calculateAge(member.date_of_birth)}</p>
-                <p className="profile-location">{member.location}</p>
+            <div className="exploreprofile" key={index}>
+            <Link to={`/profile/${member.profile_id}`}>
+              <img src={`http://localhost:5000${member.photo_url}`} alt={`${member.first_name}`} className="profile-picture" />
+              <div className="exploreprofile-background">
+                <p className="exploreprofile-name">{member.first_name}, {calculateAge(member.date_of_birth)}</p>
+                <p className="exploreprofile-location">{member.location}</p>
               </div>
+            </Link>
             </div>
           ))}
         </div>

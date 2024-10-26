@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchActiveMembers } from '../api/UserAPI'; // Import the function to fetch active members
 import { useAuth0 } from "@auth0/auth0-react"; // Auth0 authentication hook
-import '../styles/NewMembers.css'; // Custom CSS for the layout
+import '../styles/ExploreProfiles.css'; // Custom CSS for the layout
+import { Link } from 'react-router-dom';
 
 const ActiveMembers = () => {
   const [activeMembers, setActiveMembers] = useState([]);
@@ -38,26 +39,24 @@ const ActiveMembers = () => {
   };
 
   return (
-    <div className="new-members-container">
-      <h2>Aktive Brukere</h2> {/* Active Users heading */}
-      <div className="profiles-wrapper">
+    <div className="exploreprofiles-container">
+      <h3>Aktive medlemmer</h3> {/* Active Users heading */}
+      <div className="exploreprofiles-wrapper">
         <button onClick={handlePrev} className="nav-button" disabled={startIndex === 0}>
           &#10094; {/* Left Arrow */}
         </button>
-        <div className="profiles">
-          {activeMembers.slice(startIndex, startIndex + profilesPerPage).map((member, index) => (
-            <div className="profile" key={index}>
-              <img
-                src={`http://localhost:5000${member.photo_url}`}
-                alt={`${member.first_name}`}
-                className="profile-picture"
-              />
-              <div className="profile-background">
-                <p className="profile-name">{member.first_name}, {calculateAge(member.date_of_birth)}</p>
-                <p className="profile-location">{member.location}</p>
+        <div className="exploreprofiles">
+        {activeMembers.slice(startIndex, startIndex + profilesPerPage).map((member, index) => (
+          <div className="exploreprofile" key={index}>
+            <Link to={`/profile/${member.profile_id}`}>
+              <img src={`http://localhost:5000${member.photo_url}`} alt={`${member.first_name}`} className="profile-picture" />
+              <div className="exploreprofile-background">
+                <p className="exploreprofile-name">{member.first_name}, {calculateAge(member.date_of_birth)}</p>
+                <p className="exploreprofile-location">{member.location}</p>
               </div>
-            </div>
-          ))}
+            </Link>
+          </div>
+        ))}
         </div>
         <button onClick={handleNext} className="nav-button" disabled={startIndex + profilesPerPage >= activeMembers.length}>
           &#10095; {/* Right Arrow */}

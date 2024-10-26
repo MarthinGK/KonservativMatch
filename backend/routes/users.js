@@ -1,11 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const { checkOrCreateUser, getProfileComplete } = require('../controllers/userController');
+const { checkOrCreateUser, 
+        getProfileComplete, 
+        saveUserProfile, 
+        getNewMembers, 
+        getActiveMembers, 
+        getCloseMembers
+      } = require('../controllers/userController');
 
 // Route to check or create a user
 router.post('/check', checkOrCreateUser);
 
+router.post('/profile', saveUserProfile);
+
 // Route to get profile complete status
+const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const profileComplete = await getProfileComplete(userId);
+      console.log("profile complete status 15: ", profileComplete)
+      if (profileComplete !== null) {
+        return profileComplete;
+      }
+    } catch (error) {
+      console.error('Error fetching profile_complete:', error);
+    }
+    await new Promise(resolve => setTimeout(resolve, delay)); // Delay between retries
+  }
+  throw new Error('User not found after multiple retries');
+};
+
+router.get('/new-members', getNewMembers);
+router.get('/active-members', getActiveMembers);
+router.get('/close-members', getCloseMembers);
+
+
 router.get('/profile_complete', async (req, res) => {
   const { userId } = req.query;
   
@@ -14,7 +43,7 @@ router.get('/profile_complete', async (req, res) => {
   }
 
   try {
-    const profileComplete = await getProfileComplete(userId);
+    const profileComplete = await retryCheckProfileComplete(userId);
     if (profileComplete !== null) {
       res.status(200).json({ profile_complete: profileComplete });
     } else {

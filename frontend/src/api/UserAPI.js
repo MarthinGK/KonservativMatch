@@ -33,43 +33,6 @@ export const checkIfProfileIsComplete = async (user) => {
   }
 };
 
-// Fetch new members based on user preferences
-export const fetchNewMembers = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/new_members`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching new members:', error);
-    throw error;
-  }
-};
-
-// Fetch active members based on user's gender
-export const fetchActiveMembers = async (userId) => {
-  try {
-    const response = await axios.get(`${API_URL}/active_members`, {
-      params: { user_id: userId },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching active members:', error);
-    throw error;
-  }
-};
-
-// Fetch close members (nearby) based on user's location
-export const fetchCloseMembers = async (userId) => {
-  try {
-    const response = await axios.get(`${API_URL}/close_members`, {
-      params: { user_id: userId },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching close members:', error);
-    throw error;
-  }
-};
-
 // Fetch user profile based on profile ID
 export const fetchUserProfile = async (profileId) => {
   try {
@@ -98,6 +61,47 @@ export const saveUserProfile = async (profileData) => {
     return response.data;
   } catch (error) {
     console.error('Error saving user profile:', error);
+    throw error;
+  }
+};
+
+// Fetch new members based on user preferences
+export const fetchNewMembers = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/new-members`, {
+      params: {
+        user_id: userId, // Pass the user's ID as a query parameter
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching new members:', error);
+    throw error;
+  }
+};
+
+// Fetch active members based on user's gender
+export const fetchActiveMembers = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/active-members`, {
+      params: { user_id: userId },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching active members:', error);
+    throw error;
+  }
+};
+
+// Fetch close members (nearby) based on user's location
+export const fetchCloseMembers = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/close-members`, {
+      params: { user_id: userId },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching close members:', error);
     throw error;
   }
 };

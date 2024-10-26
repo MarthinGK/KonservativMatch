@@ -1,0 +1,90 @@
+/* Container for new members */
+  .exploreprofiles-topcontainer {
+    text-align: center;
+    margin-top: 120px; /* Adjusts based on navbar height */
+  }
+
+  .exploreprofiles-container {
+    text-align: center;
+    margin-top: 50px; /* Adjusts based on navbar height */
+  }
+  
+  /* Wrapper for profile cards */
+  .exploreprofiles-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0 20px;
+  }
+  
+  /* Layout for profiles, with a gap between them */
+  .exploreprofiles {
+    display: flex;
+    gap: 20px;
+  }
+  
+  /* Individual profile styling */
+  .exploreprofile {
+    position: relative;
+    width: 200px; /* Adjust width as needed */
+    text-align: center;
+  }
+  
+  /* Styling for the profile picture */
+  .exploreprofile-picture {
+    width: 200px;
+    height: 267px;
+    object-fit: cover;
+    border-radius: 10px;
+    position: relative; /* Ensure relative positioning */
+  }
+  
+  /* Background for the name and location */
+  .exploreprofile-background {
+    position: absolute;
+    bottom: 0; /* Stick to the bottom of the container */
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 123, 255, 0.5);
+    padding: 5px 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-bottom: 3.5px; /* Adjust to move it up slightly */
+  }
+  
+  /* Styling for the name */
+  .exploreprofile-name {
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+  }
+  
+  /* Styling for the location */
+  .exploreprofile-location {
+    color: white;
+    font-size: 0.8em;
+    margin: 0;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+  }
+  
+  /* Styling for navigation buttons (arrows) */
+  .nextbutton {
+    background-color: #007bff; /* Blue button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.15s ease-in-out;
+    margin: 10px;
+  }
+  
+  .nextbutton:disabled {
+    background-color: grey; /* Disabled state for buttons */
+    cursor: not-allowed;
+  }
+  

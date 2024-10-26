@@ -1,10 +1,13 @@
 import NewMembers from '../components/NewMembers';
+import ActiveMembers from '../components/ActiveMembers';
+import CloseMembers from '../components/CloseMembers';
 
 const Explore = ({ userId }) => {
   return (
     <div>
       <NewMembers userId={userId} />
-      {/* Other sections for explore page */}
+      <CloseMembers userId={userId} />
+      <ActiveMembers userId={userId} />
     </div>
   );
 };

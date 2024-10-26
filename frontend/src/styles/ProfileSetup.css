@@ -36,6 +36,32 @@ button:hover {
   background-color: #0056b3;
 }
 
+.profileSetupSelectButton {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  background-color: white;
+  border: 1px solid #ccc; /* Grey border */
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5); /* Grey shadow */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profileSetupSelectButton:hover {
+  background-color: white; /* Ensures no background color fills on hover */
+  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5); /* Blue shadow on edges */
+}
+/* Selected button style */
+.profileSetupSelectButton:focus {
+  background-color: #0057b31e; /* Light blue background on hover */
+  border-color: #0056b3; /* Light blue border on hover */
+  outline: none;
+  border-color: #007bff; /* Blue border */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Blue shadow */
+}
+
 .slide {
   display: flex;
   flex-direction: column;  /* Stack items vertically */
@@ -83,4 +109,69 @@ input {
 
 input:focus {
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.birthdateinput select {
+  width: 80px;
+  padding: 8px;
+  margin: 0 5px;
+  font-size: 16px;
+  border: 1px solid #007bff; /* Blue border */
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Blue shadow */
+  background-color: white;
+  color: #333;
+  appearance: none; /* Removes default arrow */
+  text-align: center;
+}
+
+.birthdateinput select:focus {
+  outline: none;
+  border-color: #0056b3; /* Darker blue for focus */
+  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5);
+}
+
+.birthdateinput select option {
+  color: #333;
+}
+
+.styled-slider {
+  width: 25%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+.styled-slider:hover {
+  background: #ccc;
+}
+
+.styled-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.styled-slider::-webkit-slider-thumb:hover {
+  background: #0056b3;
+  transform: scale(1.1);
+}
+
+.styled-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.styled-slider::-moz-range-thumb:hover {
+  background: #0056b3;
+  transform: scale(1.1);
 }

@@ -6,7 +6,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import LocationDropdown from "../components/LocationDropdown";
 import { checkIfProfileIsComplete } from "../api/UserAPI";
 import PhotosUploadGrid from "./PhotosUploadGrid";
-import { fetchProfilePhotos } from "../api/PhotosAPI";
+import { uploadProfilePhoto, fetchProfilePhotos } from "../api/PhotosAPI";
 
 const ProfileSetup = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -173,9 +173,11 @@ const ProfileSetup = () => {
       setStep(step + 1);
     }
   };
+
   const checkString = (field, errorMessage) => {
     if (!validateField(field, 'string')) {
       setErrorMessage(errorMessage);
+      setIsInputValid(false); // Keeps "Neste" disabled if validation fails
       return;
     }
   
@@ -202,12 +204,43 @@ const ProfileSetup = () => {
   
       // If there is at least one photo, proceed to the next step
       setStep(step + 1);
-      setErrorMessage('');
     } catch (error) {
       console.error('Error checking photos:', error);
       setErrorMessage('Error checking photos. Please try again.');
     }
   };
+
+  // const checkPhoto = async (errorMessage) => {
+  //   const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  
+  //   // Ensure at least one photo is uploaded
+  //   if (!photosData.photos || photosData.photos.length === 0) {
+  //     setErrorMessage('Please upload at least one photo.');
+  //     return;
+  //   }
+  
+  //   // Validate file types
+  //   const invalidFiles = photosData.photos.filter(photo => photo && !validImageTypes.includes(photo.type));
+  //   if (invalidFiles.length > 0) {
+  //     setErrorMessage('Invalid file type. Please upload valid images (JPEG, PNG).');
+  //     return;
+  //   }
+  
+  //   try {
+  //     // Upload all files at once
+  //     const formData = new FormData();
+  //     formData.append('user_id', profileData.userId); 
+  //     photosData.photos.forEach((photo, index) => {
+  //       if (photo) formData.append(`photos[${index}]`, photo);
+  //     });
+  
+  //     await uploadProfilePhoto(profileData.userId, formData); // Call API to upload
+  //     setStep(step + 1); // Proceed to next step
+  //   } catch (error) {
+  //     setErrorMessage('Error uploading photos, please try again.');
+  //   }
+  // };
+
   // Move to the next step
   const nextStep = () => {
     setStep(step + 1);
@@ -357,36 +390,37 @@ const ProfileSetup = () => {
       {step === 4 && (
         <div className="slide">
           <h2>Fødselsdato</h2>
-          <div className="dob-container">
+          <div className="birthdateinput">
+
             <select
-              name="month"
+              name="dag"
+              value={profileData.day}
+              onChange={(e) => setProfileData({ ...profileData, day: e.target.value })}
+            >
+              <option value="">Dag</option>
+              {[...Array(31)].map((_, index) => (
+                <option key={index} value={index + 1}>{index + 1}</option>
+              ))}
+            </select>
+
+            <select
+              name="måned"
               value={profileData.month}
               onChange={(e) => setProfileData({ ...profileData, month: e.target.value })}
             >
-              <option value="">Month</option>
-              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+              <option value="">Måned</option>
+              {["Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember"]
                 .map((month, index) => (
                   <option key={index} value={index + 1}>{month}</option>
                 ))}
             </select>
             
             <select
-              name="day"
-              value={profileData.day}
-              onChange={(e) => setProfileData({ ...profileData, day: e.target.value })}
-            >
-              <option value="">Day</option>
-              {[...Array(31)].map((_, index) => (
-                <option key={index} value={index + 1}>{index + 1}</option>
-              ))}
-            </select>
-            
-            <select
-              name="year"
+              name="år"
               value={profileData.year}
               onChange={(e) => setProfileData({ ...profileData, year: e.target.value })}
             >
-              <option value="">Year</option>
+              <option value="">År</option>
               {[...Array(100)].map((_, index) => (
                 <option key={index} value={new Date().getFullYear() - index}>
                   {new Date().getFullYear() - index}
@@ -406,16 +440,24 @@ const ProfileSetup = () => {
       {step === 5 && (
         <div className="slide">
           <h2>Er du mann eller kvinne?</h2>
-          <div className="profileSetup-buttons">
+          <div>
             <button
-              className={`profileSetup-button ${profileData.gender === 'Mann' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, gender: 'Mann' })}
+              className={`profileSetupSelectButton ${profileData.gender === 'Mann' ? 'selected' : ''}`}
+              onClick={() => {
+                setProfileData({ ...profileData, gender: 'Mann' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Mann
             </button>
             <button
-              className={`profileSetup-button ${profileData.gender === 'Kvinne' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, gender: 'Kvinne' })}
+              className={`profileSetupSelectButton ${profileData.gender === 'Kvinne' ? 'selected' : ''}`}
+              onClick={() => {
+                setProfileData({ ...profileData, gender: 'Kvinne' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Kvinne
             </button>
@@ -427,7 +469,7 @@ const ProfileSetup = () => {
             <button
               className="nextbutton"
               onClick={() => checkString('gender', 'Vennligst oppgi kjønn')}
-              disabled={!isInputValid}
+              disabled={!isInputValid} // Disables "Neste" if no gender is selected
             >
               Neste
             </button>
@@ -459,21 +501,21 @@ const ProfileSetup = () => {
     {step === 7 && (
     <div className="slide">
         <h2>Hva er ditt livssyn?</h2>
-        <div className="profileSetup-buttons">
+        <div>
         <button
-            className={`profileSetup-button ${profileData.religion === 'Ateist' ? 'selected' : ''}`}
+            className={`profileSetupSelectButton ${profileData.religion === 'Ateist' ? 'selected' : ''}`}
             onClick={() => setProfileData({ ...profileData, religion: 'Ateist' })}
         >
             Ateist
         </button>
         <button
-            className={`profileSetup-button ${profileData.religion === 'Agnostisk' ? 'selected' : ''}`}
+            className={`profileSetupSelectButton ${profileData.religion === 'Agnostisk' ? 'selected' : ''}`}
             onClick={() => setProfileData({ ...profileData, religion: 'Agnostisk' })}
         >
             Agnostisk
         </button>
         <button
-            className={`profileSetup-button ${profileData.religion === 'Kristen' ? 'selected' : ''}`}
+            className={`profileSetupSelectButton ${profileData.religion === 'Kristen' ? 'selected' : ''}`}
             onClick={() => setProfileData({ ...profileData, religion: 'Kristen' })}
         >
             Kristen
@@ -508,33 +550,33 @@ const ProfileSetup = () => {
       {step === 8 && (
         <div className="slide">
           <h2>Drikker du alkohol?</h2>
-          <div className="profileSetup-buttons">
+          <div>
             <button
-              className={`profileSetup-button ${profileData.alcohol === 'Aldri' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.alcohol === 'Aldri' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, alcohol: 'Aldri' })}
             > 
               Aldri
             </button>
             <button
-              className={`profileSetup-button ${profileData.alcohol === 'Sjeldent' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.alcohol === 'Sjeldent' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, alcohol: 'Sjeldent' })}
             >
               Sjeldent
             </button>
             <button
-              className={`profileSetup-button ${profileData.alcohol === 'Sosialt' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.alcohol === 'Sosialt' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, alcohol: 'Sosialt' })}
             >
               Sosialt
             </button>
             <button
-              className={`profileSetup-button ${profileData.alcohol === 'Ofte' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.alcohol === 'Ofte' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, alcohol: 'Ofte' })}
             >
               Ofte
             </button>
             <button
-              className={`profileSetup-button ${profileData.alcohol === 'Hver dag' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.alcohol === 'Hver dag' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, alcohol: 'Hver dag' })}
             >
               Hver dag
@@ -558,33 +600,33 @@ const ProfileSetup = () => {
       {step === 9 && (
         <div className="slide">
           <h2>Røyker du?</h2>
-          <div className="profileSetup-buttons">
+          <div>
             <button
-              className={`profileSetup-button ${profileData.smoking === 'Aldri' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.smoking === 'Aldri' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, smoking: 'Aldri' })}
             > 
               Aldri
             </button>
             <button
-              className={`profileSetup-button ${profileData.smoking === 'Sjeldent' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.smoking === 'Sjeldent' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, smoking: 'Sjeldent' })}
             >
               Sjeldent
             </button>
             <button
-              className={`profileSetup-button ${profileData.smoking === 'Sosialt' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.smoking === 'Sosialt' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, smoking: 'Sosialt' })}
             >
               Sosialt
             </button>
             <button
-              className={`profileSetup-button ${profileData.smoking === 'Ofte' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.smoking === 'Ofte' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, smoking: 'Ofte' })}
             >
               Ofte
             </button>
             <button
-              className={`profileSetup-button ${profileData.smoking === 'Hver dag' ? 'selected' : ''}`}
+              className={`profileSetupSelectButton ${profileData.smoking === 'Hver dag' ? 'selected' : ''}`}
               onClick={() => setProfileData({ ...profileData, smoking: 'Hver dag' })}
             >
               Hver dag
@@ -611,12 +653,12 @@ const ProfileSetup = () => {
           <input
             type="range"
             id="heightSlider"
-            //defaultValue={175}
             min={120}
             max={220}
             step={1}
             value={profileData.height}
             onChange={(e) => setProfileData({ ...profileData, height: e.target.value })}
+            className="styled-slider"
           />
           <div>
             <p>Høyde: {profileData.height || 175} cm</p>
@@ -648,7 +690,7 @@ const ProfileSetup = () => {
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
               className="nextbutton"
-              onClick={() => checkPhoto(photosData.photos, 'Vennligst last opp minst ett bilde')} // Pass the photos array
+              onClick={checkPhoto} // Call the new checkPhoto function
               disabled={!isInputValid}
             >
               Neste

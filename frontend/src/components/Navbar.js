@@ -54,11 +54,6 @@ const Navbar = () => {
       )}
 
       <ul className="navbar-menu">
-        {isAuthenticated && user && (
-          <li>
-            <span style={{ color: theme.color }}>Logged in as {user.name || 'User'}</span>
-          </li>
-        )}
         {isAuthenticated ? (
           <li>
             <LogoutButton />
@@ -71,7 +66,7 @@ const Navbar = () => {
           </li>
         )}
         <button onClick={toggleTheme}>
-          Toggle Theme
+          Tema
         </button>
       </ul>
     </nav>

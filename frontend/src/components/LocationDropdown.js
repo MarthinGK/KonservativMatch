@@ -1,40 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/LocationDropdown.css'; // Import custom CSS
+import React from 'react';
+import '../styles/LocationDropdown.css';
 
-const LocationDropdown = ({ onSelectLocation }) => {
-  const [counties, setCounties] = useState([]);
-  const [selectedCounty, setSelectedCounty] = useState('');
+const counties = [
+  'Agder', 
+  'Akershus', 
+  'Buskerud', 
+  'Finnmark', 
+  'Innlandet', 
+  'Møre og Romsdal', 
+  'Nordland', 
+  'Oslo', 
+  'Rogaland', 
+  'Telemark', 
+  'Troms', 
+  'Trøndelag', 
+  'Vestfold', 
+  'Vestland', 
+  'Østfold'
+];
 
-  // List of Norwegian counties (or any specific locations you want to include)
-  const norwegianCounties = [
-    'Oslo', 'Viken', 'Vestfold og Telemark', 'Agder', 'Rogaland', 
-    'Vestland', 'Møre og Romsdal', 'Trøndelag', 'Nordland', 'Troms og Finnmark'
-  ];
-
-  // Simulating a fetch from an API or external source to get the counties (you can replace this with real API call)
-  useEffect(() => {
-    setCounties(norwegianCounties);
-  }, []);
-
-  // Handle when a location is selected from the dropdown
+const LocationDropdown = ({ profileData, setProfileData }) => {
   const handleLocationChange = (e) => {
-    const selected = e.target.value;
-    setSelectedCounty(selected);
-    onSelectLocation(selected); // Send the selected location back to the parent component
+    setProfileData({ ...profileData, location: e.target.value });
   };
 
   return (
-    <div className="location-dropdown">
-      <label htmlFor="county">Velg Fylke (Choose County):</label>
-      <select id="county" value={selectedCounty} onChange={handleLocationChange}>
-        <option value="">Velg Fylke</option>
-        {counties.map((county, index) => (
-          <option key={index} value={county}>
-            {county}
+    <>
+    <div className='location-dropdown'>
+      <h2>Velg ditt fylke</h2>
+      <select
+        name="location"
+        value={profileData.location || ''}
+        onChange={handleLocationChange}
+        className="inputtext"
+      >
+        <option value="">Velg fylke</option>
+        {counties.map((location) => (
+          <option key={location} value={location}>
+            {location}
           </option>
         ))}
       </select>
-    </div>
+      </div>
+    </>
   );
 };
 
