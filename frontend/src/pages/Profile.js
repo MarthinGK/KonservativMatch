@@ -20,7 +20,7 @@ const ProfilePage = () => {
   }, [profileId]);
 
   if (!profileData) {
-    return <div>Loading...</div>; // Show loading state while fetching data
+    return <div>Loading...</div>; // Show loading state while fetching data 
   }
 
   return (

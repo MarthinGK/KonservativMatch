@@ -28,7 +28,7 @@ const IsProfileComplete = ({ children }) => {
     };
   
     checkUser();  // Call the async function
-  }, [isAuthenticated, user]);  // Dependencies array to trigger effect
+  }, [isAuthenticated, user]);  // Dependencies array to trigger effect 
 
   if (isLoading) return <div>Loading...</div>;
 

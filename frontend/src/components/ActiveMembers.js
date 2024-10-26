@@ -24,7 +24,7 @@ const ActiveMembers = () => {
       };
       loadActiveMembers();
     }
-  }, [isAuthenticated, user]); // Dependencies on user and authentication status
+  }, [isAuthenticated, user]); // Dependencies on user and authentication status 
 
   const handleNext = () => {
     if (startIndex + profilesPerPage < activeMembers.length) {

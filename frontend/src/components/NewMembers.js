@@ -66,7 +66,7 @@ const NewMembers = () => {
   );
 };
 
-// Helper function to calculate age from date of birth
+// Helper function to calculate age from date of birth 
 const calculateAge = (dob) => {
   const diffMs = Date.now() - new Date(dob).getTime();
   const ageDate = new Date(diffMs);

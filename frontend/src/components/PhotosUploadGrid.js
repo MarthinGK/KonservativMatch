@@ -61,7 +61,7 @@ const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
     }
   };
 
-  // Handle photo removal
+  // Handle photo removal 
   const handlePhotoRemove = async (index) => {
     const photoToDelete = photosData.photoUrls[index]; 
     try {

@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage }); // Define upload using the storage configuration
+const upload = multer({ storage }); // Define upload using the storage configuration 
 
 // Route to fetch profile photos by profile ID
 router.get('/profile/:profileId/photos', getProfilePhotosByProfileId);

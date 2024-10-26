@@ -5,7 +5,7 @@
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */ 
   gap: 10px;
   margin: 20px 0;
 }

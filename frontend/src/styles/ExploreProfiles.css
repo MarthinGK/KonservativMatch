@@ -84,7 +84,7 @@
   }
   
   .nextbutton:disabled {
-    background-color: grey; /* Disabled state for buttons */
+    background-color: grey; /* Disabled state for buttons */ 
     cursor: not-allowed;
   }
   

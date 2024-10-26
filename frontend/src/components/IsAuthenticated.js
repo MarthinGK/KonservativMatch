@@ -14,7 +14,7 @@ const IsAuthenticated = ({ children }) => {
     return <Navigate to="/" />; // Redirect to home if not authenticated
   }
 
-  return children; // Render the component if authenticated qwd 
+  return children; // Render the component if authenticated qwd  
 };
 
 export default IsAuthenticated;

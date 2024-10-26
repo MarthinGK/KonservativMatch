@@ -160,7 +160,7 @@ const getActiveMembers = async (req, res) => {
 
     const userGender = userResult.rows[0].gender;
 
-    // Fetch members with the opposite gender, ensure created_at is not null
+    // Fetch members with the opposite gender, ensure created_at is not null 
     const result = await pool.query(`
       SELECT users.profile_id, 
              users.first_name, 

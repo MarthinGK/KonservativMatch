@@ -446,7 +446,7 @@ const ProfileSetup = () => {
               onClick={() => {
                 setProfileData({ ...profileData, gender: 'Mann' });
                 setErrorMessage(''); // Clear error when a valid selection is made
-                setIsInputValid(true); // Enable the "Neste" button
+                setIsInputValid(true); // Enable the "Neste" button 
               }}
             >
               Mann

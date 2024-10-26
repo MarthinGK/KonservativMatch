@@ -25,7 +25,7 @@ const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
     } catch (error) {
       console.error('Error fetching profile_complete:', error);
     }
-    await new Promise(resolve => setTimeout(resolve, delay)); // Delay between retries
+    await new Promise(resolve => setTimeout(resolve, delay)); // Delay between retries 
   }
   throw new Error('User not found after multiple retries');
 };

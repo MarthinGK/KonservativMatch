@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/photos'; // Assuming you have a configured environment variable
   
-  // Fetch user’s profile photos
+  // Fetch user’s profile photos 
   export const fetchProfilePhotos = async (userId) => {
     try {
       const response = await axios.get(`${API_URL}/${userId}`);

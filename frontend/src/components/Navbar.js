@@ -28,7 +28,7 @@ const Navbar = () => {
   }, [theme]);
 
   useEffect(() => {
-    // Only check profile completeness if the user is authenticated
+    // Only check profile completeness if the user is authenticated 
     if (isAuthenticated && user) {
       const fetchProfileStatus = async () => {
         const profileComplete = await checkIfProfileIsComplete(user);

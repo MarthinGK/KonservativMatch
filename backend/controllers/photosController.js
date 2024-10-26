@@ -27,7 +27,7 @@ const getProfilePhotosByProfileId = async (req, res) => {
 const addProfilePhoto = async (req, res) => {
   const { user_id } = req.body;
 
-  // Check if files are uploaded
+  // Check if files are uploaded 
   const files = req.files || [req.file];
   if (!files || files.length === 0) {
     return res.status(400).json({ error: 'No files uploaded' });

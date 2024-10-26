@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors()); // Enable CORS
-app.use(bodyParser.json()); // Parse incoming JSON requests
+app.use(bodyParser.json()); // Parse incoming JSON requests 
 
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));

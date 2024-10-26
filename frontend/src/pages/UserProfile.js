@@ -23,7 +23,7 @@ const UserProfile = () => {
   }, [profileId]);
 
   if (!profileData) {
-    return <div>Loading...</div>; // Show loading state while fetching data
+    return <div>Loading...</div>; // Show loading state while fetching data 
   }
 
   // Extract profile photos and remove the first (main) photo from the slider

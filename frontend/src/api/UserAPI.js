@@ -80,7 +80,7 @@ export const fetchNewMembers = async (userId) => {
   }
 };
 
-// Fetch active members based on user's gender
+// Fetch active members based on user's gender 
 export const fetchActiveMembers = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/active-members`, {

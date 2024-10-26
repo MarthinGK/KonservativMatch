@@ -5,7 +5,7 @@
   /* padding: 12px 30px; */
   background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
   display: flex;
-  justify-content: space-between; /* Ensure logo and menu are spaced evenly */
+  justify-content: space-between; /* Ensure logo and menu are spaced evenly */ 
   align-items: center; /* Center vertically */
   z-index: 1000;
 }
