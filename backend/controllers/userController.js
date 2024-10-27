@@ -230,6 +230,39 @@ const getCloseMembers = async (req, res) => {
   }
 };
 
+const getUserProfile = async (req, res) => {
+  const { profileId } = req.params;
+  try {
+    const userResult = await pool.query(
+      `SELECT users.first_name, 
+              users.last_name, 
+              users.location, 
+              users.height,
+              users.alcohol,
+              users.smoking, 
+              users.religion, 
+              users.date_of_birth, 
+              users.introduction, 
+              array_agg(profile_photos.photo_url) AS photos
+      FROM users
+      JOIN profile_photos ON users.user_id = profile_photos.user_id
+      WHERE users.profile_id = $1
+      GROUP BY users.user_id`, [profileId]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(userResult.rows[0]); // Return the user profile data with all photos
+  } catch (err) {
+    console.error('Error fetching user profile:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
+
+
 module.exports = {
   checkOrCreateUser, 
   getProfileComplete, 
@@ -237,5 +270,6 @@ module.exports = {
   saveUserProfile, 
   getNewMembers, 
   getActiveMembers,
-  getCloseMembers
+  getCloseMembers, 
+  getUserProfile
 };

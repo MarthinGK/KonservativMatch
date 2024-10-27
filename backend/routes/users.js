@@ -5,7 +5,8 @@ const { checkOrCreateUser,
         saveUserProfile, 
         getNewMembers, 
         getActiveMembers, 
-        getCloseMembers
+        getCloseMembers, 
+        getUserProfile
       } = require('../controllers/userController');
 
 // Route to check or create a user
@@ -33,6 +34,8 @@ const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
 router.get('/new-members', getNewMembers);
 router.get('/active-members', getActiveMembers);
 router.get('/close-members', getCloseMembers);
+
+router.get('/profile/:profileId', getUserProfile);
 
 
 router.get('/profile_complete', async (req, res) => {

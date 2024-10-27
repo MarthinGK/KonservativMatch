@@ -46,7 +46,7 @@ function App() {
           <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><Messages /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><Likes /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
-          <Route path="/profile" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/profile/:profileId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/EmailVerification" element={<EmailVerification />} />
         </Routes>
       </Router>

@@ -3,8 +3,17 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const usersRoutes = require('./routes/users'); // Import the users route
 const photosRoutes = require('./routes/photos'); // Import the photos route
+const searchRoutes = require('./routes/search');
 const pool = require('./config/db'); 
-// const profileRoutes = require('./routes/profile'); // Import the profile route
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 500, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests, please try again later.', // response message when limit is reached
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +21,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse incoming JSON requests 
+app.use(limiter);
 
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -19,6 +29,8 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Routes
 app.use('/users', usersRoutes);  // Attach users route
 app.use('/photos', photosRoutes); // Attach photos route
+app.use('/search', searchRoutes);
+
 
 // Serve static files (for profile photos, etc.)l
 app.use('/images', express.static('public/images'));
