@@ -1,4 +1,6 @@
 const pool = require('../config/db');
+const path = require('path');
+const fs = require('fs');
 
 // Fetch profile photos by profile ID
 const getProfilePhotosByProfileId = async (req, res) => {
@@ -94,14 +96,21 @@ const addProfilePhoto = async (req, res) => {
   // Delete a profile photo
   const deleteProfilePhoto = async (req, res) => {
     const { user_id, photo_url } = req.body;
+  
     try {
       // Remove the photo from the DB
       await pool.query('DELETE FROM profile_photos WHERE user_id = $1 AND photo_url = $2', [user_id, photo_url]);
   
-      // Optionally, delete the file from the server
-      const filePath = path.join(__dirname, '..', '..', photo_url);
+      // Delete the file from the server
+      const filePath = path.join(__dirname, '..', 'images', path.basename(photo_url));
+      console.log("file path: ", filePath);
+  
       fs.unlink(filePath, (err) => {
-        if (err) console.error('Error deleting file:', err);
+        if (err) {
+          console.error('Error deleting file:', err);
+        } else {
+          console.log('File deleted successfully');
+        }
       });
   
       res.json({ message: 'Photo deleted successfully' });

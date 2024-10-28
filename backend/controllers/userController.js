@@ -205,7 +205,8 @@ const getCloseMembers = async (req, res) => {
 
     // Fetch users of the opposite gender who are in the same location
     const result = await pool.query(`
-      SELECT users.first_name, 
+      SELECT users.profile_id, 
+             users.first_name, 
              users.date_of_birth, 
              users.gender, 
              users.location,

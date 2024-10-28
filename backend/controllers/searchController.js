@@ -20,6 +20,7 @@ const searchProfiles = async (req, res) => {
       // Construct the SQL query for search
       let query = `
         SELECT users.first_name, 
+               users.profile_id, 
                users.date_of_birth, 
                users.location, 
                profile_photos.photo_url,
