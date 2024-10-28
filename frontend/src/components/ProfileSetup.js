@@ -145,7 +145,7 @@ const ProfileSetup = () => {
     setStep(step + 1);
   };
 
-  const checkText = (field, errorMessage) => {
+  const checkIntroText = (field, errorMessage) => {
 
     if (introText === "") {
       setErrorMessage(errorMessage);
@@ -210,37 +210,6 @@ const ProfileSetup = () => {
     }
   };
 
-  // const checkPhoto = async (errorMessage) => {
-  //   const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  
-  //   // Ensure at least one photo is uploaded
-  //   if (!photosData.photos || photosData.photos.length === 0) {
-  //     setErrorMessage('Please upload at least one photo.');
-  //     return;
-  //   }
-  
-  //   // Validate file types
-  //   const invalidFiles = photosData.photos.filter(photo => photo && !validImageTypes.includes(photo.type));
-  //   if (invalidFiles.length > 0) {
-  //     setErrorMessage('Invalid file type. Please upload valid images (JPEG, PNG).');
-  //     return;
-  //   }
-  
-  //   try {
-  //     // Upload all files at once
-  //     const formData = new FormData();
-  //     formData.append('user_id', profileData.userId); 
-  //     photosData.photos.forEach((photo, index) => {
-  //       if (photo) formData.append(`photos[${index}]`, photo);
-  //     });
-  
-  //     await uploadProfilePhoto(profileData.userId, formData); // Call API to upload
-  //     setStep(step + 1); // Proceed to next step
-  //   } catch (error) {
-  //     setErrorMessage('Error uploading photos, please try again.');
-  //   }
-  // };
-
   // Move to the next step
   const nextStep = () => {
     setStep(step + 1);
@@ -256,8 +225,13 @@ const ProfileSetup = () => {
   };
 
   const cleanField = (value) => {
+    // Trim and replace multiple spaces with a single space
     const cleanedValue = value.trim().replace(/\s+/g, ' ');
-    return cleanedValue;
+  
+    // Check if the first character is a letter and convert to uppercase
+    return cleanedValue.charAt(0).match(/[a-zA-Z]/)
+      ? cleanedValue.charAt(0).toUpperCase() + cleanedValue.slice(1)
+      : cleanedValue;
   };
 
   const verifyDateStep = () => {
@@ -478,25 +452,29 @@ const ProfileSetup = () => {
       )}
       
       {step === 6 && (
-        <div className="slide">
+      <div className="slide">
         <LocationDropdown
           profileData={profileData}
           setProfileData={setProfileData}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}  // Pass setErrorMessage as a prop
+          isInputValid={isInputValid}
+          setIsInputValid={setIsInputValid}
         />
-          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
-          <div className="button-container">
-            <button className="nextbutton" onClick={prevStep}>Tilbake</button>
-            <button
-              className="nextbutton"
-              onClick={() => checkString('location', 'Vennligst oppgi et fylke')}
-              disabled={!isInputValid}
-            >
-              Neste
-            </button>
-          </div>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        <hr className="divider" />
+        <div className="button-container">
+          <button className="nextbutton" onClick={prevStep}>Tilbake</button>
+          <button
+            className="nextbutton"
+            onClick={() => checkString('location', 'Vennligst oppgi et fylke')}
+            disabled={!isInputValid}
+          >
+            Neste
+          </button>
         </div>
-      )}
+      </div>
+    )}
 
     {step === 7 && (
     <div className="slide">
@@ -504,19 +482,31 @@ const ProfileSetup = () => {
         <div>
         <button
             className={`profileSetupSelectButton ${profileData.religion === 'Ateist' ? 'selected' : ''}`}
-            onClick={() => setProfileData({ ...profileData, religion: 'Ateist' })}
+            onClick={() => {
+              setProfileData({ ...profileData, religion: 'Ateist' });
+              setErrorMessage(''); // Clear error when a valid selection is made
+              setIsInputValid(true); // Enable the "Neste" button
+            }}
         >
             Ateist
         </button>
         <button
             className={`profileSetupSelectButton ${profileData.religion === 'Agnostisk' ? 'selected' : ''}`}
-            onClick={() => setProfileData({ ...profileData, religion: 'Agnostisk' })}
+            onClick={() => {
+              setProfileData({ ...profileData, religion: 'Agnostisk' });
+              setErrorMessage(''); // Clear error when a valid selection is made
+              setIsInputValid(true); // Enable the "Neste" button
+            }}
         >
             Agnostisk
         </button>
         <button
             className={`profileSetupSelectButton ${profileData.religion === 'Kristen' ? 'selected' : ''}`}
-            onClick={() => setProfileData({ ...profileData, religion: 'Kristen' })}
+            onClick={() => {
+              setProfileData({ ...profileData, religion: 'Kristen' });
+              setErrorMessage(''); // Clear error when a valid selection is made
+              setIsInputValid(true); // Enable the "Neste" button
+            }}
         >
             Kristen
         </button>
@@ -553,31 +543,51 @@ const ProfileSetup = () => {
           <div>
             <button
               className={`profileSetupSelectButton ${profileData.alcohol === 'Aldri' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, alcohol: 'Aldri' })}
+              onClick={() => {
+                setProfileData({ ...profileData, alcohol: 'Aldri' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             > 
               Aldri
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.alcohol === 'Sjeldent' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, alcohol: 'Sjeldent' })}
+              onClick={() => {
+                setProfileData({ ...profileData, alcohol: 'Sjeldent' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Sjeldent
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.alcohol === 'Sosialt' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, alcohol: 'Sosialt' })}
+              onClick={() => {
+                setProfileData({ ...profileData, alcohol: 'Sosialt' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Sosialt
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.alcohol === 'Ofte' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, alcohol: 'Ofte' })}
+              onClick={() => {
+                setProfileData({ ...profileData, alcohol: 'Ofte' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Ofte
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.alcohol === 'Hver dag' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, alcohol: 'Hver dag' })}
+              onClick={() => {
+                setProfileData({ ...profileData, alcohol: 'Hver dag' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Hver dag
             </button>
@@ -603,31 +613,51 @@ const ProfileSetup = () => {
           <div>
             <button
               className={`profileSetupSelectButton ${profileData.smoking === 'Aldri' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, smoking: 'Aldri' })}
+              onClick={() => {
+                setProfileData({ ...profileData, smoking: 'Aldri' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             > 
               Aldri
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.smoking === 'Sjeldent' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, smoking: 'Sjeldent' })}
+              onClick={() => {
+                setProfileData({ ...profileData, smoking: 'Sjeldent' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Sjeldent
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.smoking === 'Sosialt' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, smoking: 'Sosialt' })}
+              onClick={() => {
+                setProfileData({ ...profileData, smoking: 'Sosialt' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Sosialt
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.smoking === 'Ofte' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, smoking: 'Ofte' })}
+              onClick={() => {
+                setProfileData({ ...profileData, smoking: 'Ofte' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Ofte
             </button>
             <button
               className={`profileSetupSelectButton ${profileData.smoking === 'Hver dag' ? 'selected' : ''}`}
-              onClick={() => setProfileData({ ...profileData, smoking: 'Hver dag' })}
+              onClick={() => {
+                setProfileData({ ...profileData, smoking: 'Hver dag' });
+                setErrorMessage(''); // Clear error when a valid selection is made
+                setIsInputValid(true); // Enable the "Neste" button
+              }}
             >
               Hver dag
             </button>
@@ -702,12 +732,10 @@ const ProfileSetup = () => {
       {step === 12 && (
         <div className="slide">
           <div>
-          <h2>Skriv en kort introduksjon om deg selv </h2>
+            <h2>Skriv litt om deg selv</h2>
           </div>
           <div>
-          <h4>
-            Ta gjerne med litt om hobbyer, bakgrunn og jobb
-          </h4>
+            <h4> Skriv gjerne litt om hobbyer, bakgrunn og jobb </h4>
           </div>
           <div style={{ position: 'relative' }}>
             <textarea
@@ -727,7 +755,7 @@ const ProfileSetup = () => {
               }}
             />
             <div style={{ position: 'absolute', bottom: '5px', right: '10px', color: '#999' }}>
-              {500 - introText.length} characters left
+              {500 - introText.length} tegn igjen
             </div>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
@@ -736,7 +764,7 @@ const ProfileSetup = () => {
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
               className="nextbutton"
-              onClick={() => checkText('introduction', 'Vennligst skriv en kort intro på mellom 50 og 500 tegn')}
+              onClick={() => checkIntroText('introduction', 'Vennligst skriv en kort intro på mellom 50 og 500 tegn')}
               disabled={!isInputValid}
             >
               Neste
@@ -749,7 +777,16 @@ const ProfileSetup = () => {
         <div className="slide">
         <h1>Gratulerer!</h1>
         <p>Du har fullført profilen din</p>
-        <button className="nextbutton" onClick={() => navigate('/')}>Begynn å utforsk</button>
+        <button
+          className="nextbutton"
+          onClick={() => {
+            setTimeout(() => {
+              window.location.reload(); 
+              navigate('/');
+            }, 500); 
+          }}
+        > Begynn å utforsk
+        </button>
         </div>
       )}
 

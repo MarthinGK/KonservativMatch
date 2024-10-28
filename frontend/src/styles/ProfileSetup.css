@@ -9,10 +9,6 @@
   border-radius: 5px; 
 }
 
-.no-scroll {
-  overflow: hidden; /* Prevent scrolling */
-}
-
 .progress {
   height: 100%;
   background-color: #007bff; /* Blue progress color */
@@ -42,16 +38,22 @@ button:hover {
   font-weight: bold;
   color: #333;
   background-color: white;
-  border: 1px solid #ccc; /* Grey border */
+  border: 1px solid #ccc;
   border-radius: 4px;
-  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5); /* Grey shadow */
+  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .profileSetupSelectButton:hover {
-  background-color: white; /* Ensures no background color fills on hover */
-  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5); /* Blue shadow on edges */
+  background-color: white;
+  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5);
+}
+
+.profileSetupSelectButton.selected {
+  background-color: #0057b31e; /* Light blue background when selected */
+  border-color: #0056b3;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 /* Selected button style */
 .profileSetupSelectButton:focus {

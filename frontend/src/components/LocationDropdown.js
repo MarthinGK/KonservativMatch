@@ -19,9 +19,11 @@ const counties = [
   'Østfold'
 ];
 
-const LocationDropdown = ({ profileData, setProfileData }) => {
+const LocationDropdown = ({ profileData, setProfileData, setErrorMessage, setIsInputValid}) => {
   const handleLocationChange = (e) => {
     setProfileData({ ...profileData, location: e.target.value });
+    setErrorMessage(''); // Clear error when a valid selection is made
+    setIsInputValid(true); 
   };
 
   return (

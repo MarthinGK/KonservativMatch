@@ -64,6 +64,7 @@ const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
   // Handle photo removal 
   const handlePhotoRemove = async (index) => {
     const photoToDelete = photosData.photoUrls[index]; 
+    console.log("photo to delete: ", photoToDelete);
     try {
       await deleteProfilePhoto(photosData.userId, photoToDelete);
 

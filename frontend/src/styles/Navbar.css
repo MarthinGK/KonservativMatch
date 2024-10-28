@@ -2,12 +2,12 @@
   position: fixed;
   top: 0;
   width: 100%;
-  /* padding: 12px 30px; */
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  background-color: rgb(28, 27, 27);
   display: flex;
-  justify-content: space-between; /* Ensure logo and menu are spaced evenly */ 
-  align-items: center; /* Center vertically */
+  justify-content: space-between;
+  align-items: center;
   z-index: 1000;
+  height: 9%;
 }
 
 .navbar-logo a {
@@ -21,10 +21,10 @@
 .navbar-menu {
   list-style: none;
   display: flex;
-  gap: 30px; /* Space between buttons */
+  gap: 30px;
   margin-right: 150px;
   padding: 0;
-  align-items: baseline;
+  align-items: center; /* Ensure all items, including profile photo, are centered */
 }
 
 .navbar-menu li {
@@ -72,4 +72,73 @@
 
 .nav-link:hover {
   color: #b3b3b3;
+}
+
+/* Profile photo in navbar */
+.nav-profile-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #007bff;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+
+/* Dropdown arrow */
+.nav-dropdown-arrow {
+  color: #007bff;
+  font-size: 14px;
+  margin-left: -6px;
+  cursor: pointer;
+}
+
+/* Dropdown menu */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: rgb(28, 27, 27);
+  min-width: 150px;
+  border-radius: 5px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1;
+}
+
+.nav-dropdown-menu a,
+.nav-dropdown-menu button {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  display: block;
+  text-align: left;
+  font-size: 16px;
+}
+
+.nav-dropdown-menu a:hover {
+  background-color: #007bff;
+  color: white;
+  border-radius: 3px;
+}
+
+.nav-logout-button {
+  background-color: #dc35467d;
+  width: 100%;
+  color: white;
+  border: none;
+  margin-left: -0.1px; /* Shift button 3px to the left */
+}
+
+.nav-logout-button:hover {
+  background-color: #c82333;
 }

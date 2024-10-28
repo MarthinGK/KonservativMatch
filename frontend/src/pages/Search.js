@@ -56,7 +56,7 @@ const Search = () => {
       {/* Filter Form */}
       <div className="search-filter-form">
         <label className="age-slider-container">
-          Age: {ageRange[0]} - {ageRange[1]}
+          Alder: {ageRange[0]} - {ageRange[1]}
           <Slider
             range
             min={18}
