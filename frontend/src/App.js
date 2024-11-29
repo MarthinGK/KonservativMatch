@@ -13,6 +13,7 @@ import IsProfileComplete from './components/IsProfileComplete';
 import EmailVerification from './pages/EmailVerification';
 import { checkUserInDB } from './api/UserAPI';
 import ProfilePage from './pages/Profile';
+import ProfileEditPage from './pages/EditProfilePage';
 import './styles/App.css'; // Global CSS styles
 
 function App() {
@@ -46,8 +47,10 @@ function App() {
           <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><Messages /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><Likes /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
-          <Route path="/profile/:profileId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/bruker/:brukerId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/EmailVerification" element={<EmailVerification />} />
+
+          <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
         </Routes>
       </Router>
     </div>

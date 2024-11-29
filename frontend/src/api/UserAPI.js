@@ -34,12 +34,27 @@ export const checkIfProfileIsComplete = async (user) => {
 };
 
 // Fetch user profile based on profile ID
-export const fetchUserProfile = async (profileId) => {
+export const fetchUserProfile = async (brukerId) => {
   try {
-    const response = await axios.get(`${API_URL}/profile/${profileId}`);
+    const response = await axios.get(`${API_URL}/bruker/${brukerId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+// Fetch user profile based on profile ID
+export const getPreviewProfile = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/preview-profile`, {
+      params: {
+        user_id: userId, // Pass the user's ID as a query parameter
+      },
+    });
+    return response.data; // The returned data now includes `position` for each photo
+  } catch (error) {
+    console.error('Error fetching previewProfile:', error);
     throw error;
   }
 };
@@ -102,6 +117,50 @@ export const fetchCloseMembers = async (userId) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching close members:', error);
+    throw error;
+  }
+};
+
+export const fetchUserIntroduction = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/${userId}/introduction`);
+    return response.data.introduction; // Return the introduction string
+  } catch (error) {
+    console.error('Error fetching user introduction:', error);
+    throw error;
+  }
+};
+
+// Save user introduction
+export const saveUserIntroduction = async (userId, introduction) => {
+  try {
+    await axios.post(`${API_URL}/introduction`, {
+      userId,
+      introduction,
+    });
+  } catch (error) {
+    console.error('Error saving user introduction:', error);
+    throw error;
+  }
+};
+
+export const fetchUserProfileByUserId = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user profile by user_id:', error);
+    throw error;
+  }
+};
+
+// Update user profile by user_id
+export const saveUserProfileByUserId = async (userId, profileData) => {
+  try {
+    const response = await axios.put(`${API_URL}/user/${userId}`, profileData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user profile by user_id:', error);
     throw error;
   }
 };

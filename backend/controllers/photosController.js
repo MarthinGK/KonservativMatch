@@ -26,35 +26,31 @@ const getProfilePhotosByProfileId = async (req, res) => {
   }
 };
 
-const addProfilePhoto = async (req, res) => {
-  const { user_id } = req.body;
+  const addProfilePhoto = async (req, res) => {
+    const { user_id, position } = req.body;
 
-  // Check if files are uploaded 
-  const files = req.files || [req.file];
-  if (!files || files.length === 0) {
-    return res.status(400).json({ error: 'No files uploaded' });
-  }
+    // Check if files are uploaded
+    const file = req.file; // Assuming a single file upload
 
-  try {
-    const fileUrls = [];
-    for (const file of files) {
-      const photo_url = `/images/${file.filename}`; // Ensure path format matches your setup
-      fileUrls.push(photo_url);
-
-      // Insert photo URL into the database
-      await pool.query(
-        'INSERT INTO profile_photos (user_id, photo_url) VALUES ($1, $2)',
-        [user_id, photo_url]
-      );
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
     }
-    res.status(201).json({ message: 'Photos uploaded successfully', photos: fileUrls });
-  } catch (err) {
-    console.error('Error adding profile photo:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-};
 
+    try {
+      const photo_url = `/images/${file.filename}`; // Generate the photo URL
 
+      // Insert the photo with the provided position
+      await pool.query(
+        'INSERT INTO profile_photos (user_id, photo_url, position) VALUES ($1, $2, $3)',
+        [user_id, photo_url, position]
+      );
+
+      res.status(201).json({ message: 'Photo uploaded successfully', photo_url, position });
+    } catch (err) {
+      console.error('Error adding profile photo:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  };
 
   const addProfilePhotos = async (req, res) => {
     const { user_id } = req.body;
@@ -80,18 +76,21 @@ const addProfilePhoto = async (req, res) => {
     }
   };
   
-  // Fetch profile photos by user ID
   const getProfilePhotos = async (req, res) => {
     const { user_id } = req.params;
-    console.log("87 userID: ", user_id)
+  
     try {
-      const result = await pool.query('SELECT photo_url FROM profile_photos WHERE user_id = $1', [user_id]);
-      res.json(result.rows.map(row => row.photo_url));  // Return array of photo URLs
+      const result = await pool.query(
+        'SELECT photo_url, position FROM profile_photos WHERE user_id = $1 ORDER BY position ASC',
+        [user_id]
+      );
+      res.json(result.rows); // Return photo URLs with positions
     } catch (err) {
       console.error('Error fetching profile photos:', err);
       res.status(500).json({ error: 'Database error' });
     }
   };
+  
   
   // Delete a profile photo
   const deleteProfilePhoto = async (req, res) => {
@@ -120,10 +119,32 @@ const addProfilePhoto = async (req, res) => {
     }
   };
 
+  const updatePhotoOrder = async (req, res) => {
+    const { user_id, photoOrder } = req.body;
+  
+    if (!Array.isArray(photoOrder) || photoOrder.length === 0) {
+      return res.status(400).json({ error: 'Invalid photo order.' });
+    }
+  
+    try {
+      // Update positions in the database
+      const query = 'UPDATE profile_photos SET position = $1 WHERE user_id = $2 AND photo_url = $3';
+      for (let i = 0; i < photoOrder.length; i++) {
+        await pool.query(query, [i, user_id, photoOrder[i]]);
+      }
+  
+      res.status(200).json({ message: 'Photo order updated successfully.' });
+    } catch (err) {
+      console.error('Error updating photo order:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  };
+
 module.exports = {
-  getProfilePhotos,
-  getProfilePhotosByProfileId,
+  getProfilePhotos, 
+  getProfilePhotosByProfileId, 
   addProfilePhoto, 
   deleteProfilePhoto, 
-  addProfilePhotos
+  addProfilePhotos, 
+  updatePhotoOrder
 };

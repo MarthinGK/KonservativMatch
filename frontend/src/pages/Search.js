@@ -96,7 +96,7 @@ const Search = () => {
       <div className="search-profiles-grid">
         {profiles.map((profile, index) => (
           <div className="search-exploreprofile" key={index}>
-            <Link to={`/profile/${profile.profile_id}`}>
+            <Link to={`/bruker/${profile.profile_id}`}>
               <img src={`http://localhost:5000${profile.photo_url}`} alt={`${profile.first_name}`} className="search-profile-picture" />
               <div className="search-exploreprofile-background">
                 <p className="search-exploreprofile-name">{profile.first_name}, {calculateAge(profile.date_of_birth)}</p>

@@ -1,0 +1,95 @@
+.profile-edit-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 60px;
+  }
+  
+  .toggle-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f0f0f0; /* Default background */
+    color: #333;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .toggle-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .toggle-button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .profile-content {
+    width: 100%;
+    max-width: 700px; /* Adjust as needed */
+  }
+  
+  .edit-profile-container {
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    width: 100%; /* Ensure full-width alignment */
+    max-width: 460px; /* Optional: Limit the container width */
+    margin: 0 auto; /* Center the container */
+    gap: 20px; /* Space between components */
+  }
+
+  .toggle-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    position: sticky; /* Makes the container stick in place */
+    top: 70px; /* Adjust based on the height of your main navbar */
+    background-color: #fff; /* Ensure it has a background to cover content behind */
+    z-index: 100; /* Keep it above other content */
+    padding: 10px 0; /* Add some padding for spacing */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Optional: Add a subtle shadow */
+  }
+
+  .secondary-navbar {
+    position: fixed;
+    top: 9%; /* Right below the main navbar (adjust if needed) */
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    gap: 10px;
+    background-color: rgb(35, 35, 35); /* Match main navbar color */
+    z-index: 999; /* Ensure it's above other content */
+    padding: -4px 0; /* Add some vertical padding */
+    box-shadow: 0 2px 5px rgba(244, 170, 170, 0.1); /* Optional shadow */
+    opacity: 97%;
+  }
+  
+  .secondary-button {
+    background-color: #f0f0f0; /* Default light background */
+    color: #333; /* Dark text */
+    font-size: 14px; /* Smaller font size */
+    padding: 6px 12px; /* Smaller padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .secondary-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .secondary-button.active {
+    background-color: #007bff;
+    color: white;
+  }

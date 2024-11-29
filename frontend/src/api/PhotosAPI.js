@@ -13,10 +13,11 @@ const API_URL = 'http://localhost:5000/photos'; // Assuming you have a configure
     }
   };
 
-  export const uploadProfilePhoto = async (userId, file) => {
+  export const uploadProfilePhoto = async (userId, file, position) => {
     const formData = new FormData();
     formData.append('user_id', userId);
-    formData.append('file', file);  // The 'file' key should match what multer expects
+    formData.append('file', file);
+    formData.append('position', position); // Include position
   
     try {
       const response = await axios.post(`${API_URL}/upload`, formData, {
@@ -27,8 +28,7 @@ const API_URL = 'http://localhost:5000/photos'; // Assuming you have a configure
       console.error('Error uploading profile photo:', error);
       throw error;
     }
-  };
-  
+  };  
 
   export const deleteProfilePhoto = async (userId, photoUrl) => {
     try {
@@ -38,6 +38,19 @@ const API_URL = 'http://localhost:5000/photos'; // Assuming you have a configure
       return response.data;  // Return the result of the deletion
     } catch (error) {
       console.error('Error deleting profile photo:', error);
+      throw error;
+    }
+  };
+
+  export const updatePhotoOrder = async (userId, photoOrder) => {
+    try {
+      const response = await axios.put(`${API_URL}/reorder`, {
+        user_id: userId,
+        photoOrder, // Array of photo URLs in the new order
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating photo order:', error);
       throw error;
     }
   };

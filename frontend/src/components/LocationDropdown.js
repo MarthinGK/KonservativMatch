@@ -19,7 +19,7 @@ const counties = [
   'Østfold'
 ];
 
-const LocationDropdown = ({ profileData, setProfileData, setErrorMessage, setIsInputValid}) => {
+const LocationDropdown = ({ profileData, setProfileData, setErrorMessage, setIsInputValid }) => {
   const handleLocationChange = (e) => {
     setProfileData({ ...profileData, location: e.target.value });
     setErrorMessage(''); // Clear error when a valid selection is made
@@ -27,7 +27,6 @@ const LocationDropdown = ({ profileData, setProfileData, setErrorMessage, setIsI
   };
 
   return (
-    <>
     <div className='location-dropdown'>
       <h2>Velg ditt fylke</h2>
       <select
@@ -43,8 +42,7 @@ const LocationDropdown = ({ profileData, setProfileData, setErrorMessage, setIsI
           </option>
         ))}
       </select>
-      </div>
-    </>
+    </div>
   );
 };
 

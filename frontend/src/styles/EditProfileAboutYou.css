@@ -1,0 +1,121 @@
+.about-you-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .about-you-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--input-bg-color);
+    transition: background-color 0.3s ease;
+  }
+  
+  .about-you-field:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Highlight on hover */
+  }
+  
+  .field-name {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  .field-value {
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .field-edit {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  
+  .field-input {
+    padding: 5px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+  }
+  
+  .save-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  .about-you-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .about-you-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .field-display {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .field-name {
+    font-weight: bold;
+  }
+  
+  .field-value {
+    cursor: pointer;
+    color: #007bff;
+  }
+  
+  .field-value:hover {
+    text-decoration: underline;
+  }
+  
+  .profileSetupSelectButton {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .profileSetupSelectButton.selected {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .profileSetupSelectButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .field-slider {
+    width: 100%;
+  }
+  

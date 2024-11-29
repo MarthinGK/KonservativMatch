@@ -5,7 +5,7 @@ import '../styles/Navbar.css';
 import { checkIfProfileIsComplete } from '../api/UserAPI';
 import { fetchProfilePhotos } from '../api/PhotosAPI';
 import LogoutButton from './Logout';
-import Default from '../images/Default.png'
+import Default from '../images/Default.png';
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, user } = useAuth0();
@@ -43,15 +43,23 @@ const Navbar = () => {
   useEffect(() => {
     if (isAuthenticated && user) {
       const fetchProfileStatus = async () => {
-        const profileComplete = await checkIfProfileIsComplete(user);
-        setIsProfileComplete(profileComplete);
+        try {
+          const profileComplete = await checkIfProfileIsComplete(user);
+          setIsProfileComplete(profileComplete);
 
-        const photos = await fetchProfilePhotos(user.sub);
-        console.log("photos.length: ", photos.length)
-        if (photos && photos.length > 0) {
-          setProfilePhoto(`http://localhost:5000${photos[0]}`); // Use the first profile photo
-        } else {
-          setProfilePhoto(defaultPhoto); // Set default photo if none found
+          const photos = await fetchProfilePhotos(user.sub);
+
+          // Find the photo with position 0 and set it as the profile photo
+          const primaryPhoto = photos.find((photo) => photo.position === 0);
+
+          if (primaryPhoto) {
+            setProfilePhoto(`http://localhost:5000${primaryPhoto.photo_url}`);
+          } else {
+            setProfilePhoto(defaultPhoto); // Set default photo if none found
+          }
+        } catch (error) {
+          console.error('Error fetching profile photos:', error);
+          setProfilePhoto(defaultPhoto);
         }
       };
       fetchProfileStatus();
@@ -96,14 +104,13 @@ const Navbar = () => {
             <span className="nav-dropdown-arrow">▼</span>
             {showDropdown && (
               <ul className="nav-dropdown-menu">
-                <li><Link to="/profile">Profile</Link></li>
-                <li><Link to="/account">Account</Link></li>
-                <li><Link to="/subscription">Subscription</Link></li>
-                <li><Link to="/security">Security</Link></li>
-                <li><Link to="/help">Help</Link></li>
+                <li><Link to="/profil">Profil</Link></li>
+                <li><Link to="/personlig-info">Brukerinfo</Link></li>
+                <li><Link to="/abonnement">Abonnement</Link></li>
+                <li><Link to="/sikkerhet">Sikkerhet</Link></li>
+                <li><Link to="/hjelp">Hjelp</Link></li>
                 <li>
-                  <LogoutButton className="nav-logout-button"/>
-
+                  <LogoutButton className="nav-logout-button" />
                 </li>
               </ul>
             )}

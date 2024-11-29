@@ -1,7 +1,14 @@
 const express = require('express');
 const multer = require('multer'); // Import multer
 const router = express.Router();
-const { addProfilePhotos, addProfilePhoto, getProfilePhotosByProfileId, getProfilePhotos, deleteProfilePhoto } = require('../controllers/photosController');
+const { 
+      addProfilePhotos, 
+      addProfilePhoto, 
+      getProfilePhotosByProfileId, 
+      getProfilePhotos, 
+      deleteProfilePhoto, 
+      updatePhotoOrder
+    } = require('../controllers/photosController');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,5 +33,7 @@ router.post('/upload', upload.single('file'), addProfilePhoto); // Maximum 6 pho
 router.get('/:user_id', getProfilePhotos);
 
 router.delete('/delete', deleteProfilePhoto);
+
+router.put('/reorder', updatePhotoOrder);
 
 module.exports = router;

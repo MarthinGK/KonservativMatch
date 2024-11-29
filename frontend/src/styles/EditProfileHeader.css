@@ -1,0 +1,44 @@
+  .edit-profile-main-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 550px;
+  }
+
+  .header-container-grid {
+    display: flex; /* Arrange items horizontally */
+    align-items: center; /* Align items vertically */
+    gap: 20px; /* Space between <h3> and the tip */
+    margin-top:50px;
+    margin-bottom: -10px; /* Add spacing below the header */
+    margin-left: -13px;
+  }
+  
+  .header-container-intro {
+    display: flex; /* Arrange items horizontally */
+    align-items: center; /* Align items vertically */
+    gap: 20px; /* Space between <h3> and the tip */
+    margin-bottom: -10px; /* Add spacing below the header */
+  }
+  
+  .tip-container {
+    display: flex; /* Arrange the lightbulb and text horizontally */
+    align-items: center; /* Center the icon and text vertically */
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--button-bg-color);
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Space around the content */
+    gap: 10px; /* Space between the icon and the text */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+  }
+  
+  .tip-container i {
+    color: #fbbc05; /* Lightbulb icon color (yellowish) */
+    font-size: 18px; /* Icon size */
+  }
+  
+  .tip-container p {
+    margin: 0; /* Remove default margin */
+    font-size: 14px; /* Adjust text size */
+    color: var(--text-color);
+  }

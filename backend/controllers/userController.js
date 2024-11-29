@@ -231,8 +231,40 @@ const getCloseMembers = async (req, res) => {
   }
 };
 
+const getPreviewProfile = async (req, res) => {
+  const { user_id } = req.query;
+  try {
+    const userResult = await pool.query(
+      `SELECT users.first_name, 
+              users.last_name, 
+              users.location, 
+              users.height,
+              users.alcohol,
+              users.smoking, 
+              users.religion, 
+              users.date_of_birth, 
+              users.introduction, 
+              json_agg(json_build_object('photo_url', profile_photos.photo_url, 'position', profile_photos.position)) AS photos
+       FROM users
+       JOIN profile_photos ON users.user_id = profile_photos.user_id
+       WHERE users.user_id = $1
+       GROUP BY users.user_id`, [user_id]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(userResult.rows[0]); // Return the user profile data with all photos and positions
+  } catch (err) {
+    console.error('Error fetching user profile:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
+
 const getUserProfile = async (req, res) => {
-  const { profileId } = req.params;
+  const { brukerId } = req.params;
   try {
     const userResult = await pool.query(
       `SELECT users.first_name, 
@@ -248,7 +280,7 @@ const getUserProfile = async (req, res) => {
       FROM users
       JOIN profile_photos ON users.user_id = profile_photos.user_id
       WHERE users.profile_id = $1
-      GROUP BY users.user_id`, [profileId]
+      GROUP BY users.user_id`, [brukerId]
     );
 
     if (userResult.rows.length === 0) {
@@ -262,7 +294,101 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+const getUserIntroduction = async (req, res) => {
+  const { userId } = req.params;
 
+  try {
+    const result = await pool.query('SELECT introduction FROM users WHERE user_id = $1', [userId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ introduction: result.rows[0].introduction });
+  } catch (err) {
+    console.error('Error fetching user introduction:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
+// Save user's introduction
+const saveUserIntroduction = async (req, res) => {
+  const { userId, introduction } = req.body;
+
+  try {
+    await pool.query('UPDATE users SET introduction = $1 WHERE user_id = $2', [introduction, userId]);
+    res.json({ message: 'Introduction updated successfully' });
+  } catch (err) {
+    console.error('Error saving user introduction:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
+const getUserProfileByUserId = async (req, res) => {
+  const { user_id } = req.params;
+
+  try {
+    const userResult = await pool.query(
+      `SELECT first_name, 
+              last_name, 
+              location, 
+              height, 
+              alcohol, 
+              smoking, 
+              religion, 
+              date_of_birth, 
+              introduction, 
+              array_agg(profile_photos.photo_url) AS photos
+       FROM users
+       LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+       WHERE users.user_id = $1
+       GROUP BY users.user_id`,
+      [user_id]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(userResult.rows[0]); // Return the user profile details
+  } catch (err) {
+    console.error('Error fetching user profile by user_id:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
+// Update user profile details by user_id
+const saveUserProfileByUserId = async (req, res) => {
+  const { user_id } = req.params;
+  const { first_name, last_name, location, height, alcohol, smoking, religion, date_of_birth, introduction } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE users
+       SET first_name = COALESCE($1, first_name),
+           last_name = COALESCE($2, last_name),
+           location = COALESCE($3, location),
+           height = COALESCE($4, height),
+           alcohol = COALESCE($5, alcohol),
+           smoking = COALESCE($6, smoking),
+           religion = COALESCE($7, religion),
+           date_of_birth = COALESCE($8, date_of_birth),
+           introduction = COALESCE($9, introduction)
+       WHERE user_id = $10
+       RETURNING *`,
+      [first_name, last_name, location, height, alcohol, smoking, religion, date_of_birth, introduction, user_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found or no changes made' });
+    }
+
+    res.json({ message: 'Profile updated successfully', data: result.rows[0] });
+  } catch (err) {
+    console.error('Error updating user profile by user_id:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
 
 module.exports = {
   checkOrCreateUser, 
@@ -270,7 +396,12 @@ module.exports = {
   updateUserActivity, 
   saveUserProfile, 
   getNewMembers, 
-  getActiveMembers,
+  getActiveMembers, 
   getCloseMembers, 
-  getUserProfile
+  getUserProfile, 
+  getPreviewProfile, 
+  getUserIntroduction,
+  saveUserIntroduction, 
+  getUserProfileByUserId,
+  saveUserProfileByUserId
 };

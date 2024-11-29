@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchUserProfile } from '../api/UserAPI'; // Assuming you have this function
-import '../styles/ProfilePage.css'; // Custom CSS for profile page
+import { getPreviewProfile } from '../../api/UserAPI'; // Assuming you have this function
+import '../../styles/ProfilePage.css'; // Custom CSS for profile page
+import '../../styles/EditProfileHeader.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-const ProfilePage = () => {
-  const { brukerId } = useParams();
+const EditProfilePreviewProfile = ({ userId }) => {
   const [profileData, setProfileData] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
@@ -14,22 +13,28 @@ const ProfilePage = () => {
   useEffect(() => {
     const loadProfileData = async () => {
       try {
-        const data = await fetchUserProfile(brukerId);
+        const data = await getPreviewProfile(userId);
+  
+        // Sort the photos by position
+        if (data.photos) {
+          data.photos.sort((a, b) => a.position - b.position);
+        }
+  
         setProfileData(data);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
     };
     loadProfileData();
-  }, [brukerId]);
+  }, [userId]);  
 
   if (!profileData) {
     return <div>Loading...</div>;
   }
 
   const { photos } = profileData || [];
-  const mainPhoto = photos && photos.length > 0 ? photos[0] : null;
-  const secondPhoto = photos && photos.length > 1 ? photos[1] : null;
+  const mainPhoto = photos && photos.length > 0 ? photos[0].photo_url : null;
+  const secondPhoto = photos && photos.length > 1 ? photos[1].photo_url : null;
   const paginatedPhotos = photos.slice(startIndex + 2, startIndex + 2 + imagesPerPage);
 
   const handleNext = () => {
@@ -122,10 +127,10 @@ const ProfilePage = () => {
             &#10094;
           </button>
           <div className="profilepage-photos-wrapper">
-            {paginatedPhotos.map((photoUrl, index) => (
+            {paginatedPhotos.map((photo, index) => (
               <img
                 key={index}
-                src={`http://localhost:5000${photoUrl}`}
+                src={`http://localhost:5000${photo.photo_url}`}
                 alt={`Additional ${startIndex + index + 3}`}
                 className="profilepage-additional-pic"
                 onClick={() => openPhoto(startIndex + index + 2)}
@@ -148,7 +153,7 @@ const ProfilePage = () => {
             &#10094;
           </button>
           <img
-            src={`http://localhost:5000${photos[selectedPhotoIndex]}`}
+            src={`http://localhost:5000${photos[selectedPhotoIndex].photo_url}`}
             alt="Selected"
             className="lightbox-photo"
             onClick={(e) => e.stopPropagation()}
@@ -170,4 +175,5 @@ const calculateAge = (dob) => {
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
 
-export default ProfilePage;
+export default EditProfilePreviewProfile;
+

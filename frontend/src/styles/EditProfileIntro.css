@@ -1,0 +1,69 @@
+  .intro-display-container {
+    width: 95%;
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--button-bg-color);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    opacity: 0.8;
+  }
+  
+  .intro-display-container:hover {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5);
+  }
+  
+  .intro-text {
+    font-size: 16px;
+    color: var(--text-color);
+  }
+  
+  .intro-text.placeholder {
+    color: #999; /* Placeholder text color */
+  }
+  
+  .intro-edit-container {
+    width: 550px;
+    display: flex;
+    align-items: center;
+    
+  }
+  
+  .intro-textarea {
+    width: 100%;
+    min-height: 80px;
+    font-size: 16px;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    resize: none;
+    outline: none;
+    margin-bottom: 10px;
+    min-height: 200px;
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--button-bg-color);
+    color: var(--text-color);
+  }
+  
+  .intro-textarea:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .save-intro-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .save-intro-button:hover {
+    background-color: #0056b3;
+  }
+  

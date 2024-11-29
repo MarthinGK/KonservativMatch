@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { uploadProfilePhoto, fetchProfilePhotos, deleteProfilePhoto } from '../api/PhotosAPI';  // Import API functions
-import '../styles/PhotosUploadGrid.css'; 
+import '../styles/SetupPhotosGrid.css'; 
 
 const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
   const [errorMessages, setErrorMessages] = useState(Array(6).fill('')); // Initialize an array for error messages
@@ -86,7 +86,7 @@ const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
   return (
     <div className="image-upload-container">
       <h2>Last opp profilbilder</h2>
-      <p>Profiler med flere bilder får mer oppmerksomhet. Du kan legge til flere bilder senere.</p>
+      <p>Profiler med flere bilder får mer oppmerksomhet</p>
       <div className="image-grid">
         {Array(6).fill(null).map((_, index) => (
           <div key={index} className="image-slot">
