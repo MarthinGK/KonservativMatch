@@ -3,7 +3,7 @@ import EditProfilePreviewProfile from '../components/editprofile/EditProfilePrev
 import EditProfilePhotosGrid from '../components/editprofile/EditProfilePhotosGrid';
 import EditProfileIntro from '../components/editprofile/EditProfileIntro';
 import EditProfileAboutYou from '../components/editprofile/EditProfileAboutYou';
-import '../styles/EditProfilePage.css'; // Add custom styles if needed
+import '../styles/editprofile/EditProfilePage.css'; // Add custom styles if needed
 import { useAuth0 } from '@auth0/auth0-react';
 
 const ProfileEditPage = () => {
@@ -31,8 +31,6 @@ const ProfileEditPage = () => {
           Forhåndsvis profil
         </button>
       </div>
-
-
       <div className="profile-content">
         {isEditing ? (
           <div className="edit-profile-container">

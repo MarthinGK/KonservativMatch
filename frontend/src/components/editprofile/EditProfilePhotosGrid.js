@@ -5,8 +5,8 @@ import {
   deleteProfilePhoto,
   updatePhotoOrder,
 } from '../../api/PhotosAPI';
-import '../../styles/EditProfilePhotosGrid.css';
-import '../../styles/EditProfileHeader.css';
+import '../../styles/editprofile/EditProfilePhotosGrid.css';
+import '../../styles/editprofile/EditProfileHeader.css';
 
 const EditProfilePhotosGrid = ({ userId }) => {
   const [photosData, setPhotosData] = useState({

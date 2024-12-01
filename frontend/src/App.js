@@ -11,9 +11,11 @@ import Search from './pages/Search';
 import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';
 import EmailVerification from './pages/EmailVerification';
-import { checkUserInDB } from './api/UserAPI';
+import { checkUserInDB, updateUserActivity } from './api/UserAPI';
 import ProfilePage from './pages/Profile';
+
 import ProfileEditPage from './pages/EditProfilePage';
+import EditAccountPage from './pages/EditAccountPage';
 import './styles/App.css'; // Global CSS styles
 
 function App() {
@@ -26,8 +28,10 @@ function App() {
         try {
           await getAccessTokenSilently();
           // Await the result of the backend call to check or create user
-          await checkUserInDB(user);  
-          console.log('User check completed. user found: ', user.given_name);
+          await checkUserInDB(user);
+          await updateUserActivity(user.sub);  
+          console.log('User check completed. given_name: ', user.given_name);
+          console.log('User check completed. used_id: ', user.sub);
         } catch (error) {
           console.error('Error checking/creating user:', error);
         }
@@ -51,6 +55,7 @@ function App() {
           <Route path="/EmailVerification" element={<EmailVerification />} />
 
           <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/personlig-info" element={<IsAuthenticated><IsProfileComplete><EditAccountPage /></IsProfileComplete></IsAuthenticated>} />
         </Routes>
       </Router>
     </div>

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const auth0Routes = require('./routes/auth0');
 const usersRoutes = require('./routes/users'); // Import the users route
 const photosRoutes = require('./routes/photos'); // Import the photos route
 const searchRoutes = require('./routes/search');
@@ -27,6 +28,7 @@ const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Routes
+app.use('/auth0', auth0Routes);
 app.use('/users', usersRoutes);  // Attach users route
 app.use('/photos', photosRoutes); // Attach photos route
 app.use('/search', searchRoutes);

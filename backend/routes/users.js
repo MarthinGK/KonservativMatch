@@ -11,7 +11,10 @@ const { checkOrCreateUser,
         getUserIntroduction, 
         saveUserIntroduction, 
         getUserProfileByUserId, 
-        saveUserProfileByUserId 
+        saveUserProfileByUserId, 
+        updateUserActivity, 
+        updateProfileActiveStatus, 
+        getProfileActiveStatus
       } = require('../controllers/userController');
 
 // Route to check or create a user
@@ -48,6 +51,11 @@ router.post('/introduction', saveUserIntroduction);
 
 router.get('/user/:user_id', getUserProfileByUserId);
 router.put('/user/:user_id', saveUserProfileByUserId);
+
+router.post('/update_activity', updateUserActivity);
+
+router.put('/profile-active/:user_id', updateProfileActiveStatus);
+router.get('/profile-active/:user_id', getProfileActiveStatus);
 
 router.get('/profile_complete', async (req, res) => {
   const { userId } = req.query;

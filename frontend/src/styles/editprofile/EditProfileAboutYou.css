@@ -1,0 +1,199 @@
+.about-you-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Unified spacing between fields */
+    min-width: 550px; /* Limit container width */
+    width: 100%;
+    margin: 0 auto;
+    margin-left: -45px;
+  }
+
+  .header-container-about {
+    display: flex; /* Arrange items horizontally */
+    align-items: center; /* Align items vertically */
+    gap: 20px; /* Space between <h3> and the tip */
+    margin-bottom: -30px; /* Add spacing below the header */
+  }
+
+  .about-you-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid var(--button-bg-color);
+    border-radius: 5px;
+    background-color: var(--input-bg-color); /* Use theme variable */
+    cursor: pointer; /* Make the field clickable */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .about-you-field:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Highlight on hover */
+    border: 1px solid var(--button-bg-color);
+  }
+  
+  .field-display {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .field-name {
+    font-weight: bold;
+    text-transform: capitalize;
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  .field-value {
+    cursor: pointer;
+  }
+  
+  .field-value:hover {
+    text-decoration: underline;
+  }
+  
+  .field-edit {
+    display: flex;
+    gap: 10px; /* Consistent spacing between edit elements */
+    align-items: center;
+    width: 100%;
+  }
+  
+  .field-input {
+    padding: 5px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+  }
+  
+  .profileSetupSelectButton {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .profileSetupSelectButton.selected {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .profileSetupSelectButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .field-slider {
+    flex: 1;
+    margin-right: 10px;
+    margin-top: 20px; /* Improved spacing for slider */
+    width: 300px; 
+  }
+  
+  .height-adjuster {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .height-display {
+    font-weight: bold;
+  }
+  
+  .save-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #0056b3;
+  }
+
+  .save-button-religion {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 30px;
+  }
+  
+  .save-button-religion:hover {
+    background-color: #0056b3;
+  }
+  
+  .field-dropdown {
+    display: flex;
+    justify-content: center; /* Horizontally center the dropdown */
+    align-items: center; /* Vertically center the dropdown */
+    height: 100%; /* Ensures alignment within the field's height */
+    gap: 5px;
+    width: 400px;
+  }
+  
+  .inputtext {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    text-align: center; /* Optional: Align the placeholder text in the dropdown */
+  }
+  
+  /* Hover effect for dropdown */
+  .inputtext:hover {
+    border-color: var(--button-bg-color);
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+  
+  /* Focused dropdown styling */
+  .inputtext:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Placeholder option styling */
+  .inputtext option[value=""] {
+    color: #aaa;
+  }
+  
+  /* Dropdown label */
+  .field-dropdown label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+    color: #333;
+  }
+
+  .custom-religion {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .custom-religion-input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .custom-religion-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  

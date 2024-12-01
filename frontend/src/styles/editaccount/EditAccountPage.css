@@ -1,0 +1,146 @@
+.account-info-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-top: 70px;
+    background-color: var(--background-color);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .header-container-account {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .header-container-account h3 {
+    color: var(--text-color);
+  }
+  
+  .account-info-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: var(--background-color);
+  }
+  
+  .account-info-field:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-color: #007bff;
+  }
+  
+  .field-display {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .field-name {
+    font-weight: bold;
+    color: var(--text-color);
+  }
+  
+  .field-value {
+    color: var(--text-color);
+    cursor: pointer;
+  }
+  
+  .field-edit {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-field {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+  }
+  
+  .dob-dropdown {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 5px;
+  }
+
+  .dob-spacing {
+    margin-left: 155px;
+  }
+  
+  .save-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: var(--background-color);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .confirm-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background-color: #d9534f;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .confirm-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .cancel-button:hover {
+    background-color: #c9302c;
+  }
+  

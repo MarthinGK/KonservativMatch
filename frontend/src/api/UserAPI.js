@@ -164,3 +164,25 @@ export const saveUserProfileByUserId = async (userId, profileData) => {
     throw error;
   }
 };
+
+export const updateProfileActiveStatus = async (userId, profileActive) => {
+  try {
+    const response = await axios.put(`${API_URL}/profile-active/${userId}`, {
+      profile_active: profileActive,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating profile active status:', error);
+    throw error;
+  }
+};
+
+export const fetchProfileActiveStatus = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/profile-active/${userId}`);
+    return response.data.profile_active; // Assuming the response has a profile_active field
+  } catch (error) {
+    console.error('Error fetching profile active status:', error);
+    throw error;
+  }
+};

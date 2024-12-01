@@ -52,6 +52,12 @@
     border-bottom-right-radius: 10px;
     margin-bottom: 3.5px; /* Adjust to move it up slightly */
   }
+
+  .info-text{
+    color: var(--input-text-color);
+    margin-left: 50px;
+    opacity: 85%;
+  }
   
   /* Styling for the name */
   .exploreprofile-name {

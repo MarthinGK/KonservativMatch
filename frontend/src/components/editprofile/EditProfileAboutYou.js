@@ -1,11 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fetchUserProfileByUserId, saveUserProfileByUserId } from '../../api/UserAPI';
-import '../../styles/EditProfileAboutYou.css';
+import '../../styles/editprofile/EditProfileAboutYou.css';
+
+const counties = [
+  'Agder',
+  'Akershus',
+  'Buskerud',
+  'Finnmark',
+  'Innlandet',
+  'Møre og Romsdal',
+  'Nordland',
+  'Oslo',
+  'Rogaland',
+  'Telemark',
+  'Troms',
+  'Trøndelag',
+  'Vestfold',
+  'Vestland',
+  'Østfold',
+];
 
 const EditProfileAboutYou = ({ userId }) => {
   const [fields, setFields] = useState(null);
   const [editField, setEditField] = useState(null); // Track which field is being edited
-  const [heightTempValue, setHeightTempValue] = useState(null); // Track temp height value
+  const [høydeTempValue, setHøydeTempValue] = useState(null); // Track temp høyde value
+  const [customReligion, setCustomReligion] = useState(''); // Track custom religion input
+  const containerRef = useRef(null); // Reference to the container
 
   // Fetch user profile on load
   useEffect(() => {
@@ -13,13 +33,16 @@ const EditProfileAboutYou = ({ userId }) => {
       try {
         const data = await fetchUserProfileByUserId(userId);
         setFields({
-          height: data.height || 170, // Default height if not set
-          smoking: data.smoking || '',
-          alcohol: data.alcohol || '',
-          religion: data.religion || '',
-          location: data.location || '',
+          høyde: data.height || 170,
+          røyker: data.smoking || '',
+          alkohol: data.alcohol || '',
+          livssyn: data.religion || '',
+          lokasjon: data.location || '',
         });
-        setHeightTempValue(data.height || 170); // Initialize temp height
+        setHøydeTempValue(data.height || 170);
+        if (data.religion === 'Annet' && data.custom_religion) {
+          setCustomReligion(data.custom_religion); // Load existing custom religion
+        }
       } catch (error) {
         console.error('Error fetching user profile:', error);
       }
@@ -29,59 +52,189 @@ const EditProfileAboutYou = ({ userId }) => {
 
   const handleFieldUpdate = async (field, value) => {
     try {
-      const updatedFields = { [field]: value };
+      const fieldToUpdate =
+        field === 'høyde'
+          ? 'height'
+          : field === 'lokasjon'
+          ? 'location'
+          : field === 'røyker'
+          ? 'smoking'
+          : field === 'alkohol'
+          ? 'alcohol'
+          : field === 'livssyn'
+          ? 'religion'
+          : field;
 
-      console.log('FIELD: ', field);
-      console.log('UPDATED FIELDS: ', updatedFields);
+      if (field === 'livssyn') {
+        if (value !== 'Annet') {
+          setCustomReligion(''); // Clear custom religion if not 'Annet'
+        }
+        // Save religion and custom religion to the backend
+        await saveUserProfileByUserId(userId, {
+          religion: value,
+          custom_religion: value === 'Annet' ? customReligion : null,
+        });
+      } else {
+        await saveUserProfileByUserId(userId, { [fieldToUpdate]: value });
+      }
 
-      await saveUserProfileByUserId(userId, updatedFields);
-      setFields((prevFields) => ({ ...prevFields, [field]: value }));
-      setEditField(null);
+      // Update the local state
+      setFields((prevFields) => ({
+        ...prevFields,
+        [field]: value,
+      }));
+
+      // Close the editing field
+      if (value !== 'Annet') {
+        setEditField(null);
+      }
     } catch (error) {
       console.error('Error saving user profile:', error);
     }
   };
 
-  const handleHeightSave = async () => {
+  const handleCustomReligionSave = async () => {
     try {
-      await saveUserProfileByUserId(userId, { height: heightTempValue });
-      setFields((prevFields) => ({ ...prevFields, height: heightTempValue }));
-      setEditField(null);
+      await saveUserProfileByUserId(userId, {
+        religion: customReligion
+      });
+      setFields((prevFields) => ({
+        ...prevFields,
+        livssyn: customReligion,
+      }));
+      setEditField(null); // Close the field
     } catch (error) {
-      console.error('Error saving height:', error);
+      console.error('Error saving custom religion:', error);
     }
   };
+
+  const handleHøydeSave = async () => {
+    try {
+      await saveUserProfileByUserId(userId, { height: høydeTempValue });
+      setFields((prevFields) => ({ ...prevFields, høyde: høydeTempValue }));
+      setEditField(null);
+    } catch (error) {
+      console.error('Error saving høyde:', error);
+    }
+  };
+
+  const handleClickOutside = (event) => {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
+      setEditField(null); // Close any open fields
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   if (!fields) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="about-you-container">
+    <div className="about-you-container" ref={containerRef}>
+      <div className="header-container-about">
+        <h3>Mer om deg</h3>
+      </div>
       {Object.entries(fields).map(([field, value]) => (
-        <div key={field} className="about-you-field">
+        <div
+          key={field}
+          className="about-you-field"
+          onClick={() => setEditField(field)} // Allow clicking anywhere
+        >
           <div className="field-display">
-            <span className="field-name">{field}:</span>
+            <span className="field-name">
+              {field === 'høyde'
+                ? 'Høyde'
+                : field === 'lokasjon'
+                ? 'Lokasjon'
+                : field}
+              :
+            </span>
             {editField === field ? (
               <div className="field-edit">
-                {field === 'height' ? (
+                {field === 'høyde' ? (
                   <div className="height-adjuster">
                     <input
                       type="range"
                       min="120"
                       max="220"
                       step="1"
-                      value={heightTempValue}
-                      onChange={(e) => setHeightTempValue(e.target.value)}
+                      value={høydeTempValue}
+                      onChange={(e) => setHøydeTempValue(e.target.value)}
                       className="field-slider"
                     />
-                    <span className="height-display">{heightTempValue} cm</span>
+                    <span className="height-display">{høydeTempValue} cm</span>
                     <button
                       className="save-button"
-                      onClick={handleHeightSave}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleHøydeSave();
+                      }}
                     >
                       Save
                     </button>
+                  </div>
+                ) : field === 'lokasjon' ? (
+                  <div className="field-dropdown">
+                    <select
+                      name="lokasjon"
+                      value={fields.lokasjon || ''}
+                      onChange={(e) => handleFieldUpdate('lokasjon', e.target.value)}
+                      className="inputtext"
+                    >
+                      <option value="">Velg fylke</option>
+                      {counties.map((county) => (
+                        <option key={county} value={county}>
+                          {county}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : field === 'livssyn' ? (
+                  <div className="button-group">
+                    {getOptionsForField(field).map((option) => (
+                      <button
+                        key={option}
+                        className={`profileSetupSelectButton ${
+                          value === option ? 'selected' : ''
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFieldUpdate('livssyn', option);
+                          if (option === 'Annet') {
+                            setEditField('livssyn');
+                          }
+                        }}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                    {value === 'Annet' && (
+                      <div className="custom-religion">
+                        <input
+                          type="text"
+                          maxLength="50"
+                          placeholder="Spesifiser"
+                          value={customReligion}
+                          onChange={(e) => setCustomReligion(e.target.value)}
+                          className="custom-religion-input"
+                        />
+                        <button
+                          className="save-button-religion"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCustomReligionSave();
+                          }}
+                        >
+                          Lagre
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="button-group">
@@ -91,7 +244,10 @@ const EditProfileAboutYou = ({ userId }) => {
                         className={`profileSetupSelectButton ${
                           value === option ? 'selected' : ''
                         }`}
-                        onClick={() => handleFieldUpdate(field, option)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFieldUpdate(field, option);
+                        }}
                       >
                         {option}
                       </button>
@@ -100,12 +256,7 @@ const EditProfileAboutYou = ({ userId }) => {
                 )}
               </div>
             ) : (
-              <span
-                className="field-value"
-                onClick={() => setEditField(field)}
-              >
-                {value}
-              </span>
+              <span className="field-value">{value || 'Set value'}</span>
             )}
           </div>
         </div>
@@ -117,11 +268,11 @@ const EditProfileAboutYou = ({ userId }) => {
 // Helper to get options for each field
 const getOptionsForField = (field) => {
   switch (field) {
-    case 'smoking':
+    case 'røyker':
       return ['Aldri', 'Sjeldent', 'Sosialt', 'Ofte', 'Hver dag'];
-    case 'alcohol':
+    case 'alkohol':
       return ['Aldri', 'Sjeldent', 'Sosialt', 'Ofte', 'Hver dag'];
-    case 'religion':
+    case 'livssyn':
       return ['Kristen', 'Ateist', 'Agnostisk', 'Muslim', 'Hindu', 'Annet'];
     default:
       return [];

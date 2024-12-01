@@ -336,7 +336,8 @@ const getUserProfileByUserId = async (req, res) => {
               alcohol, 
               smoking, 
               religion, 
-              date_of_birth, 
+              email,
+              TO_CHAR(date_of_birth, 'YYYY-MM-DD') AS date_of_birth, 
               introduction, 
               array_agg(profile_photos.photo_url) AS photos
        FROM users
@@ -390,6 +391,53 @@ const saveUserProfileByUserId = async (req, res) => {
   }
 };
 
+const updateProfileActiveStatus = async (req, res) => {
+  const { user_id } = req.params;
+  const { profile_active } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE users
+       SET profile_active = $1
+       WHERE user_id = $2
+       RETURNING profile_active`,
+      [profile_active, user_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found or no changes made' });
+    }
+
+    res.status(200).json({
+      message: 'Profile active status updated successfully',
+      profile_active: result.rows[0].profile_active,
+    });
+  } catch (err) {
+    console.error('Error updating profile active status:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
+const getProfileActiveStatus = async (req, res) => {
+  const { user_id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT profile_active FROM users WHERE user_id = $1',
+      [user_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ profile_active: result.rows[0].profile_active });
+  } catch (error) {
+    console.error('Error fetching profile active status:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
+
 module.exports = {
   checkOrCreateUser, 
   getProfileComplete, 
@@ -400,8 +448,10 @@ module.exports = {
   getCloseMembers, 
   getUserProfile, 
   getPreviewProfile, 
-  getUserIntroduction,
+  getUserIntroduction, 
   saveUserIntroduction, 
-  getUserProfileByUserId,
-  saveUserProfileByUserId
+  getUserProfileByUserId, 
+  saveUserProfileByUserId, 
+  updateProfileActiveStatus, 
+  getProfileActiveStatus
 };

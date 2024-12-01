@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchUserIntroduction, saveUserIntroduction } from '../../api/UserAPI';
-import '../../styles/EditProfileIntro.css'; // Custom styles for the intro box
+import '../../styles/editprofile/EditProfileIntro.css'; // Custom styles for the intro box
 
 const EditProfileIntro = ({userId}) => {
 
@@ -34,7 +34,7 @@ const EditProfileIntro = ({userId}) => {
   return (
     <div className="edit-profile-main-container">
       <div className="header-container-intro">
-        <h3>Litt om meg</h3>
+        <h3>Litt om deg</h3>
       </div>
       {isEditing ? (
         <div className="intro-edit-container">

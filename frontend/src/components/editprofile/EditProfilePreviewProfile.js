@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getPreviewProfile } from '../../api/UserAPI'; // Assuming you have this function
 import '../../styles/ProfilePage.css'; // Custom CSS for profile page
-import '../../styles/EditProfileHeader.css';
+import '../../styles/editprofile/EditProfileHeader.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const EditProfilePreviewProfile = ({ userId }) => {
