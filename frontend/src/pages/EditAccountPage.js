@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchUserProfileByUserId, saveUserProfileByUserId, fetchProfileActiveStatus, updateProfileActiveStatus } from '../api/UserAPI';
+import {
+  fetchUserProfileByUserId,
+  saveUserProfileByUserId,
+  fetchProfileActiveStatus,
+  updateProfileActiveStatus,
+} from '../api/UserAPI';
 import { updateUserEmail } from '../api/auth0API';
 import '../styles/editaccount/EditAccountPage.css';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -11,6 +16,7 @@ const EditAccountPage = () => {
   const [fields, setFields] = useState(null);
   const [profileActive, setProfileActive] = useState(true); // Track profile active status
   const [editField, setEditField] = useState(null); // Track which field is being edited
+  const [tempValues, setTempValues] = useState({}); // Temporary values for editable fields
   const [emailTempValue, setEmailTempValue] = useState('');
   const [dobTemp, setDobTemp] = useState({ day: '', month: '', year: '' }); // Temp date of birth
   const [showConfirmation, setShowConfirmation] = useState(false); // Confirmation modal visibility
@@ -24,11 +30,17 @@ const EditAccountPage = () => {
           fetchUserProfileByUserId(userId),
           fetchProfileActiveStatus(userId),
         ]);
-        console.log("USER DATE OF BIRTH: ", userData.date_of_birth);
+
         setFields({
-          navn: userData.first_name + ' ' + userData.last_name || '',
+          first_name: userData.first_name || '',
+          last_name: userData.last_name || '',
           epost: userData.email || '',
           fødselsdato: userData.date_of_birth || '',
+        });
+
+        setTempValues({
+          first_name: userData.first_name || '',
+          last_name: userData.last_name || '',
         });
 
         if (userData.date_of_birth) {
@@ -45,29 +57,22 @@ const EditAccountPage = () => {
     loadUserData();
   }, [userId]);
 
-  const handleFieldUpdate = async (field, value) => {
+  const handleSaveField = async (field) => {
     try {
-      const fieldToUpdate =
-        field === 'navn'
-          ? 'name'
-          : field === 'epost'
-          ? 'email'
-          : field === 'fødselsdato'
-          ? 'date_of_birth'
-          : field;
+      const fieldToUpdate = field === 'fødselsdato' ? 'date_of_birth' : field;
+      const value = tempValues[field];
 
-      if (field === 'epost' && isDatabaseUser) {
-        await updateUserEmail(userId, value);
-        setEmailTempValue(value);
-      } else if (field !== 'epost') {
-        await saveUserProfileByUserId(userId, { [fieldToUpdate]: value });
-      }
+      await saveUserProfileByUserId(userId, { [fieldToUpdate]: value });
 
       setFields((prevFields) => ({ ...prevFields, [field]: value }));
       setEditField(null);
     } catch (error) {
       console.error('Error saving user account info:', error);
     }
+  };
+
+  const handleChangeTempValue = (field, value) => {
+    setTempValues((prevValues) => ({ ...prevValues, [field]: value }));
   };
 
   const handleDateSave = async () => {
@@ -111,6 +116,24 @@ const EditAccountPage = () => {
     }
   };
 
+  const handleFieldUpdate = async (field, value) => {
+    try {
+      const fieldToUpdate = field === 'fødselsdato' ? 'date_of_birth' : field;
+
+      if (field === 'epost' && isDatabaseUser) {
+        await updateUserEmail(userId, value);
+        setEmailTempValue(value);
+      } else {
+        await saveUserProfileByUserId(userId, { [fieldToUpdate]: value });
+      }
+
+      setFields((prevFields) => ({ ...prevFields, [field]: value }));
+      setEditField(null);
+    } catch (error) {
+      console.error('Error saving user account info:', error);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -135,7 +158,7 @@ const EditAccountPage = () => {
         >
           <div className="field-display">
             <span className="field-name">
-            {field === 'first_name'
+              {field === 'first_name'
                 ? 'Fornavn'
                 : field === 'last_name'
                 ? 'Etternavn'
@@ -148,12 +171,13 @@ const EditAccountPage = () => {
             </span>
             {editField === field ? (
               <div className="field-edit">
+
                 {field === 'epost' ? (
                   isDatabaseUser ? (
                     <div>
                       <input
                         type="email"
-                        value={"userEmail"}
+                        value={emailTempValue}
                         onChange={(e) => setEmailTempValue(e.target.value)}
                         className="input-field"
                       />
@@ -239,13 +263,22 @@ const EditAccountPage = () => {
                     </button>
                   </div>
                 ) : (
-                  <div>
+                  <div className='name-input-field'>
                     <input
                       type="text"
-                      value={value}
-                      onChange={(e) => handleFieldUpdate(field, e.target.value)}
+                      value={tempValues[field] || ''}
+                      onChange={(e) => handleChangeTempValue(field, e.target.value)}
                       className="input-field"
                     />
+                    <button
+                      className="save-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSaveField(field);
+                      }}
+                    >
+                      Lagre
+                    </button>
                   </div>
                 )}
               </div>
@@ -259,7 +292,7 @@ const EditAccountPage = () => {
       ))}
       <div className="account-info-field">
         <div className="field-display">
-          <span className="field-name">Profil aktiv:</span>
+          <span className="field-name">Bruker aktiv:</span>
           <select
             value={profileActive ? 'yes' : 'no'}
             onChange={(e) => handleProfileActiveUpdate(e.target.value === 'yes')}

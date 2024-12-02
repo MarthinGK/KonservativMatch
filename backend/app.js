@@ -5,6 +5,7 @@ const auth0Routes = require('./routes/auth0');
 const usersRoutes = require('./routes/users'); // Import the users route
 const photosRoutes = require('./routes/photos'); // Import the photos route
 const searchRoutes = require('./routes/search');
+const likesRoutes = require('./routes/likes');
 const pool = require('./config/db'); 
 const rateLimit = require('express-rate-limit');
 
@@ -32,6 +33,7 @@ app.use('/auth0', auth0Routes);
 app.use('/users', usersRoutes);  // Attach users route
 app.use('/photos', photosRoutes); // Attach photos route
 app.use('/search', searchRoutes);
+app.use('/likes', likesRoutes);
 
 
 // Serve static files (for profile photos, etc.)l
