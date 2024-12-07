@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchUserProfile } from '../api/UserAPI'; // Assuming you have this function
+import { fetchUserProfile, fetchUserId } from '../api/UserAPI'; // Assuming you have this function
+import LikeButton from '../components/LikeButton';
 import '../styles/ProfilePage.css'; // Custom CSS for profile page
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const ProfilePage = () => {
+  const { user } = useAuth0();
+  const userOneId = user.sub;
   const { brukerId } = useParams();
   const [profileData, setProfileData] = useState(null);
+  const [userTwoId, setuserTwoId] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
   const imagesPerPage = 3;
@@ -15,7 +20,9 @@ const ProfilePage = () => {
     const loadProfileData = async () => {
       try {
         const data = await fetchUserProfile(brukerId);
+        const userTwoId = await fetchUserId(brukerId);
         setProfileData(data);
+        setuserTwoId(userTwoId);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
@@ -62,6 +69,7 @@ const ProfilePage = () => {
   return (
     <div className="profilepage-page">
       <div className="profilepage-container">
+      
         {mainPhoto && (
           <img
             src={`http://localhost:5000${mainPhoto}`}
@@ -99,7 +107,10 @@ const ProfilePage = () => {
             <span>{profileData.smoking}</span>
           </div>
         </div>
+        <LikeButton likerId={userOneId} likedId={userTwoId} />
       </div>
+
+      
 
       <div className="profilepage-introduction-container">
         <div className="profilepage-introduction-box">

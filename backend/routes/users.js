@@ -14,7 +14,8 @@ const { checkOrCreateUser,
         saveUserProfileByUserId, 
         updateUserActivity, 
         updateProfileActiveStatus, 
-        getProfileActiveStatus
+        getProfileActiveStatus, 
+        getUserIdById
       } = require('../controllers/userController');
 
 // Route to check or create a user
@@ -51,6 +52,7 @@ router.post('/introduction', saveUserIntroduction);
 
 router.get('/user/:user_id', getUserProfileByUserId);
 router.put('/user/:user_id', saveUserProfileByUserId);
+router.get('/userid/:id', getUserIdById);
 
 router.post('/update_activity', updateUserActivity);
 

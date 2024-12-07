@@ -1,0 +1,238 @@
+.messages-page {
+    display: flex;
+    height: 100vh;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin-top: 70px;
+  }
+  
+  .sidebar {
+    width: 30%;
+    border-right: 1px solid var(--text-color);
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .likes-matches {
+    margin-bottom: 20px;
+  }
+  
+  .likes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .like-card {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+  }
+  
+  .like-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .like-card p {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  .messages-list {
+    margin-top: 20px;
+  }
+  
+  .conversation {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+  }
+  
+  .conversation:hover,
+  .conversation.active {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+  }
+  
+  .conversation img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .conversation-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .conversation-name {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .conversation-last-message {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  
+  .chat-area {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--text-color);
+  }
+  
+  .chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+  
+  .message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+  }
+  
+  .message.sent {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    align-self: flex-end;
+  }
+  
+  .message.received {
+    background-color: var(--background-color-opposite);
+    color: var(--text-color);
+    align-self: flex-start;
+  }
+  
+  .chat-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .chat-input input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--text-color);
+  }
+  
+  .chat-input button {
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+
+
+  .likes-and-matches-container {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .profiles-wrapper-messages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /*relative*/
+    padding: 0 20px;
+  }
+  
+
+  
+  .profile-picture-messages {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-background-messages {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 123, 255, 0.5);
+    padding: 2px;
+  }
+  
+  .profile-name-messages {
+    font-size: 10px;
+    color: white;
+    text-align: center;
+    margin: 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  
+  .nav-button-messages {
+    background-color: var(--button-bg-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.15s ease-in-out;
+  }
+  
+  .nav-button-messages:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+  }
+  
+  
+  .profiles-messages {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .profile-messages {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    background-color: var(--background-color-opposite);
+    
+  }
+
+  @media (max-width: 1200px) {
+    .profile-messages {
+      flex: 0 1 calc(33.33% - 10px); /* 3 profiles per row */
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .profile-messages {
+      flex: 0 1 calc(50% - 10px); /* 2 profiles per row */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .profile-messages {
+      flex: 0 1 calc(100% - 10px); /* 1 profile per row */
+    }
+  }

@@ -5,8 +5,6 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import ProfileSetup from './components/ProfileSetup';
-import Messages from './pages/Messages';
-import Likes from './pages/Likes';
 import Search from './pages/Search';
 import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';
@@ -16,6 +14,9 @@ import ProfilePage from './pages/Profile';
 
 import ProfileEditPage from './pages/EditProfilePage';
 import EditAccountPage from './pages/EditAccountPage';
+import LikesPage from './pages/LikesPage';
+import MessagesPage from './pages/MessagesPage';
+
 import './styles/App.css'; // Global CSS styles
 
 function App() {
@@ -48,8 +49,8 @@ function App() {
         <Routes>
           <Route path="/" element={isAuthenticated ? <IsProfileComplete><Explore /></IsProfileComplete> : <Home />} />
           <Route path="/profile-setup" element={<IsAuthenticated><ProfileSetup /></IsAuthenticated>} />
-          <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><Messages /></IsProfileComplete></IsAuthenticated>} />
-          <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><Likes /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><MessagesPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><LikesPage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/bruker/:brukerId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/EmailVerification" element={<EmailVerification />} />

@@ -1,0 +1,44 @@
+.like-button-container {
+    position: absolute;
+    right: 22%; /* Position on the right side */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%);
+    text-align: center; /* Center-align text under the button */
+  }
+  
+  .like-button {
+    font-size: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #5a6d8a; /* Gray-blue default */
+    transition: transform 0.2s, color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    border-radius: 50%; /* Ensures a circular shape */
+  }
+  
+  .like-button:hover {
+    transform: scale(1.2);
+    color: #007bff; /* Bright blue on hover */
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue circle background */
+    box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.4); /* Soft shadow */
+  }
+  
+  .like-button.liked {
+    color: #007bff; /* Fully blue when liked */
+    background-color: rgba(0, 123, 255, 0.2); /* Slightly darker blue background */
+    box-shadow: 0px 0px 15px rgba(0, 123, 255, 0.6); /* Bright blue shadow */
+    cursor: not-allowed; /* Disable further clicks */
+  }
+  
+  .like-status-text {
+    margin-top: 2px; /* Space between button and text */
+    font-size: 16px;
+    color: var(--text-color); /* Default text color */
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .like-button.liked + .like-status-text {
+    color: #007bff; /* Bright blue when liked */
+    font-weight: bold;
+  }
+  
