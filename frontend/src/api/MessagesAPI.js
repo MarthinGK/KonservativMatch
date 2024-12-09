@@ -4,6 +4,9 @@ const API_URL = 'http://localhost:5000/messages';
 
 // Send a message
 export const sendMessage = async (senderId, receiverId, messageText) => {
+  console.log("sender id: ", senderId)
+  console.log("receiver id: ", receiverId)
+  console.log("message text: ", messageText)
   try {
     const response = await axios.post(`${API_URL}/send`, {
       sender_id: senderId,
@@ -57,3 +60,24 @@ export const initiateConversation = async (userId, profileId) => {
       throw error;
     }
   };
+
+  export const markMessagesAsRead = async (userId, profileId) => {
+    try {
+      await axios.post(`${API_URL}/mark-read`, { userId, profileId });
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+    }
+  };
+
+
+  export const getUnreadMessagesCount = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/unread-messages-count`, {
+            params: { user_id: userId },
+        });
+        return response.data.unreadCount;
+    } catch (error) {
+        console.error('Error fetching unread messages count:', error);
+        return 0;
+    }
+};

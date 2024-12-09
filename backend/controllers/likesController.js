@@ -11,16 +11,15 @@ const getLikes = async (req, res) => {
           users.profile_id,
           users.date_of_birth,
           users.location,
-          profile_photos.photo_url
+          COALESCE(profile_photos.photo_url, '/default-profile.png') AS photo_url
         FROM likes
         JOIN users ON likes.liked_id = users.user_id
-        LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+
+      LEFT JOIN profile_photos 
+        ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
+
         WHERE likes.liker_id = $1
-        AND profile_photos.id = (
-          SELECT MIN(id) 
-          FROM profile_photos 
-          WHERE profile_photos.user_id = users.user_id
-        )
+ORDER BY likes.created_at DESC
       `;
   
       const result = await pool.query(query, [userId]);
@@ -44,16 +43,15 @@ const getLikedMe = async (req, res) => {
           users.profile_id,
           users.date_of_birth,
           users.location,
-          profile_photos.photo_url
+          COALESCE(profile_photos.photo_url, '/default-profile.png') AS photo_url
         FROM likes
         JOIN users ON likes.liker_id = users.user_id
-        LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+
+      LEFT JOIN profile_photos 
+        ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
+
         WHERE likes.liked_id = $1
-        AND profile_photos.id = (
-          SELECT MIN(id) 
-          FROM profile_photos 
-          WHERE profile_photos.user_id = users.user_id
-        )
+ORDER BY likes.created_at DESC
       `;
   
       const result = await pool.query(query, [user_id]);

@@ -15,6 +15,13 @@ const NewMembers = () => {
         try {
           const response = await fetchNewMembers(user.sub); // Pass user_id (sub) from Auth0
           setNewMembers(response);
+
+          if (response.photos) {
+            response.photos.sort((a, b) => a.position - b.position);
+          } 
+
+          console.log("ACTIVE MEMBERS RESPONSE PHOTOS: ", response.photos)
+
         } catch (error) {
           console.error('Error fetching new members:', error);
         }

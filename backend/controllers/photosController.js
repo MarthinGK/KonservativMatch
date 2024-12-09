@@ -3,28 +3,28 @@ const path = require('path');
 const fs = require('fs');
 
 // Fetch profile photos by profile ID
-const getProfilePhotosByProfileId = async (req, res) => {
-  const { profileId } = req.params;
+  const getProfilePhotosByProfileId = async (req, res) => {
+    const { profileId } = req.params;
 
-  try {
-    // First, find the userId using the profileId
-    const userResult = await pool.query('SELECT user_id FROM users WHERE profile_id = $1', [profileId]);
+    try {
+      // First, find the userId using the profileId
+      const userResult = await pool.query('SELECT user_id FROM users WHERE profile_id = $1', [profileId]);
 
-    if (userResult.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      if (userResult.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      const userId = userResult.rows[0].user_id;
+
+      // Fetch profile photos using userId
+      const photoResult = await pool.query('SELECT photo_url FROM profile_photos WHERE user_id = $1', [userId]);
+
+      res.json(photoResult.rows.map(row => row.photo_url));  // Return array of photo URLs
+    } catch (err) {
+      console.error('Error fetching profile photos by profile ID:', err);
+      res.status(500).json({ error: 'Database error' });
     }
-
-    const userId = userResult.rows[0].user_id;
-
-    // Fetch profile photos using userId
-    const photoResult = await pool.query('SELECT photo_url FROM profile_photos WHERE user_id = $1', [userId]);
-
-    res.json(photoResult.rows.map(row => row.photo_url));  // Return array of photo URLs
-  } catch (err) {
-    console.error('Error fetching profile photos by profile ID:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-};
+  };
 
   const addProfilePhoto = async (req, res) => {
     const { user_id, position } = req.body;

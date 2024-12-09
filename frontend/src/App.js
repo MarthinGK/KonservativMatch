@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';
 import EmailVerification from './pages/EmailVerification';
 import { checkUserInDB, updateUserActivity } from './api/UserAPI';
+// import { getUnreadMessagesCount } from './api/MessagesAPI';
 import ProfilePage from './pages/Profile';
 
 import ProfileEditPage from './pages/EditProfilePage';
@@ -21,7 +22,7 @@ import './styles/App.css'; // Global CSS styles
 
 function App() {
   const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
-
+  // const [unreadMessages, setUnreadMessages] = useState(0);
   useEffect(() => {
     const checkUser = async () => {
       if (isAuthenticated && user) {
@@ -42,10 +43,21 @@ function App() {
     checkUser();  // Call the async function
   }, [isAuthenticated, user]);  // Dependencies array to trigger effect
 
+  // const fetchUnreadCount = async () => {
+  //   // Fetch unread messages count from API and update state
+  //   try {
+  //       const count = await getUnreadMessagesCount(); // Replace with your actual API call
+  //       setUnreadMessages(count);
+  //       console.log("HOME unread messages: ", count)
+  //   } catch (error) {
+  //       console.error('Error fetching unread messages count:', error);
+  //   }
+  // };
+
   return (
     <div className="App">
       <Router>
-        <Navbar />
+      <Navbar />
         <Routes>
           <Route path="/" element={isAuthenticated ? <IsProfileComplete><Explore /></IsProfileComplete> : <Home />} />
           <Route path="/profile-setup" element={<IsAuthenticated><ProfileSetup /></IsAuthenticated>} />
@@ -57,6 +69,7 @@ function App() {
 
           <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/personlig-info" element={<IsAuthenticated><IsProfileComplete><EditAccountPage /></IsProfileComplete></IsAuthenticated>} />
+          
         </Routes>
       </Router>
     </div>

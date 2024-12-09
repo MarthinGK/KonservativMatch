@@ -27,13 +27,13 @@ const LocationDropdown = ({ profileData, setProfileData, setErrorMessage, setIsI
   };
 
   return (
-    <div className='location-dropdown'>
+    <div className='profileSetupLocation-dropdown'>
       <h2>Velg ditt fylke</h2>
       <select
         name="location"
         value={profileData.location || ''}
         onChange={handleLocationChange}
-        className="inputtext"
+        className="profileSetupLocation-inputtext"
       >
         <option value="">Velg fylke</option>
         {counties.map((location) => (

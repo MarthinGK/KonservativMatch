@@ -18,7 +18,7 @@ const EditProfilePreviewProfile = ({ userId }) => {
         // Sort the photos by position
         if (data.photos) {
           data.photos.sort((a, b) => a.position - b.position);
-        }
+        } 
   
         setProfileData(data);
       } catch (error) {

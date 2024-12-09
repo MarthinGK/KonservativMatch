@@ -117,7 +117,7 @@ const getNewMembers = async (req, res) => {
 
     const userGender = userResult.rows[0].gender;
 
-    // Now, fetch new members of the opposite gender
+    // Now, fetch new members of the opposite gender with their main profile photo
     const result = await pool.query(`
       SELECT users.profile_id, 
              users.first_name, 
@@ -127,10 +127,8 @@ const getNewMembers = async (req, res) => {
              users.created_at,
              profile_photos.photo_url
       FROM users
-      JOIN profile_photos ON users.user_id = profile_photos.user_id
-      WHERE profile_photos.id IN (
-        SELECT MIN(id) FROM profile_photos GROUP BY user_id
-      )
+      LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+      WHERE profile_photos.position = 0 -- Only select the main photo
       AND users.created_at IS NOT NULL  -- Only include users with a created_at date
       AND users.gender != $1  -- Only show the opposite gender
       ORDER BY users.created_at DESC 
@@ -144,12 +142,12 @@ const getNewMembers = async (req, res) => {
   }
 };
 
+
 const getActiveMembers = async (req, res) => {
   const { user_id } = req.query; // Get the user's ID from the query parameter
 
   try {
-
-    // First, fetch the gender of the logged-in user based on their user_id
+    // Fetch the gender of the logged-in user
     const userResult = await pool.query(`
       SELECT gender FROM users WHERE user_id = $1
     `, [user_id]);
@@ -160,23 +158,21 @@ const getActiveMembers = async (req, res) => {
 
     const userGender = userResult.rows[0].gender;
 
-    // Fetch members with the opposite gender, ensure created_at is not null 
+    // Fetch members of the opposite gender with their main profile photo
     const result = await pool.query(`
       SELECT users.profile_id, 
              users.first_name, 
              users.date_of_birth, 
              users.gender, 
              users.location,
-             users.created_at,
+             users.updated_at,
              profile_photos.photo_url
       FROM users
-      JOIN profile_photos ON users.user_id = profile_photos.user_id
-      WHERE profile_photos.id IN (
-        SELECT MIN(id) FROM profile_photos GROUP BY user_id
-      )
+      LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+      WHERE profile_photos.position = 0 -- Select the main photo
       AND users.created_at IS NOT NULL  -- Only include users with a created_at date
       AND users.gender != $1  -- Only show the opposite gender
-      ORDER BY users.updated_at DESC  -- Order by created_at for filtering by recent members
+      ORDER BY users.updated_at DESC  -- Order by updated_at for recent activity
       LIMIT 9
     `, [userGender]);
 
@@ -191,7 +187,7 @@ const getCloseMembers = async (req, res) => {
   const { user_id } = req.query; // Get the user's ID from the query parameter
 
   try {
-    // Fetch both gender and location of the logged-in user based on their user_id
+    // Fetch both gender and location of the logged-in user
     const userResult = await pool.query(`
       SELECT gender, location FROM users WHERE user_id = $1
     `, [user_id]);
@@ -203,7 +199,7 @@ const getCloseMembers = async (req, res) => {
     const userGender = userResult.rows[0].gender;
     const userLocation = userResult.rows[0].location;
 
-    // Fetch users of the opposite gender who are in the same location
+    // Fetch users of the opposite gender who are in the same location with their main profile photo
     const result = await pool.query(`
       SELECT users.profile_id, 
              users.first_name, 
@@ -213,10 +209,8 @@ const getCloseMembers = async (req, res) => {
              users.created_at,
              profile_photos.photo_url
       FROM users
-      JOIN profile_photos ON users.user_id = profile_photos.user_id
-      WHERE profile_photos.id IN (
-        SELECT MIN(id) FROM profile_photos GROUP BY user_id
-      )
+      LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+      WHERE profile_photos.position = 0 -- Select the main photo
       AND users.created_at IS NOT NULL  -- Only include users with a created_at date
       AND users.gender != $1  -- Only show the opposite gender
       AND users.location = $2  -- Only show users from the same location
@@ -230,6 +224,7 @@ const getCloseMembers = async (req, res) => {
     res.status(500).json({ error: 'Database error' });
   }
 };
+
 
 const getPreviewProfile = async (req, res) => {
   const { user_id } = req.query;
@@ -266,7 +261,7 @@ const getPreviewProfile = async (req, res) => {
 const getUserProfile = async (req, res) => {
   const { brukerId } = req.params;
   try {
-    const userResult = await pool.query(
+    const userResult = await pool.query( 
       `SELECT users.first_name, 
               users.last_name, 
               users.location, 
@@ -276,7 +271,7 @@ const getUserProfile = async (req, res) => {
               users.religion, 
               users.date_of_birth, 
               users.introduction, 
-              array_agg(profile_photos.photo_url) AS photos
+              json_agg(json_build_object('photo_url', profile_photos.photo_url, 'position', profile_photos.position)) AS photos
       FROM users
       JOIN profile_photos ON users.user_id = profile_photos.user_id
       WHERE users.profile_id = $1
@@ -324,26 +319,67 @@ const saveUserIntroduction = async (req, res) => {
   }
 };
 
+// const getUserProfileByUserId = async (req, res) => {
+//   const { user_id } = req.params;
+
+//   try {
+//     const userResult = await pool.query(
+//       `SELECT 
+//          users.first_name, 
+//          users.last_name, 
+//          users.location, 
+//          users.height, 
+//          users.alcohol, 
+//          users.smoking, 
+//          users.religion, 
+//          users.email,
+//          TO_CHAR(users.date_of_birth, 'YYYY-MM-DD') AS date_of_birth, 
+//          users.introduction, 
+//          (SELECT photo_url 
+//           FROM profile_photos 
+//           WHERE profile_photos.user_id = users.user_id 
+//           ORDER BY profile_photos.id ASC 
+//           LIMIT 1) AS profile_photo, -- Fetch the first photo as the profile photo
+//          array_agg(profile_photos.photo_url) AS photos -- All photos as an array
+//        FROM users
+//        LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
+//        WHERE users.user_id = $1
+//        GROUP BY users.user_id`,
+//       [user_id]
+//     );
+
+//     if (userResult.rows.length === 0) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     res.json(userResult.rows[0]); // Return the user profile details
+//   } catch (err) {
+//     console.error('Error fetching user profile by user_id:', err);
+//     res.status(500).json({ error: 'Database error' });
+//   }
+// };
 const getUserProfileByUserId = async (req, res) => {
   const { user_id } = req.params;
 
   try {
     const userResult = await pool.query(
-      `SELECT first_name, 
-              last_name, 
-              location, 
-              height, 
-              alcohol, 
-              smoking, 
-              religion, 
-              email,
-              TO_CHAR(date_of_birth, 'YYYY-MM-DD') AS date_of_birth, 
-              introduction, 
-              array_agg(profile_photos.photo_url) AS photos
+      `SELECT 
+          first_name, 
+          last_name, 
+          location, 
+          height, 
+          alcohol, 
+          smoking, 
+          religion, 
+          email, 
+          TO_CHAR(date_of_birth, 'YYYY-MM-DD') AS date_of_birth, 
+          introduction, 
+          (SELECT photo_url 
+           FROM profile_photos 
+           WHERE user_id = $1 AND position = 0 
+           LIMIT 1) AS profile_photo 
        FROM users
-       LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
-       WHERE users.user_id = $1
-       GROUP BY users.user_id`,
+       WHERE user_id = $1`,
       [user_id]
     );
 
@@ -351,12 +387,13 @@ const getUserProfileByUserId = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json(userResult.rows[0]); // Return the user profile details
+    res.json(userResult.rows[0]);
   } catch (err) {
     console.error('Error fetching user profile by user_id:', err);
     res.status(500).json({ error: 'Database error' });
   }
 };
+
 
 // Update user profile details by user_id
 const saveUserProfileByUserId = async (req, res) => {

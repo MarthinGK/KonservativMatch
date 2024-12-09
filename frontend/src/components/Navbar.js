@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 import { checkIfProfileIsComplete } from '../api/UserAPI';
 import { fetchProfilePhotos } from '../api/PhotosAPI';
+import { getUnreadMessagesCount } from '../api/MessagesAPI';
 import LogoutButton from './Logout';
 import Default from '../images/Default.png';
 
@@ -14,6 +15,7 @@ const Navbar = () => {
   const [theme, setTheme] = useState(savedTheme || 'light');
   const [showDropdown, setShowDropdown] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const dropdownRef = useRef(null);
   const defaultPhoto = Default;
 
@@ -26,6 +28,19 @@ const Navbar = () => {
       setShowDropdown(false);
     }
   };
+
+  // const fetchUnreadCount = async () => {
+  //   if (isAuthenticated && user) {
+  //       const count = await getUnreadMessagesCount(user.sub);
+  //       setUnreadMessages(count);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchUnreadCount();
+  //   const intervalId = setInterval(fetchUnreadCount, 5000); // Poll every 5 seconds
+  //   return () => clearInterval(intervalId);
+  // }, [isAuthenticated, user]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -46,8 +61,12 @@ const Navbar = () => {
         try {
           const profileComplete = await checkIfProfileIsComplete(user);
           setIsProfileComplete(profileComplete);
-
           const photos = await fetchProfilePhotos(user.sub);
+
+          const count = await getUnreadMessagesCount(user.sub);
+          setUnreadMessages(count);
+
+          console.log("NAVBAR unread messages count: ", count)
 
           // Find the photo with position 0 and set it as the profile photo
           const primaryPhoto = photos.find((photo) => photo.position === 0);
@@ -86,7 +105,10 @@ const Navbar = () => {
         <div className="navbar-center">
           <Link to="/likes" className="nav-link">Likes</Link>
           <Link to="/matches" className="nav-link">Matcher</Link>
-          <Link to="/messages" className="nav-link">Meldinger</Link>
+          <Link to="/messages" className="nav-link">
+            Meldinger
+            {unreadMessages > 0 && <span className="red-dot-navbar"></span>}
+          </Link>
           <Link to="/search" className="nav-link">Søk</Link>
         </div>
       )}

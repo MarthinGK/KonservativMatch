@@ -7,6 +7,7 @@ import LocationDropdown from "../components/LocationDropdown";
 import { checkIfProfileIsComplete } from "../api/UserAPI";
 import PhotosUploadGrid from "./PhotosUploadGrid";
 import { uploadProfilePhoto, fetchProfilePhotos } from "../api/PhotosAPI";
+import EditProfilePhotosGrid from "./editprofile/EditProfilePhotosGrid";
 
 const ProfileSetup = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -301,14 +302,14 @@ const ProfileSetup = () => {
       {renderProgressBar()}
 
       {step === 1 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h1>La oss sette opp profilen din</h1>
           <button className="nextbutton" onClick={nextStep}>Neste</button>
         </div>
       )}
 
       {step === 2 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Hva er ditt fornavn?</h2>
           <input
             type="text"
@@ -316,11 +317,11 @@ const ProfileSetup = () => {
             value={profileData.firstName}
             onChange={handleTextInputChange}
             placeholder="Fornavn"
-            className="inputtext"
+            className="profileSetupInput"
             maxLength={150}
           />
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -335,7 +336,7 @@ const ProfileSetup = () => {
       )}
       
       {step === 3 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Hva er ditt etternavn?</h2>
           <input
             type="text"
@@ -343,11 +344,11 @@ const ProfileSetup = () => {
             value={profileData.lastName}
             onChange={handleTextInputChange}
             placeholder="Etternavn"
-            className="inputtext"
+            className="profileSetupInput"
             maxLength={150}
           />
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -362,7 +363,7 @@ const ProfileSetup = () => {
       )}
 
       {step === 4 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Fødselsdato</h2>
           <div className="birthdateinput">
 
@@ -403,7 +404,7 @@ const ProfileSetup = () => {
             </select>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button className="nextbutton" onClick={verifyDateStep}>Neste</button>
@@ -412,7 +413,7 @@ const ProfileSetup = () => {
       )}
 
       {step === 5 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Er du mann eller kvinne?</h2>
           <div>
             <button
@@ -437,7 +438,7 @@ const ProfileSetup = () => {
             </button>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -452,7 +453,7 @@ const ProfileSetup = () => {
       )}
       
       {step === 6 && (
-      <div className="slide">
+      <div className="profileSetupSelectSlide">
         <LocationDropdown
           profileData={profileData}
           setProfileData={setProfileData}
@@ -462,7 +463,7 @@ const ProfileSetup = () => {
           setIsInputValid={setIsInputValid}
         />
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <hr className="divider" />
+        <hr className="profileSetupDivider" />
         <div className="button-container">
           <button className="nextbutton" onClick={prevStep}>Tilbake</button>
           <button
@@ -477,7 +478,7 @@ const ProfileSetup = () => {
     )}
 
     {step === 7 && (
-    <div className="slide">
+    <div className="profileSetupSelectSlide">
         <h2>Hva er ditt livssyn?</h2>
         <div>
         <button
@@ -518,12 +519,12 @@ const ProfileSetup = () => {
         value={profileData.religion}
         onChange={handleTextInputChange}
         placeholder="Livssyn"
-        className="inputtext"
+        className="profileSetupInput"
         maxLength={35}
         />
 
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <hr className="divider" />
+        <hr className="profileSetupDivider" />
         <div className="button-container">
         <button className="nextbutton" onClick={prevStep}>Tilbake</button>
         <button
@@ -538,7 +539,7 @@ const ProfileSetup = () => {
     )}
 
       {step === 8 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Drikker du alkohol?</h2>
           <div>
             <button
@@ -593,7 +594,7 @@ const ProfileSetup = () => {
             </button>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -608,7 +609,7 @@ const ProfileSetup = () => {
       )}
 
       {step === 9 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Røyker du?</h2>
           <div>
             <button
@@ -663,7 +664,7 @@ const ProfileSetup = () => {
             </button>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -678,7 +679,7 @@ const ProfileSetup = () => {
       )}
 
       {step === 10 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <h2>Hva er din høyde?</h2>
           <input
             type="range"
@@ -694,7 +695,7 @@ const ProfileSetup = () => {
             <p>Høyde: {profileData.height || 175} cm</p>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -709,13 +710,10 @@ const ProfileSetup = () => {
       )}
 
       {step === 11 && (
-        <div className="slide">
-          <PhotosUploadGrid
-            photosData={photosData}
-            setPhotosData={setPhotosData}
-          />
+        <div className="profileSetupSelectSlide">
+          <EditProfilePhotosGrid  userId={user.sub}/>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -730,7 +728,7 @@ const ProfileSetup = () => {
       )}
 
       {step === 12 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
           <div>
             <h2>Skriv litt om deg selv</h2>
           </div>
@@ -759,7 +757,7 @@ const ProfileSetup = () => {
             </div>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          <hr className="divider" />
+          <hr className="profileSetupDivider" />
           <div className="button-container">
             <button className="nextbutton" onClick={prevStep}>Tilbake</button>
             <button
@@ -774,7 +772,7 @@ const ProfileSetup = () => {
       )}
 
       {step === 13 && (
-        <div className="slide">
+        <div className="profileSetupSelectSlide">
         <h1>Gratulerer!</h1>
         <p>Du har fullført profilen din</p>
         <button

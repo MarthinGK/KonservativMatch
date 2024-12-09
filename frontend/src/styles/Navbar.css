@@ -143,3 +143,14 @@
 .nav-logout-button:hover {
   background-color: #c82333;
 }
+
+.red-dot-navbar {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  margin-left: 5px;
+  position: relative;
+  top: -5px;
+}

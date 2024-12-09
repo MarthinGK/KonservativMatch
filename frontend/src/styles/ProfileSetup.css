@@ -64,7 +64,7 @@ button:hover {
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Blue shadow */
 }
 
-.slide {
+.profileSetupSelectSlide {
   display: flex;
   flex-direction: column;  /* Stack items vertically */
   justify-content: center;  /* Center items vertically */
@@ -73,7 +73,7 @@ button:hover {
   text-align: center;  /* Optional: Center-align the text */
 }
 
-.slide .nextbutton {
+.profileSetupSelectSlide .nextbutton {
   background-color: #007bff;  /* Blue button color */
   color: white;
   border: none;
@@ -85,11 +85,11 @@ button:hover {
   margin: 10px;
 }
 
-.slide .nextbutton:hover {
+.profileSetupSelectSlide .nextbutton:hover {
   background-color: #0056b3;  /* Darker blue on hover */
 }
 
-.divider {
+.profileSetupDivider {
   width: 20%;            /* Adjust the width as needed */
   margin: 20px auto;      /* Adds margin to give space around the divider */
   border: 0;             /* Remove default border */
@@ -97,7 +97,7 @@ button:hover {
   background-color: #ccc; /* Color of the line */
 }
 
-input {
+.profileSetupInput {
   width: 15%;
   padding: 12px 15px;
   font-size: 16px;
@@ -109,7 +109,7 @@ input {
   margin-bottom: 20px;  /* Space between input and button */
 }
 
-input:focus {
+.profileSetupInput:focus {
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 

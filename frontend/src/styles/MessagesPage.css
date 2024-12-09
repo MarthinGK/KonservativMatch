@@ -1,5 +1,7 @@
 .messages-page {
     display: flex;
+    justify-content: center;
+    padding: 0 20px;
     height: 100vh;
     background-color: var(--background-color);
     color: var(--text-color);
@@ -7,7 +9,7 @@
   }
   
   .sidebar {
-    width: 30%;
+    width: 25%; /* Keep the sidebar at 25% width */
     border-right: 1px solid var(--text-color);
     padding: 20px;
     overflow-y: auto;
@@ -47,6 +49,17 @@
   .messages-list {
     margin-top: 20px;
   }
+
+  .unread-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1; /* Ensure it appears on top */
+  }
   
   .conversation {
     display: flex;
@@ -55,6 +68,8 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.2s;
+
+    position: relative; /* Needed to position the red dot */
   }
   
   .conversation:hover,
@@ -84,52 +99,104 @@
     font-size: 12px;
     opacity: 0.8;
   }
+
+  .conversation-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
   
   .chat-area {
-    width: 70%;
+    width: 50%; /* Reduce the width of the chat container */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-  }
-  
-  .chat-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--text-color);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for better separation */
+    background-color: var(--background-color);
+    border-radius: 10px; /* Optional: rounded corners */
   }
   
   .chat-messages {
     flex-grow: 1;
-    overflow-y: auto;
-    margin-top: 10px;
+    overflow-y: auto; /* Enable scrolling */
+    display: flex;
+    flex-direction: column-reverse; /* Start from the bottom */
+    margin-bottom: 20px;
+    transition: all 0.5s ease-in-out; /* Smooth movement for reordering */
+    padding-bottom: 35px;
+    padding-top: 20px;
   }
+
+  .chat-input-container {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--background-color);
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for a navbar-like effect */
+    z-index: 10; /* Ensure it stays above the scrollable messages */
+  }
+
   
+  .message-container {
+    display: flex;
+    align-items: flex-start;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 5px;
+  }
+
+  .message-container.sent {
+    justify-content: flex-end;
+  }
+
+  .message-container.received {
+    justify-content: flex-start;
+  }
+
   .message {
+    max-width: 60%;
     padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    max-width: 70%;
+    border-radius: 15px;
+    
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
   
   .message.sent {
     background-color: var(--button-bg-color);
     color: var(--button-text-color);
     align-self: flex-end;
+    text-align: right;
   }
   
   .message.received {
-    background-color: var(--background-color-opposite);
-    color: var(--text-color);
+    background-color: #1d3249;
+    color: #fff;
     align-self: flex-start;
+    text-align: left;
+  }
+
+  .message-text {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .message-timestamp {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-top: 5px;
+    align-self: flex-end;
   }
   
   .chat-input {
     display: flex;
     gap: 10px;
     align-items: center;
+    padding: 10px;
   }
   
   .chat-input input {
@@ -142,6 +209,15 @@
   .chat-input button {
     padding: 10px 20px;
     border-radius: 5px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+  }
+
+  .chat-input button:hover {
+    background-color: var(--button-bg-color-hover, #0056b3); /* Optional hover color */
   }
   
 
@@ -217,6 +293,36 @@
     text-align: center;
     background-color: var(--background-color-opposite);
     
+  }
+
+  .chat-header {
+    position: sticky; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--text-color);
+    
+  }
+
+  .chat-header-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chat-header-name {
+    font-size: 18px; /* Adjust font size as needed */
+    font-weight: bold;
+    color: var(--text-color);
+  }
+
+  .chat-header-picture {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Keep it square */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensure the image fits within the circle */
+    border: 2px solid var(--button-bg-color); /* Optional: Add a border */
   }
 
   @media (max-width: 1200px) {

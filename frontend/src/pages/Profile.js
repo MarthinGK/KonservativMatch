@@ -20,6 +20,11 @@ const ProfilePage = () => {
     const loadProfileData = async () => {
       try {
         const data = await fetchUserProfile(brukerId);
+        console.log("DATA PHOTOS: ", data.photos)
+        if (data.photos) {
+          data.photos.sort((a, b) => a.position - b.position);
+        } 
+
         const userTwoId = await fetchUserId(brukerId);
         setProfileData(data);
         setuserTwoId(userTwoId);
@@ -35,9 +40,14 @@ const ProfilePage = () => {
   }
 
   const { photos } = profileData || [];
-  const mainPhoto = photos && photos.length > 0 ? photos[0] : null;
-  const secondPhoto = photos && photos.length > 1 ? photos[1] : null;
+  const mainPhoto = photos && photos.length > 0 ? photos[0].photo_url : null;
+  const secondPhoto = photos && photos.length > 1 ? photos[1].photo_url : null;
   const paginatedPhotos = photos.slice(startIndex + 2, startIndex + 2 + imagesPerPage);
+
+  // const { photos } = profileData || [];
+  // const mainPhoto = photos && photos.length > 0 ? photos[0] : null;
+  // const secondPhoto = photos && photos.length > 1 ? photos[1] : null;
+  // const paginatedPhotos = photos.slice(startIndex + 2, startIndex + 2 + imagesPerPage);
 
   const handleNext = () => {
     if (startIndex + imagesPerPage < photos.length - 2) {
@@ -133,10 +143,10 @@ const ProfilePage = () => {
             &#10094;
           </button>
           <div className="profilepage-photos-wrapper">
-            {paginatedPhotos.map((photoUrl, index) => (
+            {paginatedPhotos.map((photo, index) => (
               <img
                 key={index}
-                src={`http://localhost:5000${photoUrl}`}
+                src={`http://localhost:5000${photo.photo_url}`}
                 alt={`Additional ${startIndex + index + 3}`}
                 className="profilepage-additional-pic"
                 onClick={() => openPhoto(startIndex + index + 2)}

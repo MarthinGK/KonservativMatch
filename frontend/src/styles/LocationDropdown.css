@@ -1,20 +1,21 @@
 /* Styling for the location dropdown container */
-.location-dropdown {
+.profileSetupLocation-dropdown {
     margin: 20px 0;
+    
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
   
   /* Label styling */
-  .location-dropdown label {
+  .profileSetupLocation-dropdown label {
     font-size: 16px;
     margin-bottom: 10px;
     color: var(--text-color); /* Uses the global text color based on the theme */ 
   }
   
   /* Dropdown styling */
-  .location-dropdown select {
+  .profileSetupLocation-dropdown select {
     padding: 10px;
     border: 2px solid var(--button-bg-color); /* Border color changes with theme */
     border-radius: 5px;
@@ -26,14 +27,43 @@
   }
   
   /* Dropdown option styling */
-  .location-dropdown option {
+  .profileSetupLocation-dropdown option {
     background-color: var(--input-bg-color);
     color: var(--input-text-color);
+  }
+
+  .profileSetupLocation-inputtext {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    text-align: center; /* Optional: Align the placeholder text in the dropdown */
+  }
+  
+  /* Hover effect for dropdown */
+  .profileSetupLocation-inputtext:hover {
+    border-color: var(--button-bg-color);
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+  
+  /* Focused dropdown styling */
+  .profileSetupLocation-inputtext:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Placeholder option styling */
+  .profileSetupLocation-inputtext option[value=""] {
+    color: #aaa;
   }
   
   /* Responsive adjustments */
   @media (max-width: 600px) {
-    .location-dropdown select {
+    .profileSetupLocation-dropdown select {
       width: 100%;
     }
   }  
