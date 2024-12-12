@@ -21,10 +21,12 @@ const MessagesPage = ()  => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [startIndex, setStartIndex] = useState(0);
+  const [canMessage, setCanMessage] = useState(true);
   const profilesPerPage = 4; // Show 4 profiles at a time
 
   useEffect(() => {
     // Apply overflow hidden when component mounts
+    window.scrollTo(0, 0);
     document.body.style.overflow = 'hidden';
     return () => {
       // Reset overflow when component unmounts
@@ -114,6 +116,14 @@ const MessagesPage = ()  => {
 
   const handleProfileClick = async (profileId) => {
     try {
+
+      console.log("profile click profile ID: ", profileId)
+
+      const permissionResponse = await checkPermission(profileId, userId);
+      console.log("Message Permission?: ", permissionResponse)
+      setCanMessage(permissionResponse);
+
+
       // Fetch the conversation with the clicked profile
       const conversation = await initiateConversation(userId, profileId);
       const profileDetails = await fetchUserProfileByUserId(profileId);
@@ -159,7 +169,7 @@ const MessagesPage = ()  => {
         {/* Likes and Matches Section */}
         
       <div className="likes-and-matches-container">
-      <h3>Likes and Matches</h3>
+      <h3>Likes og Matcher</h3>
       <div className="profiles-wrapper-messages">
         <button
           className="nav-button-messages"
@@ -200,14 +210,14 @@ const MessagesPage = ()  => {
 
         {/* Messages List */}
         <div className="messages-list">
-          <h3>Messages</h3>
+          <h3>Meldinger</h3>
           {conversations.map((conversation) => (
             <div
               key={conversation.user_id}
               className={`conversation ${selectedChat?.user_id === conversation.user_id ? 'active' : ''}`}
               onClick={() => {
-                setSelectedChat(conversation);
                 handleProfileClick(conversation.user_id);
+                setSelectedChat(conversation);
               }}
             >
               <img 
@@ -247,7 +257,11 @@ const MessagesPage = ()  => {
                 <h3 className="chat-header-name">{selectedChat.first_name}</h3>
               </div>
             </div>
-
+            {!canMessage && (
+              <div className="no-permission-message">
+                  {`${selectedChat.first_name} har ikke tillatelse til å sende deg meldinger. Hvis du vil gi dem tilgang, kan du enten sende en melding eller like profilen deres.`}
+              </div>
+            )}
             <div className="chat-messages">
               {messages
                 .slice()
@@ -267,8 +281,7 @@ const MessagesPage = ()  => {
                 ))}
               <div id="scroll-anchor"></div> {/* Dummy div */}
             </div>
-
-
+            
             <div className="chat-input-container">
               <div className="chat-input">
                 <input
@@ -283,7 +296,7 @@ const MessagesPage = ()  => {
 
           </>
         ) : (
-          <p className="no-chat-selected">Select a conversation to start messaging</p>
+          <p className="no-chat-selected">Trykk på en bruker i panelet til venstre for å starte en samtale</p>
         )}
       </div>
     </div>

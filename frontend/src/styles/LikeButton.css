@@ -27,7 +27,6 @@
     color: #007bff; /* Fully blue when liked */
     background-color: rgba(0, 123, 255, 0.2); /* Slightly darker blue background */
     box-shadow: 0px 0px 15px rgba(0, 123, 255, 0.6); /* Bright blue shadow */
-    cursor: not-allowed; /* Disable further clicks */
   }
   
   .like-status-text {

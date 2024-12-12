@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
-import { checkIfProfileIsComplete } from '../api/UserAPI';
-import { fetchProfilePhotos } from '../api/PhotosAPI';
-import { getUnreadMessagesCount } from '../api/MessagesAPI';
-import LogoutButton from './Logout';
-import Default from '../images/Default.png';
+import '../../styles/Navbar.css';
+import { checkIfProfileIsComplete } from '../../api/UserAPI';
+import { fetchProfilePhotos } from '../../api/PhotosAPI';
+import { getUnreadMessagesCount } from '../../api/MessagesAPI';
+import LogoutButton from '../../components/Logout';
+import Default from '../../images/Default.png';
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, user } = useAuth0();
@@ -104,7 +104,6 @@ const Navbar = () => {
       {isAuthenticated && isProfileComplete && (
         <div className="navbar-center">
           <Link to="/likes" className="nav-link">Likes</Link>
-          <Link to="/matches" className="nav-link">Matcher</Link>
           <Link to="/messages" className="nav-link">
             Meldinger
             {unreadMessages > 0 && <span className="red-dot-navbar"></span>}
@@ -140,7 +139,7 @@ const Navbar = () => {
         ) : (
           <li>
             <button onClick={() => loginWithRedirect()} className="navbutton">
-              Login
+              Logg inn
             </button>
           </li>
         )}

@@ -1,0 +1,65 @@
+.conditions-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
+    font-size: 16px;
+    margin-top: 70px;
+    margin-bottom:20px;
+  }
+  
+  h1 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text-color);
+  }
+  
+  .last-updated {
+    font-size: 14px;
+    text-align: center;
+    color: gray;
+  }
+  
+  .conditions-section {
+    margin-bottom: 30px;
+  }
+  
+  .conditions-section h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+  }
+  
+  .conditions-section h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+  }
+  
+  .conditions-section p {
+    margin-bottom: 15px;
+  }
+  
+  strong {
+    color: var(--button-bg-color);
+  }
+  
+  @media (max-width: 768px) {
+    .conditions-container {
+      padding: 15px;
+      font-size: 14px;
+    }
+  
+    h1 {
+      font-size: 24px;
+    }
+  
+    .conditions-section h2 {
+      font-size: 20px;
+    }
+  }  

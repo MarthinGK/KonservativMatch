@@ -42,6 +42,21 @@ button {
   --button-text-color: #fff;
 }
 
+html, body {
+  height: 100%; /* Ensure the full height of the viewport is used */
+  margin: 0; /* Remove any default margin */
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full height of the viewport */
+  position: relative; /* Allows the footer to be positioned within this context */
+}
+
+.main-content {
+  flex: 1; /* Takes up all available space above the footer */
+}
 /* Additional Styles for Layout and Custom Components */ 
 .new-members-container {
   text-align: center;

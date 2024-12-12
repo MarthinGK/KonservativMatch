@@ -68,21 +68,25 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.2s;
-
+    background-color: rgba(0, 123, 255, 0.2);
     position: relative; /* Needed to position the red dot */
+    margin-top: 3px;
+
+    align-items: center; 
+  }
+
+  .conversation-picture {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 10px;
   }
   
   .conversation:hover,
   .conversation.active {
     background-color: var(--button-bg-color);
     color: var(--button-text-color);
-  }
-  
-  .conversation img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
   }
   
   .conversation-details {
@@ -100,12 +104,7 @@
     opacity: 0.8;
   }
 
-  .conversation-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+
   
   .chat-area {
     width: 50%; /* Reduce the width of the chat container */
@@ -323,6 +322,17 @@
     border-radius: 50%; /* Make it circular */
     object-fit: cover; /* Ensure the image fits within the circle */
     border: 2px solid var(--button-bg-color); /* Optional: Add a border */
+  }
+
+  .no-permission-message {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #ffe5e5;
+    color: #d9534f;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
   }
 
   @media (max-width: 1200px) {

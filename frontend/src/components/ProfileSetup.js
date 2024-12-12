@@ -152,7 +152,7 @@ const ProfileSetup = () => {
       setErrorMessage(errorMessage);
     } 
     if (introText.length < 50 || introText.length > 500) {
-      setErrorMessage("Vennligst skriv en introduksjon på 50 og 500 tegn");
+      setErrorMessage("Vennligst skriv en introduksjon på mellom 50 og 500 tegn");
     } 
     else {  
       // Create a cleaned profileData object

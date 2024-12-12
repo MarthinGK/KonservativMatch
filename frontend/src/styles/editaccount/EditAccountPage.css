@@ -124,7 +124,7 @@
   }
   
   .confirm-button {
-    background-color: #007bff;
+    background-color: #d9534f;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -133,7 +133,7 @@
   }
   
   .cancel-button {
-    background-color: #d9534f;
+    background-color: #007bff;
     color: white;
     padding: 10px 20px;
     border: none;

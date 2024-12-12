@@ -165,16 +165,28 @@ const ProfilePage = () => {
           className={`lightbox-overlay ${selectedPhotoIndex !== null ? 'open' : ''}`}
           onClick={closePhoto}
         >
-          <button className="lightbox-prev" onClick={(e) => { e.stopPropagation(); showPrevPhoto(); }}>
+          <button
+            className="lightbox-prev"
+            onClick={(e) => {
+              e.stopPropagation();
+              showPrevPhoto();
+            }}
+          >
             &#10094;
           </button>
           <img
-            src={`http://localhost:5000${photos[selectedPhotoIndex]}`}
+            src={`http://localhost:5000${photos[selectedPhotoIndex].photo_url}`}
             alt="Selected"
             className="lightbox-photo"
             onClick={(e) => e.stopPropagation()}
           />
-          <button className="lightbox-next" onClick={(e) => { e.stopPropagation(); showNextPhoto(); }}>
+          <button
+            className="lightbox-next"
+            onClick={(e) => {
+              e.stopPropagation();
+              showNextPhoto();
+            }}
+          >
             &#10095;
           </button>
           <button className="lightbox-close" onClick={closePhoto}>✕</button>

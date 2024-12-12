@@ -44,3 +44,13 @@ export const fetchLikeStatus = async (likerId, likedId) => {
       throw error;
     }
   };
+  
+  export const fetchMatches = async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/matches`, { params: { userId } });
+      return response.data; // Return array of matched users
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+      throw error;
+    }
+  };

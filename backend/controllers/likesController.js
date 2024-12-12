@@ -5,7 +5,8 @@ const getLikes = async (req, res) => {
     const { userId } = req.query;
   
     try {
-      const query = `
+      const query = 
+      `
         SELECT 
           users.first_name,
           users.profile_id,
@@ -15,11 +16,11 @@ const getLikes = async (req, res) => {
         FROM likes
         JOIN users ON likes.liked_id = users.user_id
 
-      LEFT JOIN profile_photos 
+        LEFT JOIN profile_photos 
         ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
 
         WHERE likes.liker_id = $1
-ORDER BY likes.created_at DESC
+        ORDER BY likes.created_at DESC
       `;
   
       const result = await pool.query(query, [userId]);
@@ -128,7 +129,69 @@ const checkLikeStatus = async (req, res) => {
     }
   };
   
+  const dislikeUser = async (req, res) => {
+    const { userId, dislikedUserId } = req.body;
+
+    try {
+        // Remove messaging permissions
+        await pool.query(
+            `DELETE FROM messaging_permissions 
+             WHERE (user_id = $1 AND can_message_id = $2) 
+                OR (user_id = $2 AND can_message_id = $1)`,
+            [userId, dislikedUserId]
+        );
+
+        // Optionally delete conversation
+        await pool.query(
+            `DELETE FROM messages 
+             WHERE (sender_id = $1 AND receiver_id = $2) 
+                OR (sender_id = $2 AND receiver_id = $1)`,
+            [userId, dislikedUserId]
+        );
+
+        res.status(200).json({ message: 'User disliked successfully and conversation removed.' });
+    } catch (error) {
+        console.error('Error disliking user:', error);
+        res.status(500).json({ error: 'Database error.' });
+    }
+  };
+
+  const getMatches = async (req, res) => {
+    const { userId } = req.query;
   
+    try {
+      const query = `
+        SELECT 
+          users.first_name,
+          users.profile_id,
+          users.date_of_birth,
+          users.location,
+          COALESCE(profile_photos.photo_url, '/default-profile.png') AS photo_url
+        FROM likes AS l1
+        JOIN likes AS l2 ON l1.liker_id = l2.liked_id AND l1.liked_id = l2.liker_id
+        JOIN users ON users.user_id = l1.liked_id
+        LEFT JOIN profile_photos 
+          ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
+        WHERE l1.liker_id = $1
+        ORDER BY l1.created_at DESC
+      `;
+  
+      const result = await pool.query(query, [userId]);
+  
+      res.status(200).json(result.rows); // Return the matches
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+      res.status(500).json({ error: 'Database error' });
+    }
+  };
+
   
 
-module.exports = { getLikes, getLikedMe, checkLikeStatus, toggleLike };
+module.exports = { 
+  getLikes, 
+  getLikedMe, 
+  checkLikeStatus, 
+  toggleLike, 
+  dislikeUser, 
+  getMatches
+};

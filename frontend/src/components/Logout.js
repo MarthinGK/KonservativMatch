@@ -13,7 +13,7 @@ const LogoutButton = () => {
       }}
       className="nav-logout-button"
     >
-      Log Out
+      Logg ut
     </button>
   );
 };
