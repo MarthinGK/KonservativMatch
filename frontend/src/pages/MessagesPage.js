@@ -10,6 +10,8 @@ import { fetchLikes, fetchLikedMe } from '../api/likesAPI';
 import { fetchUserProfileByUserId } from '../api/UserAPI';
 import { checkPermission } from '../api/PermissionsAPI';
 import { useAuth0 } from '@auth0/auth0-react';
+import MessagesPagePreview from '../components/MessagesPagePreview';
+import { useLocation } from 'react-router-dom';
 import '../styles/MessagesPage.css';
 
 const MessagesPage = ()  => {
@@ -18,11 +20,15 @@ const MessagesPage = ()  => {
   const [likes, setLikes] = useState([]);
   const [conversations, setConversations] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedProfileUserId, setSelectedProfileUserId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [startIndex, setStartIndex] = useState(0);
   const [canMessage, setCanMessage] = useState(true);
-  const profilesPerPage = 4; // Show 4 profiles at a time
+  const [viewMode, setViewMode] = useState('chat');
+  const [profilesPerPage, setProfilesPerPage] = useState(4);
+  const { state } = useLocation();
+  const initialSelectedUserId = state?.selectedUserId || null;
 
   useEffect(() => {
     // Apply overflow hidden when component mounts
@@ -35,12 +41,28 @@ const MessagesPage = ()  => {
   }, []);
 
   useEffect(() => {
-    const chatMessages = document.querySelector('.chat-messages');
-    if (chatMessages) {
-      chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
-    }
-  }, [messages]); // Trigger when messages update
-  // Load likes and recent conversations
+    const updateProfilesPerPage = () => {
+      const width = window.innerWidth;
+      if (width < 1337 && width > 1220) {
+        setProfilesPerPage(3);
+      } else if (width <= 1220 && width > 870) {
+        setProfilesPerPage(2);
+      } else if (width <= 870) {
+        setProfilesPerPage(1);
+      } else {
+        setProfilesPerPage(4); // Default to 4 if none of the above conditions match
+      }
+    };
+
+    // Initial check and event listener
+    updateProfilesPerPage();
+    window.addEventListener('resize', updateProfilesPerPage);
+
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener('resize', updateProfilesPerPage);
+    };
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -80,25 +102,32 @@ const MessagesPage = ()  => {
     loadMessages();
   }, [selectedChat, userId]);
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(async () => {
-  //     try {
-  //       const updatedConversations = await fetchRecentConversations(userId);
-  //       setConversations((prevConversations) => {
-  //         // Update unread status dynamically
-  //         return updatedConversations.map((updated) => {
-  //           const prev = prevConversations.find((conv) => conv.user_id === updated.user_id);
-  //           return { ...updated, unread: updated.unread || prev?.unread };
-  //         });
-  //       });
-  //     } catch (error) {
-  //       console.error('Error fetching updated conversations:', error);
-  //     }
-  //   }, 5000); // Poll every 5 seconds
-  
-  //   return () => clearInterval(intervalId); // Cleanup on unmount
-  // }, [userId]);
-  
+  useEffect(() => {
+    const chatMessagesContainer = document.querySelector('.chat-messages');
+
+    if (viewMode === 'chat' && chatMessagesContainer) {
+      // Scroll to the bottom when in "Chat" view
+      chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    } else if (viewMode === 'preview' && chatMessagesContainer) {
+      // Scroll to the top when in "Preview Profile" view
+      chatMessagesContainer.scrollTop = 0;
+    }
+  }, [viewMode]); // Trigger whenever viewMode changes
+
+  useEffect(() => {
+    // Automatically set the selected chat if an initial user ID is provided
+    if (initialSelectedUserId) {
+      const loadChat = async () => {
+        try {
+          const profileDetails = await fetchUserProfileByUserId(initialSelectedUserId);
+          setSelectedChat({ user_id: initialSelectedUserId, ...profileDetails });
+        } catch (error) {
+          console.error('Error loading initial chat:', error);
+        }
+      };
+      loadChat();
+    }
+  }, [initialSelectedUserId]);
 
   // Send a new message
   const handleSendMessage = async () => {
@@ -116,39 +145,45 @@ const MessagesPage = ()  => {
 
   const handleProfileClick = async (profileId) => {
     try {
-
-      console.log("profile click profile ID: ", profileId)
-
+      console.log("profile click profile ID: ", profileId);
+      setSelectedProfileUserId(profileId);
+      console.log("Fetched profile: ", selectedProfileUserId);
       const permissionResponse = await checkPermission(profileId, userId);
-      console.log("Message Permission?: ", permissionResponse)
+      console.log("Message Permission?: ", permissionResponse);
       setCanMessage(permissionResponse);
-
-
+  
       // Fetch the conversation with the clicked profile
       const conversation = await initiateConversation(userId, profileId);
+      console.log("Conversation data: ", conversation);
+  
+      // Fetch profile details
       const profileDetails = await fetchUserProfileByUserId(profileId);
-
+      
+      console.log("Fetched profile details: ", profileDetails);
+      
+  
+      if (profileDetails) {
+        // Set the selected chat with profile and conversation details
+        setSelectedChat({ user_id: profileId, ...profileDetails });
+        setMessages(conversation);
+      }
+  
       // Mark all messages as read in the backend
-      await markMessagesAsRead(userId, profileId); // Ensure this backend function is working correctly
+      await markMessagesAsRead(userId, profileId);
   
-      const updatedUnreadCount = await getUnreadMessagesCount(userId);
-      console.log("MESSAGE unread messages count: ", updatedUnreadCount)
-
-      // Update selected chat and messages
-      setSelectedChat({ user_id: profileId, ...profileDetails });
-      console.log("set slected chat: ", selectedChat);
-      setMessages(conversation);
-  
-      // Update the conversations state to mark this conversation as read
+      // Update conversations to mark as read
       setConversations((prevConversations) =>
         prevConversations.map((conv) =>
           conv.user_id === profileId ? { ...conv, unread: false } : conv
         )
       );
+  
+      console.log("Set selected chat: ", { user_id: profileId, ...profileDetails });
     } catch (error) {
       console.error('Error initiating conversation:', error);
     }
   };
+  
 
   const handleNext = () => {
     if (startIndex + profilesPerPage < likes.length) {
@@ -167,47 +202,44 @@ const MessagesPage = ()  => {
       {/* Sidebar */}
       <div className="sidebar">
         {/* Likes and Matches Section */}
-        
-      <div className="likes-and-matches-container">
-      <h3>Likes og Matcher</h3>
-      <div className="profiles-wrapper-messages">
-        <button
-          className="nav-button-messages"
-          onClick={handlePrev}
-          disabled={startIndex === 0}
-        >
-          &#10094; {/* Left Arrow */}
-        </button>
-        <div className="profiles-messages">
-          
-        {likes.slice(startIndex, startIndex + profilesPerPage).map((profile, index) => (
-          <div
-            className="profile-messages"
-            key={index}
-            onClick={() => handleProfileClick(profile.user_id)} // Initiate conversation on click
-          >
-            <img
-              src={`http://localhost:5000${profile.photo_url}`}
-              alt={`${profile.first_name}`}
-              className="profile-picture-messages"
-            />
-            <div className="profile-background-messages">
-              <p className="profile-name-messages">{profile.first_name}</p>
+        <div className="likes-and-matches-container">
+          <h3>Likes og Matcher</h3>
+          <div className="profiles-wrapper-messages">
+            <button
+              className="nav-button-messages"
+              onClick={handlePrev}
+              disabled={startIndex === 0}
+            >
+              &#10094; {/* Left Arrow */}
+            </button>
+            <div className="profiles-messages">
+              {likes.slice(startIndex, startIndex + profilesPerPage).map((profile, index) => (
+                <div
+                  className="profile-messages"
+                  key={index}
+                  onClick={() => handleProfileClick(profile.user_id)} // Initiate conversation on click
+                >
+                  <img
+                    src={`http://localhost:5000${profile.photo_url}`}
+                    alt={`${profile.first_name}`}
+                    className="profile-picture-messages"
+                  />
+                  <div className="profile-background-messages">
+                    <p className="profile-name-messages">{profile.first_name}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+            <button
+              className="nav-button-messages"
+              onClick={handleNext}
+              disabled={startIndex + profilesPerPage >= likes.length}
+            >
+              &#10095; {/* Right Arrow */}
+            </button>
           </div>
-        ))}
-
         </div>
-        <button
-          className="nav-button-messages"
-          onClick={handleNext}
-          disabled={startIndex + profilesPerPage >= likes.length}
-        >
-          &#10095; {/* Right Arrow */}
-        </button>
-      </div>
-    </div>
-
+  
         {/* Messages List */}
         <div className="messages-list">
           <h3>Meldinger</h3>
@@ -220,16 +252,16 @@ const MessagesPage = ()  => {
                 setSelectedChat(conversation);
               }}
             >
-              <img 
-                src={`http://localhost:5000${conversation.photo_url}`} 
-                alt={conversation.first_name} 
+              <img
+                src={`http://localhost:5000${conversation.photo_url}`}
+                alt={conversation.first_name}
                 className="conversation-picture"
               />
               <div className="conversation-details">
                 <p className="conversation-name">{conversation.first_name}</p>
                 <p className="conversation-last-message">
-                  {conversation.message_text.length > 50 
-                    ? `${conversation.message_text.slice(0, 50)}...` 
+                  {conversation.message_text.length > 50
+                    ? `${conversation.message_text.slice(0, 50)}...`
                     : conversation.message_text}
                 </p>
               </div>
@@ -237,10 +269,8 @@ const MessagesPage = ()  => {
             </div>
           ))}
         </div>
-
-        
       </div>
-
+  
       {/* Chat Area */}
       <div className="chat-area">
         {selectedChat ? (
@@ -256,51 +286,87 @@ const MessagesPage = ()  => {
                 )}
                 <h3 className="chat-header-name">{selectedChat.first_name}</h3>
               </div>
+              <div className="chat-header-buttons">
+                <button
+                  className={`chat-header-button ${viewMode === 'chat' ? 'active' : ''}`}
+                  onClick={() => setViewMode('chat')}
+                >
+                  Chat
+                </button>
+                <button
+                  className={`chat-header-button ${viewMode === 'preview' ? 'active' : ''}`}
+                  onClick={() => setViewMode('preview')}
+                >
+                  Preview Profile
+                </button>
+              </div>
             </div>
             {!canMessage && (
               <div className="no-permission-message">
-                  {`${selectedChat.first_name} har ikke tillatelse til å sende deg meldinger. Hvis du vil gi dem tilgang, kan du enten sende en melding eller like profilen deres.`}
+                {`${selectedChat.first_name} har ikke tillatelse til å sende deg meldinger. Hvis du vil gi dem tilgang, kan du enten sende en melding eller like profilen deres.`}
               </div>
             )}
-            <div className="chat-messages">
-              {messages
-                .slice()
-                .sort((b, a) => new Date(a.created_at) - new Date(b.created_at))
-                .map((message, index) => (
-                  <div
-                    key={index}
-                    className={`message-container ${message.sender_id === userId ? 'sent' : 'received'}`}
-                  >
-                    <div className={`message ${message.sender_id === userId ? 'sent' : 'received'}`}>
-                      <p className="message-text">{message.message_text}</p>
-                      <span className="message-timestamp">
-                        {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              <div id="scroll-anchor"></div> {/* Dummy div */}
+            <div
+              className={`chat-messages ${
+                viewMode === 'preview' ? 'chat-messages-preview' : ''
+              }`}
+            >
+              {viewMode === 'chat' ? (
+                <>
+                  {messages
+                    .slice()
+                    .sort((b, a) => new Date(a.created_at) - new Date(b.created_at))
+                    .map((message, index) => (
+                      <div
+                        key={index}
+                        className={`message-container ${
+                          message.sender_id === userId ? 'sent' : 'received'
+                        }`}
+                      >
+                        <div
+                          className={`message ${
+                            message.sender_id === userId ? 'sent' : 'received'
+                          }`}
+                        >
+                          <p className="message-text">{message.message_text}</p>
+                          <span className="message-timestamp">
+                            {new Date(message.created_at).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  <div id="scroll-anchor"></div>
+                </>
+              ) : (
+                <MessagesPagePreview selectedProfileId={selectedChat.user_id} />
+              )}
             </div>
-            
-            <div className="chat-input-container">
-              <div className="chat-input">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Send a message..."
-                />
-                <button onClick={handleSendMessage}>Send</button>
+            {viewMode === 'chat' && (
+              <div className="chat-input-container">
+                <div className="chat-input">
+                  <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Send a message..."
+                  />
+                  <button onClick={handleSendMessage}>Send</button>
+                </div>
               </div>
-            </div>
-
+            )}
           </>
         ) : (
           <p className="no-chat-selected">Trykk på en bruker i panelet til venstre for å starte en samtale</p>
         )}
       </div>
+
     </div>
   );
+  
+  
 };
 
 export default MessagesPage;

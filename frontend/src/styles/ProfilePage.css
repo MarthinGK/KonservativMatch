@@ -249,3 +249,27 @@
 .profilepage-additional-pic {
   cursor: pointer; /* Change the cursor to a hand pointer */
 }
+
+.chat-bubble-button {
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.chat-bubble-button:hover {
+  background-color: var(--button-bg-color-hover);
+}
+
+.profilepage-actions {
+  display: flex;
+  align-items: center; /* Vertically align buttons */
+  gap: 10px; /* Add space between LikeButton and Chat Bubble */
+  margin-top: 10px; /* Adjust spacing from other elements */
+}

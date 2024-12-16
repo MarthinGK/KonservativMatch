@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchUserProfile, fetchUserId } from '../api/UserAPI'; // Assuming you have this function
+import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate for redirection
+import { fetchUserProfile, fetchUserId } from '../api/UserAPI'; // Assuming checkPermission is a valid function
+import { checkPermission } from '../api/PermissionsAPI';
 import LikeButton from '../components/LikeButton';
 import '../styles/ProfilePage.css'; // Custom CSS for profile page
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -10,8 +11,11 @@ const ProfilePage = () => {
   const { user } = useAuth0();
   const userOneId = user.sub;
   const { brukerId } = useParams();
+  const navigate = useNavigate();
+  
   const [profileData, setProfileData] = useState(null);
   const [userTwoId, setuserTwoId] = useState(null);
+  const [canChat, setCanChat] = useState(false); // New state to manage chat permission
   const [startIndex, setStartIndex] = useState(0);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
   const imagesPerPage = 3;
@@ -20,20 +24,24 @@ const ProfilePage = () => {
     const loadProfileData = async () => {
       try {
         const data = await fetchUserProfile(brukerId);
-        console.log("DATA PHOTOS: ", data.photos)
+        console.log("DATA PHOTOS: ", data.photos);
         if (data.photos) {
           data.photos.sort((a, b) => a.position - b.position);
-        } 
+        }
 
         const userTwoId = await fetchUserId(brukerId);
         setProfileData(data);
         setuserTwoId(userTwoId);
+
+        // Check permission to chat with the user
+        const hasPermission = await checkPermission(userOneId, userTwoId);
+        setCanChat(hasPermission);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
     };
     loadProfileData();
-  }, [brukerId]);
+  }, [brukerId, userOneId]);
 
   if (!profileData) {
     return <div>Loading...</div>;
@@ -43,11 +51,6 @@ const ProfilePage = () => {
   const mainPhoto = photos && photos.length > 0 ? photos[0].photo_url : null;
   const secondPhoto = photos && photos.length > 1 ? photos[1].photo_url : null;
   const paginatedPhotos = photos.slice(startIndex + 2, startIndex + 2 + imagesPerPage);
-
-  // const { photos } = profileData || [];
-  // const mainPhoto = photos && photos.length > 0 ? photos[0] : null;
-  // const secondPhoto = photos && photos.length > 1 ? photos[1] : null;
-  // const paginatedPhotos = photos.slice(startIndex + 2, startIndex + 2 + imagesPerPage);
 
   const handleNext = () => {
     if (startIndex + imagesPerPage < photos.length - 2) {
@@ -76,10 +79,13 @@ const ProfilePage = () => {
     }
   };
 
+  const handleChatRedirect = () => {
+    navigate('/messages', { state: { selectedUserId: userTwoId } }); // Pass selected user ID
+  };
+
   return (
     <div className="profilepage-page">
       <div className="profilepage-container">
-      
         {mainPhoto && (
           <img
             src={`http://localhost:5000${mainPhoto}`}
@@ -117,10 +123,15 @@ const ProfilePage = () => {
             <span>{profileData.smoking}</span>
           </div>
         </div>
-        <LikeButton likerId={userOneId} likedId={userTwoId} />
+        <div className="profilepage-actions">
+          <LikeButton likerId={userOneId} likedId={userTwoId} />
+          {canChat && (
+            <button className="chat-bubble-button" onClick={handleChatRedirect}>
+              <i className="fas fa-comment-alt"></i>
+            </button>
+          )}
+        </div>
       </div>
-
-      
 
       <div className="profilepage-introduction-container">
         <div className="profilepage-introduction-box">

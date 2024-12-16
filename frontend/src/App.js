@@ -14,7 +14,7 @@ import IsProfileComplete from './components/IsProfileComplete';
 import EmailVerification from './pages/EmailVerification';
 import { checkUserInDB, updateUserActivity } from './api/UserAPI';
 
-import ProfilePage from './pages/Profile';
+import ProfilePage from './pages/ProfilePage';
 
 import ProfileEditPage from './pages/EditProfilePage';
 import EditAccountPage from './pages/EditAccountPage';

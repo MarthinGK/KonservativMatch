@@ -189,7 +189,7 @@ export const fetchProfileActiveStatus = async (userId) => {
 
 export const fetchUserId = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:5000/users/userid/${id}`);
+    const response = await axios.get(`${API_URL}/userid/${id}`);
     return response.data.user_id; // Retrieved user_id
   } catch (error) {
     console.error('Error fetching user_id:', error);

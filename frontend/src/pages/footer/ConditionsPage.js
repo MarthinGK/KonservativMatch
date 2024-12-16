@@ -12,7 +12,7 @@ const ConditionsPage = () => {
         <p>
           Disse vilkårene og betingelsene gjelder for både gratis og betalte arrangementer, heretter referert til som
           Aktiviteter, arrangert av Klækken Nettjenester (heretter “Klækken”). Ved å delta eller registrere seg for
-          disse Aktiviteter godtar deltakerne vilkårene fullt ut.
+          disse Aktiviteter godtar deltakerne vilkårene fullt ut. 
         </p>
       </section>
 
