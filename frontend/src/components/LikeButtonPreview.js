@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { fetchLikeStatus, toggleLike } from '../api/likesAPI'; // Import API calls
+import { checkPermission } from '../api/PermissionsAPI';
+import { useNavigate } from 'react-router-dom';
 import '../styles/LikeButton.css';
 
-const LikeButton = ({ likerId, likedId }) => {
+const LikeButtonPreview = ({ likerId, likedId }) => {
   const [liked, setLiked] = useState(false); // Track like status
-
+  const [canChat, setCanChat] = useState(false);
+  const navigate = useNavigate();
   // Fetch initial like status
   useEffect(() => {
     const fetchStatus = async () => {
       try {
         const isLiked = await fetchLikeStatus(likerId, likedId); // Call API
         setLiked(isLiked); // Update state
+
+        const hasPermission = await checkPermission(likerId, likedId);
+        setCanChat(hasPermission);
       } catch (error) {
         console.error('Error fetching like status:', error);
       }
@@ -18,7 +24,9 @@ const LikeButton = ({ likerId, likedId }) => {
 
     fetchStatus();
   }, [likerId, likedId]);
-
+  const handleChatRedirect = () => {
+    navigate('/messages', { state: { selectedUserId: likedId } }); // Pass selected user ID
+  };
   // Handle like toggle
   const handleLikeToggle = async () => {
     try {
@@ -31,16 +39,19 @@ const LikeButton = ({ likerId, likedId }) => {
 
   return (
     <div className="like-button-container">
-      <button
-        className={`like-button ${liked ? 'liked' : ''}`}
-        onClick={handleLikeToggle}
-      >
-        <i className="fas fa-heart"></i>
-      </button>
-      <p className="like-status-text">{liked ? 'Likt' : 'Lik'}</p>
+      <div className="button-with-text">
+        <button
+          className={`like-button ${liked ? 'liked' : ''}`}
+          onClick={handleLikeToggle}
+        >
+          <i className="fas fa-heart"></i>
+        </button>
+        <p className="like-status-text">{liked ? 'Likt' : ''}</p>
+      </div>
     </div>
   );
+  
 };
 
-export default LikeButton;
+export default LikeButtonPreview;
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate for redirection
+import { useParams } from 'react-router-dom'; // Added useNavigate for redirection
 import { fetchUserProfile, fetchUserId } from '../api/UserAPI'; // Assuming checkPermission is a valid function
-import { checkPermission } from '../api/PermissionsAPI';
-import LikeButton from '../components/LikeButton';
+import LikeButtonProfile from '../components/LikeButtonProfile';
 import '../styles/ProfilePage.css'; // Custom CSS for profile page
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -11,11 +10,10 @@ const ProfilePage = () => {
   const { user } = useAuth0();
   const userOneId = user.sub;
   const { brukerId } = useParams();
-  const navigate = useNavigate();
   
   const [profileData, setProfileData] = useState(null);
   const [userTwoId, setuserTwoId] = useState(null);
-  const [canChat, setCanChat] = useState(false); // New state to manage chat permission
+
   const [startIndex, setStartIndex] = useState(0);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
   const imagesPerPage = 3;
@@ -33,9 +31,6 @@ const ProfilePage = () => {
         setProfileData(data);
         setuserTwoId(userTwoId);
 
-        // Check permission to chat with the user
-        const hasPermission = await checkPermission(userOneId, userTwoId);
-        setCanChat(hasPermission);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
@@ -79,10 +74,6 @@ const ProfilePage = () => {
     }
   };
 
-  const handleChatRedirect = () => {
-    navigate('/messages', { state: { selectedUserId: userTwoId } }); // Pass selected user ID
-  };
-
   return (
     <div className="profilepage-page">
       <div className="profilepage-container">
@@ -124,12 +115,7 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="profilepage-actions">
-          <LikeButton likerId={userOneId} likedId={userTwoId} />
-          {canChat && (
-            <button className="chat-bubble-button" onClick={handleChatRedirect}>
-              <i className="fas fa-comment-alt"></i>
-            </button>
-          )}
+          <LikeButtonProfile likerId={userOneId} likedId={userTwoId} />
         </div>
       </div>
 

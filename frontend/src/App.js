@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 
-import Navbar from './pages/navbar/Navbar';
+import Navbar from './pages/Navbar';
 import Footer from './pages/footer/Footer';
 
-import Home from './pages/Home';
+import Home from './pages/HomePage';
 import Explore from './pages/Explore';
 import ProfileSetup from './components/ProfileSetup';
 import Search from './pages/Search';

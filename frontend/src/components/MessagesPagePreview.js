@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchUserProfile, fetchUserId, getPreviewProfile } from '../api/UserAPI'; // Assuming you have this function
-import LikeButton from '../components/LikeButton';
+import LikeButtonPreview from './LikeButtonPreview';
 import '../styles/MessagesPagePreview.css'; // Custom CSS for profile page
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -129,7 +129,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
               <span>{profileData.smoking}</span>
             </div>
           </div>
-          <LikeButton likerId={userOneId} likedId={userTwoId} />
+          <LikeButtonPreview likerId={userOneId} likedId={userTwoId} />
         </div>
   
         

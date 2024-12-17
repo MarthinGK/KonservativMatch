@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
-import '../../styles/Navbar.css';
-import { checkIfProfileIsComplete } from '../../api/UserAPI';
-import { fetchProfilePhotos } from '../../api/PhotosAPI';
-import { getUnreadMessagesCount } from '../../api/MessagesAPI';
-import LogoutButton from '../../components/Logout';
-import Default from '../../images/Default.png';
+import '../styles/Navbar.css';
+import { checkIfProfileIsComplete } from '../api/UserAPI';
+import { fetchProfilePhotos } from '../api/PhotosAPI';
+import { getUnreadMessagesCount } from '../api/MessagesAPI';
+import LogoutButton from '../components/Logout';
+import Default from '../images/Default.png';
+import Logo from '../components/images/LogoTransparent.png';
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, user } = useAuth0();
@@ -28,19 +29,6 @@ const Navbar = () => {
       setShowDropdown(false);
     }
   };
-
-  // const fetchUnreadCount = async () => {
-  //   if (isAuthenticated && user) {
-  //       const count = await getUnreadMessagesCount(user.sub);
-  //       setUnreadMessages(count);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchUnreadCount();
-  //   const intervalId = setInterval(fetchUnreadCount, 5000); // Poll every 5 seconds
-  //   return () => clearInterval(intervalId);
-  // }, [isAuthenticated, user]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -97,9 +85,17 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
+      
       <div className="navbar-logo">
-        <Link to="/" style={{ color: theme.color }}>KonservativMatch</Link>
-      </div>
+  <Link to="/" className="logo-container">
+    <img
+      src={Logo}
+      alt="KonservativMatch Logo"
+      className="nav-logo-image"
+    />
+    <span className="nav-logo-text">KonservativMatch</span>
+  </Link>
+</div>
 
       {isAuthenticated && isProfileComplete && (
         <div className="navbar-center">

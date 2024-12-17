@@ -155,3 +155,23 @@
   position: relative;
   top: -5px;
 }
+
+.navbar-logo {
+  display: flex;
+  align-items: center; /* Align items vertically */
+}
+
+.navbar-logo img.nav-logo-image {
+  width: 30px; /* Adjust as needed */
+  height: 30px; /* Adjust as needed */
+  margin-right: 10px; /* Spacing between logo and text */
+  vertical-align: middle; /* Ensures alignment */
+}
+
+/* Style for the logo text */
+.navbar-logo .nav-logo-text {
+  font-size: 1.5rem; /* Adjust text size */
+  font-weight: bold;
+  line-height: 1; /* Ensures text height matches the image */
+  display: inline-block; /* Prevent extra spacing issues */
+}
