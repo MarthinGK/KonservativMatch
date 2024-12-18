@@ -68,31 +68,34 @@ const updateUserActivity = async (req, res) => {
 
 // Controller function to handle saving user profile data incrementally
 const saveUserProfile = async (req, res) => {
-  const { userId, firstName, lastName, dateOfBirth, gender, location, religion, alcohol, smoking, height, introduction, profile_complete, created_at } = req.body;
+  const { userId, firstName, lastName, dateOfBirth, gender, location, religion, alcohol, smoking, height, introduction, profile_complete, created_at, political_party, want_children } = req.body;
   try {
     const checkUser = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
 
     if (checkUser.rows.length > 0) {
       const result = await pool.query(
-        'UPDATE users SET first_name = $1, last_name = $2, date_of_birth = $3, gender = $4, location = $5, religion = $6, alcohol = $7, smoking = $8, height = $9, introduction = $10, profile_complete = $11, created_at = $12 WHERE user_id = $13 RETURNING *',
+        'UPDATE users SET first_name = $1, last_name = $2, date_of_birth = $3, gender = $4, location = $5, religion = $6, alcohol = $7, smoking = $8, height = $9, introduction = $10, profile_complete = $11, created_at = $12, political_party = $13, want_children = $14 WHERE user_id = $15 RETURNING *',
         [firstName || checkUser.rows[0].first_name, 
          lastName || checkUser.rows[0].last_name, 
-         dateOfBirth || checkUser.rows[0].date_of_birth,  // Correct column reference
+         dateOfBirth || checkUser.rows[0].date_of_birth,
          gender || checkUser.rows[0].gender,
-         location || checkUser.rows[0].location,         religion || checkUser.rows[0].religion,
+         location || checkUser.rows[0].location,
+         religion || checkUser.rows[0].religion,
          alcohol || checkUser.rows[0].alcohol,
          smoking || checkUser.rows[0].smoking,
          height || checkUser.rows[0].height,
          introduction || checkUser.rows[0].introduction,
          profile_complete || checkUser.rows[0].profile_complete,
          created_at || checkUser.rows[0].created_at,
+         political_party || checkUser.rows[0].political_party, 
+         want_children || checkUser.rows[0].want_children,
          userId]
       );
       res.status(200).json({ message: 'Profile updated', data: result.rows[0] });
     } else {
       const result = await pool.query(
-        'INSERT INTO users (user_id, first_name, last_name, date_of_birth, gender, location, religion, alcohol, smoking, height, introduction, profile_complete, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
-        [userId, firstName, lastName, dateOfBirth, gender, location, religion, alcohol, smoking, height, introduction, profile_complete, created_at]
+        'INSERT INTO users (user_id, first_name, last_name, date_of_birth, gender, location, religion, alcohol, smoking, height, introduction, profile_complete, created_at, political_party, want_children) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *',
+        [userId, firstName, lastName, dateOfBirth, gender, location, religion, alcohol, smoking, height, introduction, profile_complete, created_at, political_party, want_children]
       );
       res.status(201).json({ message: 'Profile created', data: result.rows[0] });
     }
@@ -233,12 +236,14 @@ const getPreviewProfile = async (req, res) => {
       `SELECT users.first_name, 
               users.last_name, 
               users.location, 
-              users.height,
+              users.height, 
               users.alcohol,
               users.smoking, 
               users.religion, 
               users.date_of_birth, 
               users.introduction, 
+              users.political_party, 
+              users.want_children, 
               json_agg(json_build_object('photo_url', profile_photos.photo_url, 'position', profile_photos.position)) AS photos
        FROM users
        JOIN profile_photos ON users.user_id = profile_photos.user_id
@@ -271,6 +276,8 @@ const getUserProfile = async (req, res) => {
               users.religion, 
               users.date_of_birth, 
               users.introduction, 
+              users.political_party, 
+              users.want_children, 
               json_agg(json_build_object('photo_url', profile_photos.photo_url, 'position', profile_photos.position)) AS photos
       FROM users
       JOIN profile_photos ON users.user_id = profile_photos.user_id
@@ -374,6 +381,8 @@ const getUserProfileByUserId = async (req, res) => {
           email, 
           TO_CHAR(date_of_birth, 'YYYY-MM-DD') AS date_of_birth, 
           introduction, 
+          political_party, 
+          want_children, 
           (SELECT photo_url 
            FROM profile_photos 
            WHERE user_id = $1 AND position = 0 
@@ -398,7 +407,7 @@ const getUserProfileByUserId = async (req, res) => {
 // Update user profile details by user_id
 const saveUserProfileByUserId = async (req, res) => {
   const { user_id } = req.params;
-  const { first_name, last_name, location, height, alcohol, smoking, religion, date_of_birth, introduction } = req.body;
+  const { first_name, last_name, location, height, alcohol, smoking, religion, date_of_birth, introduction, political_party, want_children } = req.body;
 
   try {
     const result = await pool.query(
@@ -411,10 +420,12 @@ const saveUserProfileByUserId = async (req, res) => {
            smoking = COALESCE($6, smoking),
            religion = COALESCE($7, religion),
            date_of_birth = COALESCE($8, date_of_birth),
-           introduction = COALESCE($9, introduction)
-       WHERE user_id = $10
+           introduction = COALESCE($9, introduction),
+           political_party = COALESCE($10, political_party),
+           want_children = COALESCE($11, want_children)
+       WHERE user_id = $12
        RETURNING *`,
-      [first_name, last_name, location, height, alcohol, smoking, religion, date_of_birth, introduction, user_id]
+      [first_name, last_name, location, height, alcohol, smoking, religion, date_of_birth, introduction, political_party, want_children, user_id]
     );
 
     if (result.rows.length === 0) {

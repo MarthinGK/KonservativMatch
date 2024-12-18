@@ -6,11 +6,12 @@ import { checkIfProfileIsComplete } from '../api/UserAPI';
 import { fetchProfilePhotos } from '../api/PhotosAPI';
 import { getUnreadMessagesCount } from '../api/MessagesAPI';
 import LogoutButton from '../components/Logout';
+import LoginButton from '../components/Login';
 import Default from '../images/Default.png';
 import Logo from '../components/images/LogoTransparent.png';
 
 const Navbar = () => {
-  const { isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const savedTheme = localStorage.getItem('theme');
   const [theme, setTheme] = useState(savedTheme || 'light');
@@ -71,7 +72,7 @@ const Navbar = () => {
       };
       fetchProfileStatus();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, defaultPhoto]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -87,15 +88,18 @@ const Navbar = () => {
     <nav className="navbar">
       
       <div className="navbar-logo">
-  <Link to="/" className="logo-container">
-    <img
-      src={Logo}
-      alt="KonservativMatch Logo"
-      className="nav-logo-image"
-    />
-    <span className="nav-logo-text">KonservativMatch</span>
-  </Link>
-</div>
+        <Link to="/" className="logo-container">
+          <img
+            src={Logo}
+            alt="KonservativMatch Logo"
+            className="nav-logo-image"
+          />
+          <span 
+            className="nav-logo-text">KonservativMatch
+            <span className="beta-label">Beta</span>
+          </span>
+        </Link>
+      </div>
 
       {isAuthenticated && isProfileComplete && (
         <div className="navbar-center">
@@ -109,9 +113,11 @@ const Navbar = () => {
       )}
 
       <ul className="navbar-menu">
+      {isAuthenticated ? (
+        <>
         <button onClick={toggleTheme}>Tema</button>
 
-        {isAuthenticated ? (
+        
           <li className="nav-dropdown" onClick={toggleDropdown} ref={dropdownRef}>
             <img
               src={profilePhoto}
@@ -132,11 +138,12 @@ const Navbar = () => {
               </ul>
             )}
           </li>
+          </>
         ) : (
           <li>
-            <button onClick={() => loginWithRedirect()} className="navbutton">
-              Logg inn
-            </button>
+            <div>
+            <LoginButton text={"Logg inn"}/>
+            </div>
           </li>
         )}
       </ul>
@@ -145,6 +152,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-

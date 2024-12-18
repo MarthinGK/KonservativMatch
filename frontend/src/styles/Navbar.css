@@ -175,3 +175,17 @@
   line-height: 1; /* Ensures text height matches the image */
   display: inline-block; /* Prevent extra spacing issues */
 }
+
+.beta-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background-color: red;
+  padding: 2px 6px;
+  margin-left: 8px;
+  border-radius: 4px;
+  vertical-align: top;
+  text-transform: uppercase;
+  position: relative;
+  top: -2px;
+}

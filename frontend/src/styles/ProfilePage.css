@@ -78,7 +78,7 @@
     align-items: center;
     margin-bottom: 10px;
     font-size: 16px;
-    margin-top: 10px;
+    margin-top: 7px;
     margin-left: 10px;
   }
   
@@ -136,6 +136,10 @@
 /* Additional class for smoking icon */
 .profilepage-info-item i.smoking-icon {
   color: gray; /* Example color for smoking icon */
+}
+
+.profilepage-info-item i.child-icon {
+  color: yellowgreen; /* Example color for smoking icon */
 }
 
 .profilepage-other-photos {

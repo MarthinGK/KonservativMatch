@@ -7,7 +7,7 @@ import Footer from './pages/footer/Footer';
 
 import Home from './pages/HomePage';
 import Explore from './pages/Explore';
-import ProfileSetup from './components/ProfileSetup';
+import ProfileSetup from './pages/ProfileSetup';
 import Search from './pages/Search';
 import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';

@@ -25,6 +25,7 @@ const EditProfileAboutYou = ({ userId }) => {
   const [editField, setEditField] = useState(null); // Track which field is being edited
   const [høydeTempValue, setHøydeTempValue] = useState(null); // Track temp høyde value
   const [customReligion, setCustomReligion] = useState(''); // Track custom religion input
+  const [customPoliticalParty, setCustomPoliticalParty] = useState('');
   const containerRef = useRef(null); // Reference to the container
 
   // Fetch user profile on load
@@ -38,10 +39,15 @@ const EditProfileAboutYou = ({ userId }) => {
           alkohol: data.alcohol || '',
           livssyn: data.religion || '',
           lokasjon: data.location || '',
+          parti: data.political_party || '',
+          barn: data.want_children || '',
         });
         setHøydeTempValue(data.height || 170);
         if (data.religion === 'Annet' && data.custom_religion) {
           setCustomReligion(data.custom_religion); // Load existing custom religion
+        }
+        if (data.political_party === 'Annet' && data.custom_political_party) {
+          setCustomPoliticalParty(data.custom_political_party);
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -53,17 +59,27 @@ const EditProfileAboutYou = ({ userId }) => {
   const handleFieldUpdate = async (field, value) => {
     try {
       const fieldToUpdate =
-        field === 'høyde'
+          field === 'høyde'
           ? 'height'
+
           : field === 'lokasjon'
           ? 'location'
+
           : field === 'røyker'
           ? 'smoking'
+
           : field === 'alkohol'
           ? 'alcohol'
+
           : field === 'livssyn'
           ? 'religion'
-          : field;
+          
+          : field === 'parti'
+          ? 'political_party'
+
+          : field === 'barn'
+          ? 'want_children'
+          :field;
 
       if (field === 'livssyn') {
         if (value !== 'Annet') {
@@ -77,6 +93,20 @@ const EditProfileAboutYou = ({ userId }) => {
       } else {
         await saveUserProfileByUserId(userId, { [fieldToUpdate]: value });
       }
+
+      if (field === 'political_party') {
+        if (value !== 'Annet') {
+          setCustomPoliticalParty(''); // Clear custom religion if not 'Annet'
+        }
+        // Save religion and custom religion to the backend
+        await saveUserProfileByUserId(userId, {
+          political_party: value,
+          custom_PoliticalParty: value === 'Annet' ? customPoliticalParty : null,
+        });
+      } else {
+        await saveUserProfileByUserId(userId, { [fieldToUpdate]: value });
+      }
+
 
       // Update the local state
       setFields((prevFields) => ({
@@ -95,18 +125,39 @@ const EditProfileAboutYou = ({ userId }) => {
 
   const handleCustomReligionSave = async () => {
     try {
+      const newValue = customReligion.trim() || fields.livssyn; // Use original value if input is blank
       await saveUserProfileByUserId(userId, {
-        religion: customReligion
+        religion: newValue,
+        custom_religion: newValue === 'Annet' ? customReligion : null,
       });
       setFields((prevFields) => ({
         ...prevFields,
-        livssyn: customReligion,
+        livssyn: newValue,
       }));
       setEditField(null); // Close the field
     } catch (error) {
       console.error('Error saving custom religion:', error);
     }
   };
+  
+  const handleCustomPoliticalPartySave = async () => {
+    try {
+      const newValue = customPoliticalParty.trim() || fields.parti; // Use original value if input is blank
+      await saveUserProfileByUserId(userId, {
+        political_party: newValue,
+        custom_political_party: newValue === 'Annet' ? customPoliticalParty : null,
+      });
+      setFields((prevFields) => ({
+        ...prevFields,
+        parti: newValue,
+      }));
+      setEditField(null); // Close the field
+    } catch (error) {
+      console.error('Error saving custom political party:', error);
+    }
+  };
+  
+
 
   const handleHøydeSave = async () => {
     try {
@@ -218,7 +269,7 @@ const EditProfileAboutYou = ({ userId }) => {
                       <div className="custom-religion">
                         <input
                           type="text"
-                          maxLength="50"
+                          maxLength="30"
                           placeholder="Spesifiser"
                           value={customReligion}
                           onChange={(e) => setCustomReligion(e.target.value)}
@@ -236,7 +287,60 @@ const EditProfileAboutYou = ({ userId }) => {
                       </div>
                     )}
                   </div>
-                ) : (
+                ) : 
+                
+
+
+
+
+                 field === 'parti' ? (
+                  <div className="button-group">
+                    {getOptionsForField(field).map((option) => (
+                      <button
+                        key={option}
+                        className={`profileSetupSelectButton ${
+                          value === option ? 'selected' : ''
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFieldUpdate('parti', option);
+                          if (option === 'Annet') {
+                            setEditField('parti');
+                          }
+                        }}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                    {value === 'Annet' && (
+                      <div className="custom-party">
+                        <input
+                          type="text"
+                          maxLength="30"
+                          placeholder="Spesifiser"
+                          value={customPoliticalParty}
+                          onChange={(e) => setCustomPoliticalParty(e.target.value)}
+                          className="custom-religion-input"
+                        />
+                        <button
+                          className="save-button-religion"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCustomPoliticalPartySave();
+                          }}
+                        >
+                          Lagre
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) :
+                
+
+
+
+
+                (
                   <div className="button-group">
                     {getOptionsForField(field).map((option) => (
                       <button
@@ -273,7 +377,11 @@ const getOptionsForField = (field) => {
     case 'alkohol':
       return ['Aldri', 'Sjeldent', 'Sosialt', 'Ofte', 'Hver dag'];
     case 'livssyn':
-      return ['Kristen', 'Ateist', 'Agnostisk', 'Muslim', 'Hindu', 'Annet'];
+      return ['Kristen', 'Ateist', 'Agnostisk', 'Annet'];
+    case 'parti':
+      return ['Høyre', 'Fremskrittspartiet', 'Senterpartiet', 'Annet'];
+    case 'barn':
+      return ['Ønsker barn', 'Ønsker ikke barn', 'Vet ikke enda'];
     default:
       return [];
   }

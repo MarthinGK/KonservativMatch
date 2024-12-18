@@ -18,11 +18,6 @@ const { checkOrCreateUser,
         getUserIdById
       } = require('../controllers/userController');
 
-// Route to check or create a user
-router.post('/check', checkOrCreateUser);
-
-router.post('/profile', saveUserProfile);
-
 // Route to get profile complete status
 const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
   for (let i = 0; i < retries; i++) {
@@ -39,6 +34,11 @@ const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
   }
   throw new Error('User not found after multiple retries');
 };
+
+// Route to check or create a user
+router.post('/check', checkOrCreateUser);
+
+router.post('/profile', saveUserProfile);
 
 router.get('/new-members', getNewMembers);
 router.get('/active-members', getActiveMembers);

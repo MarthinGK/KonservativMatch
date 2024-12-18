@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import '../styles/HomePage.css';
 
-const LoginButton = () => {
+const LoginButton = ({ text, className }) => {
   const { loginWithRedirect, isLoading } = useAuth0();
 
   if (isLoading) {
@@ -10,6 +11,7 @@ const LoginButton = () => {
 
   return (
     <button
+      className={className} // Apply the className prop to the button
       onClick={() =>
         loginWithRedirect({
           authorizationParams: {
@@ -17,9 +19,8 @@ const LoginButton = () => {
           },
         })
       }
-      className="navbutton"
     >
-      Logg inn
+      {text}
     </button>
   );
 };

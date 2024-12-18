@@ -92,16 +92,24 @@ const EditProfilePreviewProfile = ({ userId }) => {
             <span>{profileData.height} cm</span>
           </div>
           <div className="profilepage-info-item">
-            <i className="fas fa-place-of-worship religion-icon"></i>
-            <span>{profileData.religion}</span>
-          </div>
-          <div className="profilepage-info-item">
             <i className="fas fa-wine-glass-alt alcohol-icon"></i>
             <span>{profileData.alcohol}</span>
           </div>
           <div className="profilepage-info-item">
             <i className="fas fa-smoking smoking-icon"></i>
             <span>{profileData.smoking}</span>
+          </div>
+          <div className="profilepage-info-item">
+            <i className="fas fa-place-of-worship religion-icon"></i>
+            <span>{profileData.religion}</span>
+          </div>
+          <div className="profilepage-info-item">
+            <i className="fas fa-landmark political-icon"></i>
+            <span>{profileData.political_party}</span>
+          </div>
+          <div className="profilepage-info-item">
+            <i className="fa-solid fa-child-reaching child-icon"></i>
+            <span>{profileData.want_children}</span>
           </div>
         </div>
       </div>

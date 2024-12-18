@@ -1,0 +1,66 @@
+/* Home.css */
+
+.home {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .home-font{
+    color: white;
+  }
+  
+  .background-image {
+    background-image: url('../components/images/HomeImage2.png');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+  }
+  
+  .content {
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Adds a transparent black background */
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .email-signup {
+    margin-top: 20px; /* Adds space between the text and email form */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .email-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left */
+    outline: none;
+    width: 250px;
+  }
+  
+  .email-input:focus {
+    border-color: #007bff; /* Blue border when focused */
+  }
+  
+  .home-join-btn {
+    padding: 15px 30px; /* Adjust size */
+    font-size: 1.15rem; /* Increase font size */
+    background-color: #0056b3; /* Blue theme */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .home-join-btn:hover {
+    background-color: #003d82; /* Darker blue on hover */
+  }
