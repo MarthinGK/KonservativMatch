@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchLikes, fetchLikedMe } from '../api/TempLikesAPI.js';
+import { fetchLikes, fetchLikedMe } from '../api/ULikesAPI.js';
 import '../styles/LikesPage.css'; // Add custom styles for this page
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';

@@ -6,7 +6,7 @@ import { fetchRecentConversations,
          markMessagesAsRead, 
          getUnreadMessagesCount
         } from '../api/MessagesAPI';
-import { fetchLikes, fetchLikedMe } from '../api/TempLikesAPI';
+import { fetchLikes, fetchLikedMe } from '../api/ULikesAPI';
 import { fetchUserProfileByUserId } from '../api/UserAPI';
 import { checkPermission } from '../api/PermissionsAPI';
 import { useAuth0 } from '@auth0/auth0-react';
