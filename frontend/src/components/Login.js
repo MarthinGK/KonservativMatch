@@ -15,7 +15,7 @@ const LoginButton = ({ text, className }) => {
       onClick={() =>
         loginWithRedirect({
           authorizationParams: {
-            redirect_uri: 'http://konservativmatch.no/', // Change this to your redirect URL after login 
+            redirect_uri: window.location.origin, // Change this to your redirect URL after login 
           },
         })
       }

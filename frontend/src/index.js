@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-console.log("audience: ", process.env.REACT_APP_AUDIENCE);
 root.render(
   <React.StrictMode>
     <Auth0Provider  
