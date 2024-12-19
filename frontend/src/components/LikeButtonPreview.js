@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchLikeStatus, toggleLike } from '../api/LikesAPI'; // Import API calls
 import { checkPermission } from '../api/PermissionsAPI';
+import { fetchLikeStatus, toggleLike } from '../api/TempLikesAPI'; // Import API calls
 import { useNavigate } from 'react-router-dom';
 import '../styles/LikeButton.css';
 
