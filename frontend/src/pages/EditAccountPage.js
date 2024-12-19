@@ -5,7 +5,7 @@ import {
   fetchProfileActiveStatus,
   updateProfileActiveStatus,
 } from '../api/UserAPI';
-import { updateUserEmail } from '../api/auth0API';
+import { updateUserEmail } from '../api/Auth0API';
 import '../styles/editaccount/EditAccountPage.css';
 import { useAuth0 } from '@auth0/auth0-react';
 
