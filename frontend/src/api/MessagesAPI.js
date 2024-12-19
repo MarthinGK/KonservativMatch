@@ -1,12 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/messages';
-
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/messages';
+const API_URL = `${API_BASE_URL}/messages`;
 // Send a message
 export const sendMessage = async (senderId, receiverId, messageText) => {
-  console.log("sender id: ", senderId)
-  console.log("receiver id: ", receiverId)
-  console.log("message text: ", messageText)
   try {
     const response = await axios.post(`${API_URL}/send`, {
       sender_id: senderId,
