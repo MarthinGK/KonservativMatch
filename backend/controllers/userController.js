@@ -1,4 +1,4 @@
-const pool = require('../config/db'); // Assuming you are using a PostgreSQL pool connection
+const pool = require('../db'); // Assuming you are using a PostgreSQL pool connection
 
 // Function to check if user exists or create a new one if not
 const checkOrCreateUser = async (req, res) => {

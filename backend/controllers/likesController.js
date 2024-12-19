@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../db');
 
 // Get all likes by a user
 const getLikes = async (req, res) => {

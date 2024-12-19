@@ -1,5 +1,5 @@
 // backend/controllers/searchController.js
-const pool = require('../config/db'); // Assuming pool is set up for database connection
+const pool = require('../db'); // Assuming pool is set up for database connection
 
 const searchProfiles = async (req, res) => {
   const { minAge, maxAge, location, user_id } = req.query;

@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../db');
 
 // Grant Messaging Permission
 const grantPermission = async (req, res) => {
