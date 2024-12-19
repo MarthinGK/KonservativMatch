@@ -22,8 +22,14 @@ const limiter = rateLimit({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const corsOptions = {
+  origin: ['https://konservativmatch.no', 'http://localhost:3000'], // Add allowed domains
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  credentials: true // Enable cookies if needed
+};
+
 // Middleware
-app.use(cors()); // Enable CORS
+app.use(cors(corsOptions)); // Enable CORS
 app.use(bodyParser.json()); // Parse incoming JSON requests 
 app.use(limiter);
 
