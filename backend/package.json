@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "auth0": "^4.15.0",
     "backend": "file:",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
