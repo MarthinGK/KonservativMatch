@@ -1,36 +1,32 @@
-// require('dotenv').config(); // Ensure this is at the top of the file
-// const { Pool } = require('pg');
-
-// // Set up the connection pool 
-// const pool = new Pool({
-//   user: process.env.DATABASE_USERNAME,
-//   host: process.env.DATABASE_EXTERNAL_HOSTNAME,
-//   database: process.env.DATABASE_NAME,
-//   password: process.env.DATABASE_PASSWORD,
-//   port: process.env.DATABASE_PORT,  // Default port for PostgreSQL d
-//   ssl: {
-//     rejectUnauthorized: false, // Allow self-signed certificates
-//   },
-// });
-
-// module.exports = pool;
-
-
+require('dotenv').config(); // Ensure this is at the top of the file
 const { Pool } = require('pg');
 
 // Set up the connection pool 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'konservativdatingdb',
-  password: '1728',
-  port: 5432,  // Default port for PostgreSQL d
+  user: process.env.DATABASE_USERNAME,
+  host: process.env.DATABASE_EXTERNAL_HOSTNAME,
+  database: process.env.DATABASE_NAME,
+  password: process.env.DATABASE_PASSWORD,
+  port: process.env.DATABASE_PORT,  // Default port for PostgreSQL d
+  ssl: {
+    rejectUnauthorized: false, // Allow self-signed certificates
+  },
 });
 
 module.exports = pool;
 
 
-// const { Pool } = require('pg');
+// // Set up the connection pool 
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'konservativdatingdb',
+//   password: '1728',
+//   port: 5432,  // Default port for PostgreSQL d
+// });
+
+// module.exports = pool;
+
 
 // // Set up the connection pool
 // const pool = new Pool({
