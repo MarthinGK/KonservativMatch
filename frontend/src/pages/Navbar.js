@@ -61,7 +61,8 @@ const Navbar = () => {
           const primaryPhoto = photos.find((photo) => photo.position === 0);
 
           if (primaryPhoto) {
-            setProfilePhoto(`${process.env.REACT_APP_API_BASE_URL}${primaryPhoto.photo_url}`);
+            setProfilePhoto(`${primaryPhoto.photo_url}`);
+            // FOR LOCAL DEVELOPMENT: setProfilePhoto(`${process.env.REACT_APP_API_BASE_URL}${primaryPhoto.photo_url}`);
           } else {
             setProfilePhoto(defaultPhoto); // Set default photo if none found
           }
