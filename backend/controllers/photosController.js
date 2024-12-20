@@ -151,7 +151,6 @@ const addProfilePhoto = async (req, res) => {
       Bucket: BUCKET_NAME,
       Key: uniqueFilename,
       Body: file.buffer, // File content
-      ACL: 'public-read', // Optional: Make the file publicly accessible
     };
 
     // Upload the file to S3
