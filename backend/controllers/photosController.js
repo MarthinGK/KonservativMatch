@@ -138,6 +138,9 @@ const addProfilePhoto = async (req, res) => {
   const { user_id } = req.body;
   const file = req.file; // Single uploaded file
 
+  console.log('Request Body:', req.body);
+  console.log('Uploaded File:', req.file);
+
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }

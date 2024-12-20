@@ -19,7 +19,10 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage }); // Define upload using the storage configuration 
+const upload = multer({
+  storage: multer.memoryStorage(), // Use memory storage for direct buffer access
+  limits: { fileSize: 5 * 1024 * 1024 }, // Optional: Limit file size to 5MB
+});
 
 // Route to fetch profile photos by profile ID
 router.get('/profile/:profileId/photos', getProfilePhotosByProfileId);
