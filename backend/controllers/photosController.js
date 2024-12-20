@@ -135,9 +135,8 @@ const getProfilePhotosByProfileId = async (req, res) => {
 };
 
 const addProfilePhoto = async (req, res) => {
-  const { user_id, position } = req.body;
-
-  const file = req.file; // Assuming a single file upload
+  const { user_id } = req.body;
+  const file = req.file; // Single uploaded file
 
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
@@ -148,24 +147,27 @@ const addProfilePhoto = async (req, res) => {
     const uploadParams = {
       Bucket: BUCKET_NAME,
       Key: uniqueFilename,
-      Body: file.buffer,
-      ACL: 'public-read', // Makes the file publicly accessible (optional)
+      Body: file.buffer, // File content
+      ACL: 'public-read', // Optional: Make the file publicly accessible
     };
 
+    // Upload the file to S3
     const uploadResult = await s3.upload(uploadParams).promise();
 
-    // Insert the photo with the provided position
-    await pool.query(
-      'INSERT INTO profile_photos (user_id, photo_url, position) VALUES ($1, $2, $3)',
-      [user_id, uploadResult.Location, position]
-    );
+    // Save the uploaded photo's URL to the database
+    const query = 'INSERT INTO profile_photos (user_id, photo_url) VALUES ($1, $2)';
+    await pool.query(query, [user_id, uploadResult.Location]);
 
-    res.status(201).json({ message: 'Photo uploaded successfully', photo_url: uploadResult.Location, position });
+    res.status(201).json({
+      message: 'Photo uploaded successfully',
+      photoUrl: uploadResult.Location,
+    });
   } catch (err) {
-    console.error('Error adding profile photo:', err);
+    console.error('Error uploading photo to S3:', err);
     res.status(500).json({ error: 'Failed to upload photo' });
   }
 };
+
 
 
 
