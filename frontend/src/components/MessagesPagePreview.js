@@ -94,7 +94,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
         
           {mainPhoto && (
             <img
-              src={`http://localhost:5000${mainPhoto}`}
+            src={`${process.env.REACT_APP_API_BASE_URL}${mainPhoto}`}
               alt="Profile"
               className="preview-profilepage-pic"
               onClick={() => openPhoto(0)}
@@ -141,7 +141,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
           </div>
           {secondPhoto && (
             <img
-              src={`http://localhost:5000${secondPhoto}`}
+            src={`${process.env.REACT_APP_API_BASE_URL}${secondPhoto}`}
               alt="Secondary Profile"
               className="preview-profilepage-secondary-pic"
               onClick={() => openPhoto(1)}
@@ -158,7 +158,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
               {paginatedPhotos.map((photo, index) => (
                 <img
                   key={index}
-                  src={`http://localhost:5000${photo.photo_url}`}
+                  src={`${process.env.REACT_APP_API_BASE_URL}${photo.photo_url}`}
                   alt={`Additional ${startIndex + index + 3}`}
                   className="preview-profilepage-additional-pic"
                   onClick={() => openPhoto(startIndex + index + 2)}

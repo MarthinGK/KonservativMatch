@@ -75,7 +75,7 @@ const LikesPage = () => {
                     <div className="likesprofile" key={index}>
                       <Link to={`/bruker/${profile.profile_id}`}>
                         <img
-                          src={`http://localhost:5000${profile.photo_url}`}
+                          src={`${process.env.REACT_APP_API_BASE_URL}${profile.photo_url}`}
                           alt={`${profile.first_name}`}
                           className="profile-picture"
                         />
@@ -106,7 +106,7 @@ const LikesPage = () => {
                     <div className="likesprofile" key={index}>
                       <Link to={`/bruker/${profile.profile_id}`}>
                         <img
-                          src={`http://localhost:5000${profile.photo_url}`}
+                          src={`${process.env.REACT_APP_API_BASE_URL}${profile.photo_url}`}
                           alt={`${profile.first_name}`}
                           className="profile-picture"
                         />

@@ -15,6 +15,7 @@
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "auth0": "^4.15.0",
+    "aws-sdk": "^2.1692.0",
     "babel-loader": "^9.2.1",
     "backend": "file:",
     "cors": "^2.8.5",

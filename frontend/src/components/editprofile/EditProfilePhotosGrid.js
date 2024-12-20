@@ -159,7 +159,7 @@ const EditProfilePhotosGrid = ({ userId }) => {
               {photosData.photoUrls[index] ? (
                 <div className="image-wrapper">
                   <img
-                    src={`http://localhost:5000${photosData.photoUrls[index]}`}
+                    src={`${process.env.REACT_APP_API_BASE_URL}${photosData.photoUrls[index]}`}
                     alt=""
                     className="uploaded-image"
                   />

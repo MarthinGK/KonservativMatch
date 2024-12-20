@@ -220,7 +220,7 @@ const MessagesPage = ()  => {
                   onClick={() => handleProfileClick(profile.user_id)} // Initiate conversation on click
                 >
                   <img
-                    src={`http://localhost:5000${profile.photo_url}`}
+                    src={`${process.env.REACT_APP_API_BASE_URL}${profile.photo_url}`}
                     alt={`${profile.first_name}`}
                     className="profile-picture-messages"
                   />
@@ -253,7 +253,7 @@ const MessagesPage = ()  => {
               }}
             >
               <img
-                src={`http://localhost:5000${conversation.photo_url}`}
+                src={`${process.env.REACT_APP_API_BASE_URL}${conversation.photo_url}`}
                 alt={conversation.first_name}
                 className="conversation-picture"
               />
@@ -279,7 +279,7 @@ const MessagesPage = ()  => {
               <div className="chat-header-profile">
                 {selectedChat.profile_photo && (
                   <img
-                    src={`http://localhost:5000${selectedChat.profile_photo}`}
+                    src={`${process.env.REACT_APP_API_BASE_URL}${selectedChat.profile_photo}`}
                     alt={`${selectedChat.first_name}'s profile`}
                     className="chat-header-picture"
                   />

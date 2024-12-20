@@ -56,7 +56,7 @@ const NewMembers = () => {
           {newMembers.slice(startIndex, startIndex + profilesPerPage).map((member, index) => (
             <div className="exploreprofile" key={index}>
             <Link to={`/bruker/${member.profile_id}`}>
-              <img src={`http://localhost:5000${member.photo_url}`} alt={`${member.first_name}`} className="profile-picture" />
+              <img src={`${process.env.REACT_APP_API_BASE_URL}${member.photo_url}`} alt={`${member.first_name}`} className="profile-picture" />
               <div className="exploreprofile-background">
                 <p className="exploreprofile-name">{member.first_name}, {calculateAge(member.date_of_birth)}</p>
                 <p className="exploreprofile-location">{member.location}</p>
