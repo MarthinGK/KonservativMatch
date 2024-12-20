@@ -107,7 +107,7 @@ const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
             ) : photosData.photoUrls && photosData.photoUrls[index] ? (
               <div className="image-wrapper">
                 <img 
-                  src={`${process.env.REACT_APP_API_BASE_URL}${photosData.photoUrls[index]}`}
+                  src={`$${photosData.photoUrls[index]}`}
                   alt={`Fetched ${index}`} 
                   className="uploaded-image" 
                 />

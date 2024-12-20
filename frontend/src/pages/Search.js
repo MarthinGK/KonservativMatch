@@ -97,7 +97,7 @@ const Search = () => {
         {profiles.map((profile, index) => (
           <div className="search-exploreprofile" key={index}>
             <Link to={`/bruker/${profile.profile_id}`}>
-              <img src={`${process.env.REACT_APP_API_BASE_URL}${profile.profile_photo}`} alt={`${profile.first_name}`} className="search-profile-picture" />
+              <img src={`${profile.profile_photo}`} alt={`${profile.first_name}`} className="search-profile-picture" />
               <div className="search-exploreprofile-background">
                 <p className="search-exploreprofile-name">{profile.first_name}, {calculateAge(profile.date_of_birth)}</p>
                 <p className="search-exploreprofile-location">{profile.location}</p>

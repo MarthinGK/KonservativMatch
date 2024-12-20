@@ -187,7 +187,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
               &#10094;
             </button>
             <img
-              src={`http://localhost:5000${photos[selectedPhotoIndex].photo_url}`}
+              src={`${process.env.REACT_APP_API_BASE_URL}${photos[selectedPhotoIndex].photo_url}`}
               alt="Selected"
               className="preview-lightbox-photo"
               onClick={(e) => e.stopPropagation()}
