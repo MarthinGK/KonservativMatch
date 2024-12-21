@@ -3,6 +3,7 @@ const pool = require('../db');
 // Get all likes by a user
 const getLikes = async (req, res) => {
   const { userId } = req.query;
+  console.log('Liker ID backend:', userId);
 
   try {
     const query = `
