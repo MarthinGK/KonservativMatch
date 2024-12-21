@@ -5,7 +5,7 @@ const getLikes = async (req, res) => {
   const { userId } = req.query;
   console.log('Liker ID backend:', userId);
 
-  try {
+  try { 
     const query = `
       SELECT 
         users.first_name,
@@ -32,7 +32,7 @@ const getLikes = async (req, res) => {
 
   // Get all users who liked the logged-in user
   const getLikedMe = async (req, res) => {
-    const { user_id } = req.query;
+    const { userId } = req.query;
   
     try {
       const query = `
@@ -53,7 +53,7 @@ const getLikes = async (req, res) => {
         ORDER BY likes.created_at DESC
       `;
   
-      const result = await pool.query(query, [user_id]);
+      const result = await pool.query(query, [userId]);
   
       res.status(200).json(result.rows); // Return array of users who liked the current user
     } catch (error) {
