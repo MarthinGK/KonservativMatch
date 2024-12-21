@@ -94,7 +94,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
         
           {mainPhoto && (
             <img
-            src={`${process.env.REACT_APP_API_BASE_URL}${mainPhoto}`}
+            src={`${mainPhoto}`}
               alt="Profile"
               className="preview-profilepage-pic"
               onClick={() => openPhoto(0)}
@@ -141,7 +141,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
           </div>
           {secondPhoto && (
             <img
-            src={`${process.env.REACT_APP_API_BASE_URL}${secondPhoto}`}
+            src={`${secondPhoto}`}
               alt="Secondary Profile"
               className="preview-profilepage-secondary-pic"
               onClick={() => openPhoto(1)}
@@ -158,7 +158,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
               {paginatedPhotos.map((photo, index) => (
                 <img
                   key={index}
-                  src={`${process.env.REACT_APP_API_BASE_URL}${photo.photo_url}`}
+                  src={`${photo.photo_url}`}
                   alt={`Additional ${startIndex + index + 3}`}
                   className="preview-profilepage-additional-pic"
                   onClick={() => openPhoto(startIndex + index + 2)}
@@ -187,7 +187,7 @@ const MessagesPagePreview = ({ selectedProfileId }) => {
               &#10094;
             </button>
             <img
-              src={`${process.env.REACT_APP_API_BASE_URL}${photos[selectedPhotoIndex].photo_url}`}
+              src={`${photos[selectedPhotoIndex].photo_url}`}
               alt="Selected"
               className="preview-lightbox-photo"
               onClick={(e) => e.stopPropagation()}
