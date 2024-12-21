@@ -13,41 +13,6 @@ const s3 = new AWS.S3({
 
 const BUCKET_NAME = 'konservativmatch-bucket';
 
-const addProfilePhotos = async (req, res) => {
-  const { user_id } = req.body;
-  const files = req.files; // Array of uploaded files
-
-  if (!files || files.length === 0) {
-    return res.status(400).json({ error: 'No files uploaded' });
-  }
-
-  try {
-    const photoUrls = [];
-
-    // Loop through each file and upload to S3
-    for (const file of files) {
-      const uniqueFilename = `${uuidv4()}-${file.originalname}`;
-      const uploadParams = {
-        Bucket: BUCKET_NAME,
-        Key: uniqueFilename,
-        Body: file.buffer,
-        ACL: 'public-read', // Makes the file publicly accessible (optional, depends on your needs)
-      };
-
-      const uploadResult = await s3.upload(uploadParams).promise();
-      photoUrls.push(uploadResult.Location);
-
-      // Save the photo URL to the database
-      const query = 'INSERT INTO profile_photos (user_id, photo_url) VALUES ($1, $2)';
-      await pool.query(query, [user_id, uploadResult.Location]);
-    }
-
-    res.status(201).json({ message: 'Photos uploaded successfully', photoUrls });
-  } catch (err) {
-    console.error('Error uploading photos to S3:', err);
-    res.status(500).json({ error: 'Failed to upload photos' });
-  }
-};
 
 const getProfilePhotos = async (req, res) => {
   const { user_id } = req.params;
@@ -67,9 +32,17 @@ const getProfilePhotos = async (req, res) => {
 const deleteProfilePhoto = async (req, res) => {
   const { user_id, photo_url } = req.body;
 
+  if (!user_id || !photo_url) {
+    return res.status(400).json({ error: 'user_id and photo_url are required.' });
+  }
+
   try {
     // Remove the photo from the database
-    await pool.query('DELETE FROM profile_photos WHERE user_id = $1 AND photo_url = $2', [user_id, photo_url]);
+    const dbResult = await pool.query('DELETE FROM profile_photos WHERE user_id = $1 AND photo_url = $2', [user_id, photo_url]);
+
+    if (dbResult.rowCount === 0) {
+      return res.status(404).json({ error: 'Photo not found in the database.' });
+    }
 
     // Extract the S3 key from the photo URL
     const key = photo_url.split('/').pop();
@@ -83,10 +56,16 @@ const deleteProfilePhoto = async (req, res) => {
     await s3.deleteObject(deleteParams).promise();
     console.log('Photo deleted from S3:', photo_url);
 
-    res.json({ message: 'Photo deleted successfully' });
+    res.json({ message: 'Photo deleted successfully.' });
   } catch (err) {
     console.error('Error deleting profile photo:', err);
-    res.status(500).json({ error: 'Failed to delete photo' });
+
+    // Enhanced error handling for specific S3 errors
+    if (err.code === 'NoSuchKey') {
+      return res.status(404).json({ error: 'Photo not found in S3.' });
+    }
+
+    res.status(500).json({ error: 'Failed to delete photo.' });
   }
 };
 
@@ -98,10 +77,11 @@ const updatePhotoOrder = async (req, res) => {
   }
 
   try {
-    // Update positions in the database
     const query = 'UPDATE profile_photos SET position = $1 WHERE user_id = $2 AND photo_url = $3';
-    for (let i = 0; i < photoOrder.length; i++) {
-      await pool.query(query, [i, user_id, photoOrder[i]]);
+
+    // Update each photo's position
+    for (const { position, photo_url } of photoOrder) {
+      await pool.query(query, [position, user_id, photo_url]);
     }
 
     res.status(200).json({ message: 'Photo order updated successfully.' });
@@ -136,11 +116,12 @@ const getProfilePhotosByProfileId = async (req, res) => {
 
 const addProfilePhoto = async (req, res) => {
   const { user_id } = req.body;
+  const position = parseInt(req.body.position, 10); // Convert position to an integer
   const file = req.file; // Single uploaded file
 
   console.log('Request Body:', req.body);
   console.log('Uploaded File:', req.file);
-
+  console.log('Ppposition:', position);
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
@@ -156,19 +137,22 @@ const addProfilePhoto = async (req, res) => {
     // Upload the file to S3
     const uploadResult = await s3.upload(uploadParams).promise();
 
-    // Save the uploaded photo's URL to the database
-    const query = 'INSERT INTO profile_photos (user_id, photo_url) VALUES ($1, $2)';
-    await pool.query(query, [user_id, uploadResult.Location]);
+    // Save the uploaded photo's URL and position to the database
+    const query = 'INSERT INTO profile_photos (user_id, photo_url, position) VALUES ($1, $2, $3)';
+    await pool.query(query, [user_id, uploadResult.Location, position]);
 
     res.status(201).json({
       message: 'Photo uploaded successfully',
       photoUrl: uploadResult.Location,
+      position,
     });
   } catch (err) {
     console.error('Error uploading photo to S3:', err);
     res.status(500).json({ error: 'Failed to upload photo' });
   }
 };
+
+
 
 
 
@@ -325,7 +309,6 @@ module.exports = {
   getProfilePhotos, 
   getProfilePhotosByProfileId, 
   addProfilePhoto, 
-  deleteProfilePhoto, 
-  addProfilePhotos, 
+  deleteProfilePhoto,
   updatePhotoOrder
 };

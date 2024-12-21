@@ -2,7 +2,6 @@ const express = require('express');
 const multer = require('multer'); // Import multer
 const router = express.Router();
 const { 
-      addProfilePhotos, 
       addProfilePhoto, 
       getProfilePhotosByProfileId, 
       getProfilePhotos, 

@@ -91,45 +91,38 @@ const EditProfilePhotosGrid = ({ userId }) => {
     }
   };
 
-  // Handle drag-and-drop
   const handleDragStart = (index) => (event) => {
-    console.log('Dragging index:', index);
+    console.log('Dragging photo from index:', index);
     event.dataTransfer.setData('text/plain', index);
   };
-
+  
   const handleDrop = async (event, index) => {
     event.preventDefault();
     const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'), 10);
-    console.log('Dragged index:', draggedIndex);
-    console.log('Drop index:', index);
-
+    console.log(`Dropped photo from ${draggedIndex} to ${index}`);
+  
     if (isNaN(draggedIndex) || draggedIndex === index) {
       console.error('Invalid drag or drop operation.');
       return;
     }
-
+  
     const newPhotoUrls = [...photosData.photoUrls];
-
-    // Swap the dragged photo with the target position
     [newPhotoUrls[draggedIndex], newPhotoUrls[index]] = [
       newPhotoUrls[index],
       newPhotoUrls[draggedIndex],
     ];
-
-    console.log('New photoUrls after swapping:', newPhotoUrls);
-
-    // Update state
+  
+    console.log('Updated photo order:', newPhotoUrls);
     setPhotosData({ ...photosData, photoUrls: newPhotoUrls });
-
-    // Update positions in the backend
+  
     try {
-      console.log('Sending updated order to backend...');
-      await updatePhotoOrder(userId, newPhotoUrls);
+      await updatePhotoOrder(userId, newPhotoUrls.map((url, i) => ({ photo_url: url, position: i })));
       console.log('Photo order updated successfully.');
     } catch (error) {
-      console.error('Failed to update photo order on the backend:', error);
+      console.error('Error updating photo order:', error);
     }
   };
+  
 
   const allowDrop = (event) => {
     event.preventDefault();

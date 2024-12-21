@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_URL = `${API_BASE_URL}/photos`;
 // const API_URL = 'http://localhost:5000/photos';
 
@@ -20,7 +20,7 @@ const API_URL = `${API_BASE_URL}/photos`;
     formData.append('user_id', userId);
     formData.append('file', file);
     formData.append('position', position); // Include position
-  
+    console.log('Uploading photo with position:', position);
     try {
       const response = await axios.post(`${API_URL}/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -55,4 +55,4 @@ const API_URL = `${API_BASE_URL}/photos`;
       console.error('Error updating photo order:', error);
       throw error;
     }
-  };
+  }; 

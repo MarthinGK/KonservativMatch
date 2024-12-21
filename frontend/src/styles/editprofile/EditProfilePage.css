@@ -62,7 +62,7 @@
 
   .secondary-navbar {
     position: fixed;
-    top: 9%; /* Right below the main navbar (adjust if needed) */
+    top: 8%; /* Right below the main navbar (adjust if needed) */
     width: 100%;
     display: flex;
     justify-content: center; /* Center the buttons horizontally */

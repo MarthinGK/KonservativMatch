@@ -5,6 +5,9 @@ import '../styles/SetupPhotosGrid.css';
 const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
   const [errorMessages, setErrorMessages] = useState(Array(6).fill('')); // Initialize an array for error messages
 
+  //   // Fetch previously uploaded photos when the component loads
+  const [photos, setPhotos] = useState(Array(6).fill(null)); // Grid with 6 slots
+
   useEffect(() => {
     const fetchUserPhotos = async () => {
       try {
