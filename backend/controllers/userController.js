@@ -231,9 +231,10 @@ const getCloseMembers = async (req, res) => {
 
 const getPreviewProfile = async (req, res) => {
   const { user_id } = req.query;
+  console.log('Fetched Photosss:', userResult.rows[0].photos);
   try {
     const userResult = await pool.query(
-      `SELECT users.first_name, 
+      `SELECT users.first_name,
               users.last_name, 
               users.location, 
               users.height, 
