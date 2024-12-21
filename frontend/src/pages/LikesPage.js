@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 const LikesPage = () => {
   const { user } = useAuth0();
   const userId = user.sub;
+  console.log('User:', user); // Debugging
+  console.log('UserID:', userId); // Debugging
+  console.log('user.sub:', user.sub); // Debugging
   const [isLikedProfiles, setIsLikedProfiles] = useState(true); // Default to "Profiles You Liked"
   const [likes, setLikes] = useState([]);
   const [likedMe, setLikedMe] = useState([]);
