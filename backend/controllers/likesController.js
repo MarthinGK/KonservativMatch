@@ -2,7 +2,7 @@ const pool = require('../db');
 
 // Get all likes by a user
 const getLikes = async (req, res) => {
-  const { userId } = req.query;
+  const { userId } = req.query; // Access userId from query parameters
   console.log('Liker ID backend:', userId);
 
   try { 
@@ -21,14 +21,15 @@ const getLikes = async (req, res) => {
       ORDER BY likes.created_at DESC
     `;
 
-    const result = await pool.query(query, [userId]); // Use the correct userId
-    console.log('Query Result:', result.rows); // Debugging
-    res.status(200).json(result.rows); // Ensure rows are sent to the frontend
+    const result = await pool.query(query, [userId]);
+    console.log('Query Result:', result.rows);
+    res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching liked profiles:', error);
     res.status(500).json({ error: 'Database error' });
   }
 };
+
 
   // Get all users who liked the logged-in user
   const getLikedMe = async (req, res) => {

@@ -6,9 +6,9 @@ const API_URL = `${API_BASE_URL}/likes`;
 
 export const fetchLikes = async (userId) => {
   try {
-    console.log('Liker ID backend:', userId);
-    const response = await axios.get(`${API_URL}/liked-by`, { params: { user_id: userId } }); // Match backend's expected query parameter
-    console.log('API Response:', response.data); // Debugging
+    console.log('Liker ID frontend:', userId);
+    const response = await axios.get(`${API_URL}/liked-by`, { params: { userId } });
+    console.log('API Response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching likes:', error);
@@ -16,10 +16,9 @@ export const fetchLikes = async (userId) => {
   }
 };
 
-
 export const fetchLikedMe = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/liked-me`, { params: { user_id: userId } });
+    const response = await axios.get(`${API_URL}/liked-me`, { params: { userId } });
     return response.data; // Return array of users
   } catch (error) {
     console.error('Error fetching liked-me:', error);
