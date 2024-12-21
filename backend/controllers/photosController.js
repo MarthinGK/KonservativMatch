@@ -92,7 +92,7 @@ const updatePhotoOrder = async (req, res) => {
 };
 
 const getProfilePhotosByProfileId = async (req, res) => {
-  const { profileId } = req.params;
+  const { profileId } = req.params; 
 
   try {
     // First, find the userId using the profileId

@@ -42,32 +42,31 @@ const EditProfilePhotosGrid = ({ userId }) => {
     fetchUserPhotos();
   }, [userId]);
 
-  // Handle photo uploads
   const handlePhotosUpload = async (index, event) => {
     const file = event.target.files[0];
     const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-
+  
     if (!file || !validImageTypes.includes(file.type)) {
       const newErrorMessages = [...errorMessages];
-      newErrorMessages[index] =
-        'Invalid file type. Please upload valid images (JPEG, PNG).';
+      newErrorMessages[index] = 'Invalid file type. Please upload valid images (JPEG, PNG).';
       setErrorMessages(newErrorMessages);
       return;
     }
-
-    // Clear the error message for valid files
+  
     const newErrorMessages = [...errorMessages];
     newErrorMessages[index] = '';
     setErrorMessages(newErrorMessages);
-
+  
     try {
       const response = await uploadProfilePhoto(userId, file, index); // Include the position (index)
-      const uploadedPhotoUrl = response.photo_url;
-
-      const newPhotoUrls = [...photosData.photoUrls];
-      newPhotoUrls[index] = uploadedPhotoUrl;
-
-      setPhotosData({ ...photosData, photoUrls: newPhotoUrls });
+      console.log('Upload response:', response);
+  
+      // Fetch updated photos after upload
+      const updatedPhotos = await fetchProfilePhotos(userId);
+      setPhotosData((prevState) => ({
+        ...prevState,
+        photoUrls: updatedPhotos.map((photo) => photo.photo_url),
+      }));
     } catch (error) {
       console.error('Error uploading photo:', error);
       const newErrorMessages = [...errorMessages];
@@ -75,6 +74,41 @@ const EditProfilePhotosGrid = ({ userId }) => {
       setErrorMessages(newErrorMessages);
     }
   };
+  
+
+  // // Handle photo uploads
+  // const handlePhotosUpload = async (index, event) => {
+  //   const file = event.target.files[0];
+  //   const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+  //   if (!file || !validImageTypes.includes(file.type)) {
+  //     const newErrorMessages = [...errorMessages];
+  //     newErrorMessages[index] =
+  //       'Invalid file type. Please upload valid images (JPEG, PNG).';
+  //     setErrorMessages(newErrorMessages);
+  //     return;
+  //   }
+
+  //   // Clear the error message for valid files
+  //   const newErrorMessages = [...errorMessages];
+  //   newErrorMessages[index] = '';
+  //   setErrorMessages(newErrorMessages);
+
+  //   try {
+  //     const response = await uploadProfilePhoto(userId, file, index); // Include the position (index)
+  //     const uploadedPhotoUrl = response.photo_url;
+
+  //     const newPhotoUrls = [...photosData.photoUrls];
+  //     newPhotoUrls[index] = uploadedPhotoUrl;
+
+  //     setPhotosData({ ...photosData, photoUrls: newPhotoUrls });
+  //   } catch (error) {
+  //     console.error('Error uploading photo:', error);
+  //     const newErrorMessages = [...errorMessages];
+  //     newErrorMessages[index] = 'Error uploading photo. Please try again.';
+  //     setErrorMessages(newErrorMessages);
+  //   }
+  // };
 
   // Handle photo removal
   const handlePhotoRemove = async (index) => {

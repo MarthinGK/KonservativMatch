@@ -57,7 +57,7 @@ export const getPreviewProfile = async (userId) => {
     return response.data; // The returned data now includes `position` for each photo
   } catch (error) {
     console.error('Error fetching previewProfile:', error);
-    throw error;
+    throw error; 
   }
 };
 
