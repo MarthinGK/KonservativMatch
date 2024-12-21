@@ -7,31 +7,28 @@ import { Link } from 'react-router-dom';
 const LikesPage = () => {
   const { user } = useAuth0();
   const userId = user.sub;
-  console.log('User:', user); // Debugging
-  console.log('UserID:', userId); // Debugging
-  console.log('user.sub:', user.sub); // Debugging
+
+  // Debugging user info
+  console.log('User:', user);
+  console.log('UserID:', userId);
+
   const [isLikedProfiles, setIsLikedProfiles] = useState(true); // Default to "Profiles You Liked"
   const [likes, setLikes] = useState([]);
   const [likedMe, setLikedMe] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [startIndex, setStartIndex] = useState(0);
-
-  const [page, setPage] = useState(1); // For infinite scrolling
-
-  const profilesPerPage = 9;
-
+  // Fetch profiles based on the current mode (liked or liked-me)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         if (isLikedProfiles) {
-          const likedProfiles = await fetchLikes(userId); // Ensure `userId` is passed correctly
-          console.log('Liked Profiles:', likedProfiles); // Debugging
-          setLikes(likedProfiles); // Update the `likes` state
+          const likedProfiles = await fetchLikes(userId); // Fetch profiles the user liked
+          console.log('Liked Profiles:', likedProfiles);
+          setLikes(likedProfiles);
         } else {
-          const likedMeProfiles = await fetchLikedMe(userId);
-          console.log('Liked Me Profiles:', likedMeProfiles); // Debugging
+          const likedMeProfiles = await fetchLikedMe(userId); // Fetch profiles that liked the user
+          console.log('Liked Me Profiles:', likedMeProfiles);
           setLikedMe(likedMeProfiles);
         }
       } catch (error) {
@@ -42,8 +39,8 @@ const LikesPage = () => {
     };
     fetchData();
   }, [isLikedProfiles, userId]);
-  
 
+  // Toggle between "Profiles You Liked" and "Profiles Who Liked You"
   const toggleMode = (mode) => {
     setIsLikedProfiles(mode);
   };
@@ -53,13 +50,13 @@ const LikesPage = () => {
       {/* Sub-navbar */}
       <div className="secondary-navbar-likes">
         <button
-          className={`secondary-button-likes ${isLikedProfiles ? 'active' : ''}`} // Default to left
+          className={`secondary-button-likes ${isLikedProfiles ? 'active' : ''}`}
           onClick={() => toggleMode(true)}
         >
           Brukere som liker deg
         </button>
         <button
-          className={`secondary-button-likes ${!isLikedProfiles ? 'active' : ''}`} // Right button
+          className={`secondary-button-likes ${!isLikedProfiles ? 'active' : ''}`}
           onClick={() => toggleMode(false)}
         >
           Brukere du har likt
@@ -77,7 +74,7 @@ const LikesPage = () => {
                 <h3>Personer som har likt deg</h3>
                 <div className="likesprofile-wrapper">
                   <div className="likesprofiles">
-                    {(isLikedProfiles ? likes : likedMe).map((profile, index) => (
+                    {likedMe.map((profile, index) => (
                       <div className="likesprofile" key={index}>
                         <Link to={`/bruker/${profile.profile_id}`}>
                           <img
@@ -108,7 +105,7 @@ const LikesPage = () => {
                 <h3>Personer du har likt</h3>
                 <div className="likesprofile-wrapper">
                   <div className="likesprofiles">
-                    {(isLikedProfiles ? likes : likedMe).map((profile, index) => (
+                    {likes.map((profile, index) => (
                       <div className="likesprofile" key={index}>
                         <Link to={`/bruker/${profile.profile_id}`}>
                           <img
