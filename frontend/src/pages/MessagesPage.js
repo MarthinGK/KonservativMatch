@@ -291,13 +291,13 @@ const MessagesPage = ()  => {
                   className={`chat-header-button ${viewMode === 'chat' ? 'active' : ''}`}
                   onClick={() => setViewMode('chat')}
                 >
-                  Chat
+                  Vis chat
                 </button>
                 <button
                   className={`chat-header-button ${viewMode === 'preview' ? 'active' : ''}`}
                   onClick={() => setViewMode('preview')}
                 >
-                  Preview Profile
+                  Vis profil
                 </button>
               </div>
             </div>

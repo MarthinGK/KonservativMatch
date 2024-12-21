@@ -6,8 +6,8 @@ const API_URL = `${API_BASE_URL}/likes`;
 
 export const fetchLikes = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/liked-by`, { params: { userId } });
-    console.log("RESPONSE: ", response)
+    const response = await axios.get(`${API_URL}/liked-by`, { params: { user_id: userId } });
+    console.log("RESPONSE: ", response);
     return response.data; // Return the array of users
   } catch (error) {
     console.error('Error fetching likes:', error);
@@ -16,14 +16,16 @@ export const fetchLikes = async (userId) => {
 };
 
 export const fetchLikedMe = async (userId) => {
-    try {
-      const response = await axios.get(`${API_URL}/liked-me`, { params: { user_id: userId } });
-      return response.data; // Return array of users
-    } catch (error) {
-      console.error('Error fetching liked-me:', error);
-      throw error;
-    }
+  try {
+    const response = await axios.get(`${API_URL}/liked-me`, { params: { user_id: userId } });
+    return response.data; // Return array of users
+  } catch (error) {
+    console.error('Error fetching liked-me:', error);
+    throw error;
+  }
 };
+
+
 
 export const fetchLikeStatus = async (likerId, likedId) => {
     try {

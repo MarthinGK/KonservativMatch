@@ -9,6 +9,8 @@
     transition: background-color 0.2s ease-in-out;
     opacity: 0.8;
     max-width: 520px;
+    word-break: break-word; /* Ensures long words break to fit within the container */
+    overflow-wrap: break-word; /* Adds extra compatibility for older browsers */
   }
   
   .intro-display-container:hover {

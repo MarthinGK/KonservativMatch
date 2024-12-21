@@ -32,8 +32,8 @@ const getLikes = async (req, res) => {
     }
   };
 
-// Get all users who liked the logged-in user
-const getLikedMe = async (req, res) => {
+  // Get all users who liked the logged-in user
+  const getLikedMe = async (req, res) => {
     const { user_id } = req.query;
   
     try {
@@ -48,11 +48,11 @@ const getLikedMe = async (req, res) => {
         FROM likes
         JOIN users ON likes.liker_id = users.user_id
 
-      LEFT JOIN profile_photos 
+        LEFT JOIN profile_photos 
         ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
 
         WHERE likes.liked_id = $1
-ORDER BY likes.created_at DESC
+        ORDER BY likes.created_at DESC
       `;
   
       const result = await pool.query(query, [user_id]);

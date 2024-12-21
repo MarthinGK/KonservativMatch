@@ -19,22 +19,25 @@ const LikesPage = () => {
   const profilesPerPage = 9;
 
   useEffect(() => {
+
     const fetchData = async () => {
       setLoading(true);
       try {
-        if (isLikedProfiles) {
-          const likedProfiles = await fetchLikes(userId);
-          setLikes(likedProfiles);
-        } else {
-          const likedMeProfiles = await fetchLikedMe(userId);
-          setLikedMe(likedMeProfiles);
-        }
+        const likedProfiles = await fetchLikes(userId);
+        setLikes(likedProfiles);
+        console.log('Liked Profiles:', likedProfiles); // Debugging
+
+        const likedMeProfiles = await fetchLikedMe(userId);
+        console.log('Liked Me Profiles:', likedMeProfiles); // Debugging
+        setLikedMe(likedMeProfiles);
+
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [isLikedProfiles, userId]);
 
@@ -47,13 +50,13 @@ const LikesPage = () => {
       {/* Sub-navbar */}
       <div className="secondary-navbar-likes">
         <button
-          className={`secondary-button-likes ${!isLikedProfiles ? 'active' : ''}`} 
+          className={`secondary-button-likes ${isLikedProfiles ? 'active' : ''}`} // Default to left
           onClick={() => toggleMode(true)}
         >
           Brukere som liker deg
         </button>
         <button
-          className={`secondary-button-likes ${isLikedProfiles ? 'active' : ''}`}
+          className={`secondary-button-likes ${!isLikedProfiles ? 'active' : ''}`} // Right button
           onClick={() => toggleMode(false)}
         >
           Brukere du har likt
@@ -65,32 +68,32 @@ const LikesPage = () => {
         {loading ? (
           <div className="loading">Loading...</div>
         ) : isLikedProfiles ? (
-        <div className="profiles-container">
-          {likes.length > 0 ? (
-            <div className="likesprofile-topcontainer">
-              <h3>Personer som har likt deg</h3>
-              <div className="likesprofile-wrapper">
-                <div className="likesprofiles">
-                  {(isLikedProfiles ? likes : likedMe).map((profile, index) => (
-                    <div className="likesprofile" key={index}>
-                      <Link to={`/bruker/${profile.profile_id}`}>
-                        <img
-                          src={`${process.env.REACT_APP_API_BASE_URL}${profile.photo_url}`}
-                          alt={`${profile.first_name}`}
-                          className="profile-picture"
-                        />
-                        <div className="likesprofile-background">
-                          <p className="likesprofile-name">
-                            {profile.first_name}, {calculateAge(profile.date_of_birth)}
-                          </p>
-                          <p className="likesprofile-location">{profile.location}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+          <div className="profiles-container">
+            {likedMe.length > 0 ? (
+              <div className="likesprofile-topcontainer">
+                <h3>Personer som har likt deg</h3>
+                <div className="likesprofile-wrapper">
+                  <div className="likesprofiles">
+                    {(isLikedProfiles ? likes : likedMe).map((profile, index) => (
+                      <div className="likesprofile" key={index}>
+                        <Link to={`/bruker/${profile.profile_id}`}>
+                          <img
+                            src={`${profile.photo_url}`}
+                            alt={`${profile.first_name}`}
+                            className="profile-picture"
+                          />
+                          <div className="likesprofile-background">
+                            <p className="likesprofile-name">
+                              {profile.first_name}, {calculateAge(profile.date_of_birth)}
+                            </p>
+                            <p className="likesprofile-location">{profile.location}</p>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
             ) : (
               <p>Ingen likes enda</p>
             )}
@@ -98,32 +101,32 @@ const LikesPage = () => {
         ) : (
           <div className="profiles-container">
             {likes.length > 0 ? (
-            <div className="likesprofile-topcontainer">
-              <h3>Personer du har likt</h3>
-              <div className="likesprofile-wrapper">
-                <div className="likesprofiles">
-                  {(isLikedProfiles ? likes : likedMe).map((profile, index) => (
-                    <div className="likesprofile" key={index}>
-                      <Link to={`/bruker/${profile.profile_id}`}>
-                        <img
-                          src={`${process.env.REACT_APP_API_BASE_URL}${profile.photo_url}`}
-                          alt={`${profile.first_name}`}
-                          className="profile-picture"
-                        />
-                        <div className="likesprofile-background">
-                          <p className="likesprofile-name">
-                            {profile.first_name}, {calculateAge(profile.date_of_birth)}
-                          </p>
-                          <p className="likesprofile-location">{profile.location}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+              <div className="likesprofile-topcontainer">
+                <h3>Personer du har likt</h3>
+                <div className="likesprofile-wrapper">
+                  <div className="likesprofiles">
+                    {(isLikedProfiles ? likes : likedMe).map((profile, index) => (
+                      <div className="likesprofile" key={index}>
+                        <Link to={`/bruker/${profile.profile_id}`}>
+                          <img
+                            src={`${profile.photo_url}`}
+                            alt={`${profile.first_name}`}
+                            className="profile-picture"
+                          />
+                          <div className="likesprofile-background">
+                            <p className="likesprofile-name">
+                              {profile.first_name}, {calculateAge(profile.date_of_birth)}
+                            </p>
+                            <p className="likesprofile-location">{profile.location}</p>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
             ) : (
-              <p>No profiles liked yet.</p>
+              <p>Ingen likes enda</p>
             )}
           </div>
         )}

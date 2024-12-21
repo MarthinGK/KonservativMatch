@@ -97,6 +97,8 @@
     color: var(--text-color);
     border-radius: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+    word-break: break-word; /* Ensures long words break to fit within the container */
+    overflow-wrap: break-word; /* Adds extra compatibility for older browsers */
   }
   
   .profilepage-secondary-pic {
