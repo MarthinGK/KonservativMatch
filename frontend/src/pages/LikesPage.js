@@ -19,27 +19,27 @@ const LikesPage = () => {
   const profilesPerPage = 9;
 
   useEffect(() => {
-
     const fetchData = async () => {
       setLoading(true);
       try {
-        const likedProfiles = await fetchLikes(userId);
-        setLikes(likedProfiles);
-        console.log('Liked Profiles:', likedProfiles); // Debugging
-
-        const likedMeProfiles = await fetchLikedMe(userId);
-        console.log('Liked Me Profiles:', likedMeProfiles); // Debugging
-        setLikedMe(likedMeProfiles);
-
+        if (isLikedProfiles) {
+          const likedProfiles = await fetchLikes(userId); // Ensure `userId` is passed correctly
+          console.log('Liked Profiles:', likedProfiles); // Debugging
+          setLikes(likedProfiles); // Update the `likes` state
+        } else {
+          const likedMeProfiles = await fetchLikedMe(userId);
+          console.log('Liked Me Profiles:', likedMeProfiles); // Debugging
+          setLikedMe(likedMeProfiles);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [isLikedProfiles, userId]);
+  
 
   const toggleMode = (mode) => {
     setIsLikedProfiles(mode);

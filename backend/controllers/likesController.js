@@ -2,35 +2,32 @@ const pool = require('../db');
 
 // Get all likes by a user
 const getLikes = async (req, res) => {
-    const { userId } = req.query;
-  
-    try {
-      const query = 
-      `
-        SELECT 
-          users.first_name,
-          users.profile_id,
-          users.date_of_birth,
-          users.location,
-          COALESCE(profile_photos.photo_url, '/default-profile.png') AS photo_url
-        FROM likes
-        JOIN users ON likes.liked_id = users.user_id
+  const { userId } = req.query;
 
-        LEFT JOIN profile_photos 
-        ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
+  try {
+    const query = `
+      SELECT 
+        users.first_name,
+        users.profile_id,
+        users.date_of_birth,
+        users.location,
+        COALESCE(profile_photos.photo_url, '/default-profile.png') AS photo_url
+      FROM likes
+      JOIN users ON likes.liked_id = users.user_id
+      LEFT JOIN profile_photos 
+      ON users.user_id = profile_photos.user_id AND profile_photos.position = 0
+      WHERE likes.liker_id = $1
+      ORDER BY likes.created_at DESC
+    `;
 
-        WHERE likes.liker_id = $1
-        ORDER BY likes.created_at DESC
-      `;
-  
-      const result = await pool.query(query, [userId]);
-  
-      res.status(200).json(result.rows); // Return array of profiles the user has liked
-    } catch (error) {
-      console.error('Error fetching liked profiles:', error);
-      res.status(500).json({ error: 'Database error' });
-    }
-  };
+    const result = await pool.query(query, [userId]); // Use the correct userId
+    console.log('Query Result:', result.rows); // Debugging
+    res.status(200).json(result.rows); // Ensure rows are sent to the frontend
+  } catch (error) {
+    console.error('Error fetching liked profiles:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
+};
 
   // Get all users who liked the logged-in user
   const getLikedMe = async (req, res) => {
@@ -62,7 +59,7 @@ const getLikes = async (req, res) => {
       console.error('Error fetching liked-me:', error);
       res.status(500).json({ error: 'Database error' });
     }
-};
+  };
 
 const checkLikeStatus = async (req, res) => {
     const { likerId, likedId } = req.query;
