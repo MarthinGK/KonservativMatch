@@ -391,7 +391,7 @@
     gap: 10px;
   }
 
-  .profile-messages { 
+  .profile-messages {
     position: relative;
     width: 80px;
     height: 80px;
@@ -399,9 +399,14 @@
     overflow: hidden;
     text-align: center;
     background-color: var(--background-color-opposite);
+    cursor: pointer; /* Add this line */
   }
 
-
+  .profile-messages:hover {
+    transform: scale(1.05); /* Slightly enlarge the profile on hover */
+    transition: transform 0.2s ease; /* Smooth transition */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow on hover */
+  }
   
   @media (max-width: 1617px) {
     .profile-messages {

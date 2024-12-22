@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchRecentConversations, 
          fetchConversation, 
          sendMessage, 
-         initiateConversation,
-         markMessagesAsRead, 
-         getUnreadMessagesCount
+         initiateConversation, 
+         markMessagesAsRead
         } from '../api/MessagesAPI';
 import { fetchLikes, fetchLikedMe } from '../api/ULikesAPI';
 import { fetchUserProfileByUserId } from '../api/UserAPI';
@@ -14,7 +13,7 @@ import MessagesPagePreview from '../components/MessagesPagePreview';
 import { useLocation } from 'react-router-dom';
 import '../styles/MessagesPage.css';
 
-const MessagesPage = ()  => {
+const MessagesPage = ()  => { 
   const { user } = useAuth0();
   const userId = user?.sub;
   const [likes, setLikes] = useState([]);

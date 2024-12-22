@@ -8,7 +8,7 @@ import Footer from './pages/footer/Footer';
 import Home from './pages/HomePage';
 import Explore from './pages/Explore';
 import ProfileSetup from './pages/ProfileSetup';
-import Search from './pages/Search';
+import Search from './pages/SearchPage';
 import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';
 import EmailVerification from './pages/EmailVerification';

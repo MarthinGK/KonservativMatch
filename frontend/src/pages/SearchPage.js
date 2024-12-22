@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProfiles } from '../api/SearchAPI';
 import { Link } from 'react-router-dom';
-import '../styles/Search.css';
+import '../styles/SearchPage.css';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const Search = () => {
+const SearchPage = () => {
   const { user, isAuthenticated } = useAuth0();
   const [profiles, setProfiles] = useState([]);
   const [ageRange, setAgeRange] = useState([18, 100]);
   const [location, setLocation] = useState('');
   const [debouncedAgeRange, setDebouncedAgeRange] = useState(ageRange);
+
+  const [page, setPage] = useState(1); // Current page
+  const [totalPages, setTotalPages] = useState(1); // Total pages
 
   // Update the debounced age range with a delay
   useEffect(() => {
@@ -27,19 +30,21 @@ const Search = () => {
     if (isAuthenticated && user) {
       const loadProfiles = async () => {
         try {
-          const data = await fetchProfiles(
+          const { data, totalPages } = await fetchProfiles(
             { min: debouncedAgeRange[0], max: debouncedAgeRange[1] },
             location,
-            user.sub
+            user.sub,
+            page // Pass the current page
           );
           setProfiles(data);
+          setTotalPages(totalPages); // Update total pages
         } catch (error) {
           console.error("Error fetching profiles:", error);
         }
       };
       loadProfiles();
     }
-  }, [debouncedAgeRange, location, isAuthenticated, user]);
+  }, [debouncedAgeRange, location, page, isAuthenticated, user]);
 
   const handleAgeChange = (value) => {
     setAgeRange(value);
@@ -47,6 +52,14 @@ const Search = () => {
 
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
+  };
+
+  const goToNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+  const goToPreviousPage = () => {
+    if (page > 1) setPage(page - 1);
   };
 
   return (
@@ -92,6 +105,8 @@ const Search = () => {
           </select>
         </label>
       </div>
+
+
       {/* Profiles Grid */}
       <div className="search-profiles-grid">
         {profiles.map((profile, index) => (
@@ -106,6 +121,18 @@ const Search = () => {
           </div>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      <div className="pagination-controls">
+        <button onClick={goToPreviousPage} disabled={page === 1}>
+          Forrige
+        </button>
+        <span>Side {page} av {totalPages}</span>
+        <button onClick={goToNextPage} disabled={page === totalPages}>
+          Neste
+        </button>
+      </div>
+
     </div>
   );
 };
@@ -116,4 +143,4 @@ const calculateAge = (dob) => {
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
 
-export default Search;
+export default SearchPage;
