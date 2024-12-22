@@ -135,3 +135,34 @@
     border-radius: 4px;
     pointer-events: none;
   }
+
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .pagination-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #8bc3ffc4;
+    color: #333;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+  }
+  
+  .pagination-button.active {
+    background-color: #007bff; /* Blue color for the active page */
+    color: white;
+    opacity: 1; /* Full opacity for active button */
+  }
+  
+  .pagination-button:hover {
+    background-color: #0056b3; /* Slightly darker blue for hover */
+    color: white;
+    opacity: 1;
+  }

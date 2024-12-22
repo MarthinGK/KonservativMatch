@@ -12,10 +12,7 @@ const SearchPage = () => {
   const [ageRange, setAgeRange] = useState([18, 100]);
   const [location, setLocation] = useState('');
   const [debouncedAgeRange, setDebouncedAgeRange] = useState(ageRange);
-
-  const [page, setPage] = useState(1); // Current page
   const [totalPages, setTotalPages] = useState(1); // Total pages
-
   const locationState = useLocation(); // Get current location
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(locationState.search);
@@ -56,10 +53,6 @@ const SearchPage = () => {
 
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
-  };
-
-  const handlePageChange = (page) => {
-    navigate(`/search?page=${page}`); // Update URL with the selected page
   };
 
   const goToNextPage = () => {
