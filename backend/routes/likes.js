@@ -7,6 +7,6 @@ router.get('/liked-me', getLikedMe);
 router.get('/status', checkLikeStatus); // Check like status
 router.post('/toggle', toggleLike); // Toggle like
 router.post('/dislike', dislikeUser);
-router.get('/matches', getMatches); 
+router.get('/matches', getMatches);   
 
 module.exports = router;

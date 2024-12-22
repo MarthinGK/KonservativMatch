@@ -12,7 +12,7 @@ const ConditionsPage = () => {
         <p>
           Disse vilkårene og betingelsene gjelder for både gratis og betalte arrangementer, heretter referert til som
           Aktiviteter, arrangert av Klækken Nettjenester (heretter “Klækken”). Ved å delta eller registrere seg for
-          disse Aktiviteter godtar deltakerne vilkårene fullt ut. 
+          disse aktiviteter godtar medlemmene vilkårene fullt ut. 
         </p>
       </section>
 
@@ -32,13 +32,7 @@ const ConditionsPage = () => {
             og abonnenter.
           </li>
           <li>
-            <strong>“Medlem”:</strong> En bruker som har registrert seg for å benytte seg av gratistjenester.
-          </li>
-          <li>
-            <strong>“Abonnent”:</strong> En bruker som har kjøpt et abonnement for å få tilgang til premium-tjenester.
-          </li>
-          <li>
-            <strong>“Deltaker”:</strong> Alle som har registrert seg til å delta i et arrangement.
+            <strong>“Medlem”:</strong> En bruker som har registrert seg for å benytte seg av tjenester på KonservativMatch.
           </li>
         </ul>
       </section>
@@ -47,15 +41,15 @@ const ConditionsPage = () => {
         <h2>Artikkel 2 – Registrering for arrangement</h2>
         <h3>2.1 Vilkår for registrering</h3>
         <p>
-          Kun personer over 18 år kan delta. For å registrere seg, må brukeren logge inn på sin konto og bekrefte
-          opplysningene sine.
+          Kun personer over 18 år kan registrere seg og utnytte tjenestene levert av KonservativMatch. 
+          For å registrere seg, må brukeren logge inn på sin konto og bekrefte opplysningene sine.
         </p>
         <h3>2.2 Registreringsprosess</h3>
-        <p>For å registrere seg må deltaker:</p>
+        <p>For å registrere seg må man:</p>
         <ol>
           <li>Oppgi korrekt informasjon.</li>
           <li>Godta vilkårene i sin helhet.</li>
-          <li>Betale eventuell medlemsavgift.</li>
+          <li>Betale eventuell abonnementsavgift.</li>
         </ol>
       </section>
 
@@ -80,7 +74,7 @@ const ConditionsPage = () => {
         <h2>Artikkel 5 – Endringer og avlysning</h2>
         <h3>5.1 Endring</h3>
         <p>
-          Ved endring av tidspunkt, sted eller dato, informeres deltakerne innen rimelig tid. Deltakere kan få refusjon
+          Ved endring av tidspunkt, sted eller dato, informeres medlemmene innen rimelig tid. Medlemmene kan få refusjon
           dersom endringene ikke aksepteres.
         </p>
         <h3>5.2 Avlysning</h3>
@@ -89,7 +83,7 @@ const ConditionsPage = () => {
 
       <section className="conditions-section">
         <h2>Artikkel 6 – Atferd og tilgang</h2>
-        <p>Deltakere plikter å:</p>
+        <p>Medlemmene plikter å:</p>
         <ul>
           <li>Oppføre seg høflig og respektfullt.</li>
           <li>Ikke bryte norsk lov eller retningslinjer satt av Klækken.</li>
@@ -98,21 +92,10 @@ const ConditionsPage = () => {
 
       <section className="conditions-section">
         <h2>Artikkel 7 – Ansvar</h2>
-        <p>
-          Klækken kan ikke holdes ansvarlig for:
-        </p>
         <ul>
-          <li>Skader eller ulemper som oppstår som følge av deltakerens handlinger under bruk av plattformen eller interaksjon med andre brukere.</li>
-          <li>Avlysninger forårsaket av force majeure.</li>
+          <li>Klækken kan ikke holdes ansvarlig for skader eller ulemper som oppstår som følge av medlemmenes handlinger under bruk av plattformen eller interaksjon med andre brukere.</li>
+          <li>Medlemmer har selv ansvar for å sørge for at de man velger å møte opp med er pålitelige.</li>
         </ul>
-      </section>
-
-      <section className="conditions-section">
-        <h2>Artikkel 8 – Kontakt</h2>
-        <p>
-          Spørsmål kan rettes til <a href="mailto:support@klaekken.no">support@klaekken.no</a> eller via kontaktskjemaet
-          på nettsiden. Dersom saken ikke løses internt, kan klager rettes til Forbrukerrådet.
-        </p>
       </section>
     </div>
   );

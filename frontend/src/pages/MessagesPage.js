@@ -205,38 +205,44 @@ const MessagesPage = ()  => {
         <div className="likes-and-matches-container">
           <h3>Likes og Matcher</h3>
           <div className="profiles-wrapper-messages">
-            <button
-              className="nav-button-messages"
-              onClick={handlePrev}
-              disabled={startIndex === 0}
-            >
-              &#10094; {/* Left Arrow */}
-            </button>
-            <div className="profiles-messages">
-              {likes.slice(startIndex, startIndex + profilesPerPage).map((profile, index) => (
-                <div
-                  className="profile-messages"
-                  key={index}
-                  onClick={() => handleProfileClick(profile.user_id)} // Initiate conversation on click
+            {likes.length === 0 ? (
+              <p className="no-likes-message">Ingen likes enda</p>
+            ) : (
+              <>
+                <button
+                  className="nav-button-messages"
+                  onClick={handlePrev}
+                  disabled={startIndex === 0}
                 >
-                  <img
-                    src={`${profile.photo_url}`}
-                    alt={`${profile.first_name}`}
-                    className="profile-picture-messages"
-                  />
-                  <div className="profile-background-messages">
-                    <p className="profile-name-messages">{profile.first_name}</p>
-                  </div>
+                  &#10094; {/* Left Arrow */}
+                </button>
+                <div className="profiles-messages">
+                  {likes.slice(startIndex, startIndex + profilesPerPage).map((profile, index) => (
+                    <div
+                      className="profile-messages"
+                      key={index}
+                      onClick={() => handleProfileClick(profile.user_id)} // Initiate conversation on click
+                    >
+                      <img
+                        src={`${profile.photo_url}`}
+                        alt={`${profile.first_name}`}
+                        className="profile-picture-messages"
+                      />
+                      <div className="profile-background-messages">
+                        <p className="profile-name-messages">{profile.first_name}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <button
-              className="nav-button-messages"
-              onClick={handleNext}
-              disabled={startIndex + profilesPerPage >= likes.length}
-            >
-              &#10095; {/* Right Arrow */}
-            </button>
+                <button
+                  className="nav-button-messages"
+                  onClick={handleNext}
+                  disabled={startIndex + profilesPerPage >= likes.length}
+                >
+                  &#10095; {/* Right Arrow */}
+                </button>
+              </>
+            )}
           </div>
         </div>
   

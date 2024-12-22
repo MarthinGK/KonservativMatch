@@ -25,6 +25,7 @@ import ConditionsPage from './pages/footer/ConditionsPage';
 import AboutUsPage from './pages/footer/AboutUsPage';
 import PrivacyPolicyPage from './pages/footer/PrivacyPolicyPage';
 import ContactPage from './pages/footer/ContactPage';
+import FAQPage from './pages/footer/FAQPage';
 
 import './styles/App.css'; // Global CSS styles
 
@@ -74,6 +75,7 @@ function AppLayout() {
             <Route path="/om-oss" element={<IsAuthenticated><IsProfileComplete><AboutUsPage /></IsProfileComplete></IsAuthenticated>} />
             <Route path="/personvern" element={<IsAuthenticated><IsProfileComplete><PrivacyPolicyPage /></IsProfileComplete></IsAuthenticated>} />
             <Route path="/kontakt" element={<IsAuthenticated><IsProfileComplete><ContactPage /></IsProfileComplete></IsAuthenticated>} />
+            <Route path="/faq" element={<IsAuthenticated><IsProfileComplete><FAQPage /></IsProfileComplete></IsAuthenticated>} />
             
           </Routes>
         </div>

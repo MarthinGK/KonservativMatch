@@ -17,9 +17,7 @@ const ContactPage = () => {
       <section className="conditions-section">
         <h2>Kontaktinformasjon</h2>
         <ul>
-          <li><strong>E-post:</strong> <a href="mailto:support@klaekken.no">support@klaekken.no</a></li>
-          <li><strong>Telefon:</strong> +47 123 45 678 (mandag til fredag, 09:00–16:00)</li>
-          <li><strong>Adresse:</strong> Klækken Nettjenester, 0123 Oslo, Norge</li>
+          <li><strong>E-post:</strong> <a href="mailto:support@konservativmatch.no">support@konservativmatch.no</a></li>
         </ul>
       </section>
 
@@ -32,41 +30,15 @@ const ContactPage = () => {
       </section>
 
       <section className="conditions-section">
-        <h2>Tilbakemelding</h2>
-        <p>
-          Vi verdsetter din mening! Hvis du har forslag til forbedringer eller ønsker å dele din erfaring med oss, kan du sende
-          en e-post til <a href="mailto:feedback@klaekken.no">feedback@klaekken.no</a>. Din tilbakemelding hjelper oss å gjøre
-          tjenesten enda bedre.
-        </p>
-      </section>
-
-      <section className="conditions-section">
         <h2>Sosiale medier</h2>
         <p>
           Følg oss på sosiale medier for å holde deg oppdatert om nyheter, arrangementer, og spennende oppdateringer:
         </p>
         <ul>
-          <li><a href="https://www.facebook.com/klaekken">Facebook</a></li>
-          <li><a href="https://www.instagram.com/klaekken">Instagram</a></li>
-          <li><a href="https://www.twitter.com/klaekken">Twitter</a></li>
+          <a href="https://www.instagram.com/klaekken">Instagram</a>
         </ul>
       </section>
 
-      <section className="conditions-section">
-        <h2>Teknisk support</h2>
-        <p>
-          Opplever du tekniske problemer? Beskriv problemet ditt i detalj og kontakt oss via e-post på
-          <a href="mailto:support@klaekken.no">support@klaekken.no</a>. Vi vil gjøre vårt beste for å hjelpe deg så raskt som mulig.
-        </p>
-      </section>
-
-      <section className="conditions-section">
-        <h2>Personlig hjelp</h2>
-        <p>
-          Hvis du ønsker personlig assistanse, kan du kontakte oss på telefon eller sende oss en melding via kontaktskjemaet
-          på nettsiden. Vi er her for deg!
-        </p>
-      </section>
     </div>
   );
 };

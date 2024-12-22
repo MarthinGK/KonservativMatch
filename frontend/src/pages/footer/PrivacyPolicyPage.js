@@ -69,15 +69,6 @@ const PrivacyPolicyPage = () => {
       </section>
 
       <section className="conditions-section">
-        <h2>Kontakt oss</h2>
-        <p>
-          Har du spørsmål om vår personvernerklæring eller hvordan vi behandler dine opplysninger? Du kan kontakte oss
-          på <a href="mailto:support@klaekken.no">support@klaekken.no</a>. Vi svarer så raskt som mulig for å adressere
-          dine bekymringer.
-        </p>
-      </section>
-
-      <section className="conditions-section">
         <h2>Oppdateringer av denne erklæringen</h2>
         <p>
           Denne personvernerklæringen kan bli oppdatert fra tid til annen for å reflektere endringer i lovgivning eller
