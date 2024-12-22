@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchProfiles } from '../api/SearchAPI';
-import { Link } from 'react-router-dom';
+import { searchFetchProfiles } from '../api/SearchAPI';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/SearchPage.css';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -16,6 +16,11 @@ const SearchPage = () => {
   const [page, setPage] = useState(1); // Current page
   const [totalPages, setTotalPages] = useState(1); // Total pages
 
+  const locationState = useLocation(); // Get current location
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(locationState.search);
+  const currentPage = parseInt(queryParams.get('page')) || 1; // Default to page 1
+
   // Update the debounced age range with a delay
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -25,26 +30,25 @@ const SearchPage = () => {
     return () => clearTimeout(handler); // Clear the timeout if ageRange changes
   }, [ageRange]);
 
-  // Fetch profiles whenever debouncedAgeRange or location changes
   useEffect(() => {
     if (isAuthenticated && user) {
       const loadProfiles = async () => {
         try {
-          const { data, totalPages } = await fetchProfiles(
+          const data = await searchFetchProfiles(
             { min: debouncedAgeRange[0], max: debouncedAgeRange[1] },
             location,
             user.sub,
-            page // Pass the current page
+            currentPage
           );
-          setProfiles(data);
-          setTotalPages(totalPages); // Update total pages
+          setProfiles(data.data); // `data` contains the profiles
+          setTotalPages(data.totalPages); // `totalPages` from the backend
         } catch (error) {
-          console.error("Error fetching profiles:", error);
+          console.error('Error fetching profiles:', error);
         }
       };
       loadProfiles();
     }
-  }, [debouncedAgeRange, location, page, isAuthenticated, user]);
+  }, [debouncedAgeRange, location, isAuthenticated, user, currentPage]);
 
   const handleAgeChange = (value) => {
     setAgeRange(value);
@@ -54,12 +58,20 @@ const SearchPage = () => {
     setLocation(e.target.value);
   };
 
+  const handlePageChange = (page) => {
+    navigate(`/search?page=${page}`); // Update URL with the selected page
+  };
+
   const goToNextPage = () => {
-    if (page < totalPages) setPage(page + 1);
+    if (currentPage < totalPages) {
+      navigate(`/search?page=${currentPage + 1}`);
+    }
   };
 
   const goToPreviousPage = () => {
-    if (page > 1) setPage(page - 1);
+    if (currentPage > 1) {
+      navigate(`/search?page=${currentPage - 1}`);
+    }
   };
 
   return (
@@ -121,18 +133,32 @@ const SearchPage = () => {
           </div>
         ))}
       </div>
-
       {/* Pagination Controls */}
       <div className="pagination-controls">
-        <button onClick={goToPreviousPage} disabled={page === 1}>
-          Forrige
+        <button
+          className="pagination-arrow"
+          onClick={goToPreviousPage}
+          disabled={currentPage === 1}
+        >
+          &#10094; {/* Left Arrow */}
         </button>
-        <span>Side {page} av {totalPages}</span>
-        <button onClick={goToNextPage} disabled={page === totalPages}>
-          Neste
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            className={`pagination-button ${page === currentPage ? 'active' : ''}`}
+            onClick={() => navigate(`/search?page=${page}`)}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          className="pagination-arrow"
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+        >
+          &#10095; {/* Right Arrow */}
         </button>
       </div>
-
     </div>
   );
 };
