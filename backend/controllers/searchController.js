@@ -1,3 +1,5 @@
+const pool = require('../db'); // Assuming pool is set up for database connection
+
 const searchProfiles = async (req, res) => {
     const { minAge, maxAge, location, user_id, page = 1 } = req.query;
   
@@ -85,7 +87,7 @@ const searchProfiles = async (req, res) => {
   };
 
   
-// const pool = require('../db'); // Assuming pool is set up for database connection
+
 
 // const searchProfiles = async (req, res) => {
 //   const { minAge, maxAge, location, user_id } = req.query;
