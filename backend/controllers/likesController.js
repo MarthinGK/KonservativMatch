@@ -184,7 +184,23 @@ const checkLikeStatus = async (req, res) => {
     }
   };
 
+  const getUnseenLikesCount = async (req, res) => {
+    const { user_id } = req.query;
   
+    try {
+      const result = await pool.query(
+        `SELECT COUNT(*) AS unseen_count
+         FROM likes
+         WHERE liked_id = $1 AND seen = false`,
+        [user_id]
+      );
+  
+      res.status(200).json({ unseenCount: result.rows[0].unseen_count });
+    } catch (error) {
+      console.error('Error fetching unseen likes count:', error);
+      res.status(500).json({ error: 'Database error' });
+    }
+  };
 
 module.exports = { 
   getLikes, 
@@ -192,5 +208,6 @@ module.exports = {
   checkLikeStatus, 
   toggleLike, 
   dislikeUser, 
-  getMatches
+  getMatches, 
+  getUnseenLikesCount
 };

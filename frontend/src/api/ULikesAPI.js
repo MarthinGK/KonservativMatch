@@ -60,3 +60,15 @@ export const fetchLikeStatus = async (likerId, likedId) => {
       throw error;
     }
   };
+
+  export const getUnseenLikesCount = async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/unseen-likes`, {
+        params: { user_id: userId },
+      });
+      return response.data.unseenCount;
+    } catch (error) {
+      console.error('Error fetching unseen likes count:', error);
+      throw error;
+    }
+  };

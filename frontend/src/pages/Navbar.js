@@ -5,6 +5,7 @@ import '../styles/Navbar.css';
 import { checkIfProfileIsComplete } from '../api/UserAPI';
 import { fetchProfilePhotos } from '../api/PhotosAPI';
 import { getUnreadMessagesCount } from '../api/MessagesAPI';
+import { getUnseenLikesCount } from '../api/ULikesAPI';
 import LogoutButton from '../components/Logout';
 import LoginButton from '../components/Login';
 import Default from '../images/Default.png';
@@ -18,6 +19,7 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [unseenLikes, setUnseenLikes] = useState(0);
   const dropdownRef = useRef(null);
   const defaultPhoto = Default;
 
@@ -52,10 +54,13 @@ const Navbar = () => {
           setIsProfileComplete(profileComplete);
           const photos = await fetchProfilePhotos(user.sub);
 
-          const count = await getUnreadMessagesCount(user.sub);
-          setUnreadMessages(count);
+          const countUnreadMessages = await getUnreadMessagesCount(user.sub);
+          setUnreadMessages(countUnreadMessages);
 
-          console.log("NAVBAR unread messages count: ", count)
+          const countUnseenLikes = await getUnseenLikesCount(user.sub);
+          setUnseenLikes(countUnseenLikes);
+
+          console.log("NAVBAR unseen likes count: ", countUnseenLikes)
 
           // Find the photo with position 0 and set it as the profile photo
           const primaryPhoto = photos.find((photo) => photo.position === 0);
@@ -85,6 +90,10 @@ const Navbar = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  const handleLikesClick = () => {
+    setUnseenLikes(0); // Reset unseen likes count when the likes page is accessed
+  };
+
   return (
     <nav className="navbar">
       
@@ -104,7 +113,10 @@ const Navbar = () => {
 
       {isAuthenticated && isProfileComplete && (
         <div className="navbar-center">
-          <Link to="/likes" className="nav-link">Likes</Link>
+          <Link to="/likes" className="nav-link" onClick={handleLikesClick}>
+            Likes
+            {unseenLikes > 0 && <span className="red-dot-navbar"></span>}
+          </Link>
           <Link to="/messages" className="nav-link">
             Meldinger
             {unreadMessages > 0 && <span className="red-dot-navbar"></span>}
