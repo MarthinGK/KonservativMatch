@@ -80,7 +80,6 @@ function AppLayout() {
             <Route path="/faq" element={<IsAuthenticated><IsProfileComplete><FAQPage /></IsProfileComplete></IsAuthenticated>} />
             
           </Routes>
-          <SpeedInsights />
         </div>
         {!hideFooterOnRoutes.includes(location.pathname) && <Footer />}
       </div>    
@@ -89,7 +88,9 @@ function AppLayout() {
 
 const App = () => (
   <Router>
-    <AppLayout />
+    <SpeedInsights>
+      <AppLayout />
+    </SpeedInsights>
   </Router>
 );
 
