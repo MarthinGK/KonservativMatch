@@ -8,12 +8,17 @@ const pool = new Pool({
   password: process.env.DATABASE_PASSWORD,
   port: process.env.DATABASE_PORT,
   ssl: {
-    rejectUnauthorized: false, // Allow self-signed certificates
+    rejectUnauthorized: false,
   },
-  max: 20, // Maximum number of connections in the pool
-  idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
-  connectionTimeoutMillis: 2000, // Return an error if connection takes more than 2 seconds
+  max: 100, // Maximum number of connections
+  idleTimeoutMillis: 30000, // 30 seconds idle timeout
+  connectionTimeoutMillis: 10000, // 10 seconds connection timeout
 });
+
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client:', err);
+});
+
 
 module.exports = pool;
 
