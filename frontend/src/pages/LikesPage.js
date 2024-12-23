@@ -22,15 +22,12 @@ const LikesPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        if (isLikedProfiles) {
           const likedProfiles = await fetchLikes(userId); // Fetch profiles the user liked
           console.log('Liked Profiles:', likedProfiles);
           setLikes(likedProfiles);
-        } else {
           const likedMeProfiles = await fetchLikedMe(userId); // Fetch profiles that liked the user
           console.log('Liked Me Profiles:', likedMeProfiles);
           setLikedMe(likedMeProfiles);
-        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {

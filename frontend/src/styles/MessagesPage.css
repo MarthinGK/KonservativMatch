@@ -102,6 +102,8 @@
   .conversation-last-message {
     font-size: 12px;
     opacity: 0.8;
+    word-break: break-word; /* Ensures long words break to fit within the container */
+    overflow-wrap: break-word; /* Adds extra compatibility for older browsers */
   }
 
 
