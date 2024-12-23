@@ -3,7 +3,7 @@ const pool = require('../db'); // Assuming pool is set up for database connectio
 const searchProfiles = async (req, res) => {
   const { minAge, maxAge, location, user_id, page = 1 } = req.query;
 
-  const profilesPerPage = 1; // Profiles per page
+  const profilesPerPage = 20; // Profiles per page
   const offset = (page - 1) * profilesPerPage;
 
   try {

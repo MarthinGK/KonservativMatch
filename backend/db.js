@@ -6,10 +6,13 @@ const pool = new Pool({
   host: process.env.DATABASE_EXTERNAL_HOSTNAME,
   database: process.env.DATABASE_NAME,
   password: process.env.DATABASE_PASSWORD,
-  port: process.env.DATABASE_PORT,  // Default port for PostgreSQL d
+  port: process.env.DATABASE_PORT,
   ssl: {
     rejectUnauthorized: false, // Allow self-signed certificates
   },
+  max: 20, // Maximum number of connections in the pool
+  idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
+  connectionTimeoutMillis: 2000, // Return an error if connection takes more than 2 seconds
 });
 
 module.exports = pool;
