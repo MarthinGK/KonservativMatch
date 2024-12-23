@@ -4,27 +4,28 @@ const pool = require('../db'); // Assuming you are using a PostgreSQL pool conne
 const checkOrCreateUser = async (req, res) => {
   const { userId, email } = req.body;
   try {
-    // Check if the user exists in the database
-    const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+    // Use UPSERT to check or create user in one query
+    const query = `
+      INSERT INTO users (user_id, email, profile_complete)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (user_id) DO NOTHING
+      RETURNING profile_complete;
+    `;
+    const result = await pool.query(query, [userId, email, false]);
 
-    if (userResult.rows.length > 0) {
-      // If user exists, return their data
-      const user = userResult.rows[0];
-      res.status(200).json({ message: 'User exists', profileComplete: user.profile_complete });
+    // If no rows were returned, the user already exists
+    if (result.rows.length === 0) {
+      const existingUser = await pool.query('SELECT profile_complete FROM users WHERE user_id = $1', [userId]);
+      res.status(200).json({ message: 'User exists', profileComplete: existingUser.rows[0].profile_complete });
     } else {
-      // If user doesn't exist, insert a new record
-      const newUser = await pool.query(
-        'INSERT INTO users (user_id, email, profile_complete) VALUES ($1, $2, $3) RETURNING *',
-        [userId, email, false]  // Insert with profile_complete as false initially
-      );
-
-      res.status(201).json({ message: 'User created', data: newUser.rows[0] });
+      res.status(201).json({ message: 'User created', data: result.rows[0] });
     }
   } catch (error) {
     console.error('Error checking or creating user:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Function to get the profile completion status of a user
 const getProfileComplete = async (userId) => {
