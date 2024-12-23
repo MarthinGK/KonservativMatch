@@ -202,6 +202,24 @@ const checkLikeStatus = async (req, res) => {
     }
   };
 
+  const markLikesAsSeen = async (req, res) => {
+    const { user_id } = req.body;
+  
+    try {
+      await pool.query(
+        `UPDATE likes
+         SET seen = true
+         WHERE liked_id = $1`,
+        [user_id]
+      );
+  
+      res.status(200).json({ message: 'Likes marked as seen' });
+    } catch (error) {
+      console.error('Error marking likes as seen:', error);
+      res.status(500).json({ error: 'Database error' });
+    }
+  };
+
 module.exports = { 
   getLikes, 
   getLikedMe, 
@@ -209,5 +227,6 @@ module.exports = {
   toggleLike, 
   dislikeUser, 
   getMatches, 
-  getUnseenLikesCount
+  getUnseenLikesCount, 
+  markLikesAsSeen
 };

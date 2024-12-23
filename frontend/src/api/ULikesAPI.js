@@ -72,3 +72,13 @@ export const fetchLikeStatus = async (likerId, likedId) => {
       throw error;
     }
   };
+
+  export const markLikesAsSeen = async (userId) => {
+    try {
+      const response = await axios.post(`${API_URL}/mark-seen`, { user_id: userId });
+      return response.data;
+    } catch (error) {
+      console.error('Error marking likes as seen:', error);
+      throw error;
+    }
+  };

@@ -5,7 +5,7 @@ import '../styles/Navbar.css';
 import { checkIfProfileIsComplete } from '../api/UserAPI';
 import { fetchProfilePhotos } from '../api/PhotosAPI';
 import { getUnreadMessagesCount } from '../api/MessagesAPI';
-import { getUnseenLikesCount } from '../api/ULikesAPI';
+import { getUnseenLikesCount, markLikesAsSeen } from '../api/ULikesAPI';
 import LogoutButton from '../components/Logout';
 import LoginButton from '../components/Login';
 import Default from '../images/Default.png';
@@ -90,8 +90,13 @@ const Navbar = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const handleLikesClick = () => {
-    setUnseenLikes(0); // Reset unseen likes count when the likes page is accessed
+  const handleLikesClick = async () => {
+    try {
+      await markLikesAsSeen(user.sub); // Mark likes as seen
+      setUnseenLikes(0); // Reset the unseen likes count in the frontend
+    } catch (error) {
+      console.error('Error marking likes as seen:', error);
+    }
   };
 
   return (
