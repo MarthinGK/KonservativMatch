@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Navbar from './pages/Navbar';
 import Footer from './pages/footer/Footer';
 
@@ -55,7 +55,9 @@ function AppLayout() {
   }, [isAuthenticated, user]);  // Dependencies array to trigger effect
 
   return (
+    
       <div className="app">
+        
         <div className="main-content">
         <Navbar />
           <Routes>
@@ -78,6 +80,7 @@ function AppLayout() {
             <Route path="/faq" element={<IsAuthenticated><IsProfileComplete><FAQPage /></IsProfileComplete></IsAuthenticated>} />
             
           </Routes>
+          <SpeedInsights />
         </div>
         {!hideFooterOnRoutes.includes(location.pathname) && <Footer />}
       </div>    
