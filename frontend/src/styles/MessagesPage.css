@@ -185,6 +185,8 @@
     padding-right: 15px;
     padding-left: 15px;
     padding-bottom: 5px;
+    word-break: break-word; /* Ensures long words break to fit within the container */
+    overflow-wrap: break-word; /* Adds extra compatibility for older browsers */
   }
 
   .message-container.sent {
@@ -395,7 +397,7 @@
     position: relative;
     width: 80px;
     height: 80px;
-    border-radius: 50%;
+    border-radius: 50%; 
     overflow: hidden;
     text-align: center;
     background-color: var(--background-color-opposite);
