@@ -73,13 +73,14 @@ function AppLayout() {
             <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
             <Route path="/personlig-info" element={<IsAuthenticated><IsProfileComplete><EditAccountPage /></IsProfileComplete></IsAuthenticated>} />
 
-            <Route path="/vilkår" element={<IsAuthenticated><IsProfileComplete><ConditionsPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/om-oss" element={<IsAuthenticated><IsProfileComplete><AboutUsPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/personvern" element={<IsAuthenticated><IsProfileComplete><PrivacyPolicyPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/kontakt" element={<IsAuthenticated><IsProfileComplete><ContactPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/faq" element={<IsAuthenticated><IsProfileComplete><FAQPage /></IsProfileComplete></IsAuthenticated>} />
+            <Route path="/vilkår" element={<ConditionsPage />} />
+            <Route path="/om-oss" element={<AboutUsPage />} />
+            <Route path="/personvern" element={<PrivacyPolicyPage />} />
+            <Route path="/kontakt" element={<ContactPage />} />
+            <Route path="/faq" element={<FAQPage />} />
             
           </Routes>
+          <SpeedInsights />
         </div>
         {!hideFooterOnRoutes.includes(location.pathname) && <Footer />}
       </div>    
@@ -88,9 +89,7 @@ function AppLayout() {
 
 const App = () => (
   <Router>
-    <SpeedInsights>
-      <AppLayout />
-    </SpeedInsights>
+    <AppLayout />
   </Router>
 );
 

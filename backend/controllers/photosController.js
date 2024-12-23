@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 });
 
 
-const BUCKET_NAME = 'konservativmatch-bucket';
+const BUCKET_NAME = 'konservativmatch-s3-frankfurt';
 
 
 const getProfilePhotos = async (req, res) => {
