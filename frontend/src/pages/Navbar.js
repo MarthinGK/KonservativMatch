@@ -8,8 +8,8 @@ import { getUnreadMessagesCount } from '../api/MessagesAPI';
 import { getUnseenLikesCount, markLikesAsSeen } from '../api/ULikesAPI';
 import LogoutButton from '../components/Logout';
 import LoginButton from '../components/Login';
-import Default from '../images/Default.png';
-import Logo from '../components/images/LogoTransparent.png';
+import Default from '../images/Default.webp';
+import Logo from '../components/images/LogoTransparent.webp';
 
 const Navbar = () => {
   const { isAuthenticated, user } = useAuth0();
