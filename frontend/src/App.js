@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from './pages/Navbar';
 import Footer from './pages/footer/Footer';
 
@@ -16,7 +14,6 @@ import EmailVerification from './pages/EmailVerification';
 import { checkUserInDB, updateUserActivity, fetchProfileActiveStatus } from './api/UserAPI';
 
 import ProfilePage from './pages/ProfilePage';
-
 import ProfileEditPage from './pages/EditProfilePage';
 import EditAccountPage from './pages/EditAccountPage';
 import LikesPage from './pages/LikesPage';
@@ -30,71 +27,80 @@ import FAQPage from './pages/footer/FAQPage';
 
 import DeactivatedPage from './pages/DeactivatedPage';
 
+import { SpeedInsights } from '@vercel/speed-insights/react';
+
+import Logo from './components/images/LogoTransparent.webp'; // Path to your logo
+
 import './styles/App.css'; // Global CSS styles
+import './styles/LoadingSpinner.css'; // Import CSS for spinner
+
 
 function AppLayout() {
   const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
   const location = useLocation();
-  const hideFooterOnRoutes = ['/messages', '/profile-setup', '/deactivated']; // Add other paths if needed.
-  const hideNavbarOnRoutes = ['/deactivated']; // Add other paths if needed.
   const navigate = useNavigate();
+  const hideFooterOnRoutes = ['/messages', '/profile-setup', '/deactivated']; // Paths without footer
+  const hideNavbarOnRoutes = ['/deactivated']; // Paths without navbar
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkUser = async () => {
-      if (isAuthenticated && user) {
-
-        try {
+    const initializeApp = async () => {
+      try {
+        if (isAuthenticated && user) {
           await getAccessTokenSilently();
-          // Await the result of the backend call to check or create user
-          
-          await checkUserInDB(user);
-          await updateUserActivity(user.sub);  
-          console.log('User check completed. given_name: ', user.given_name);
-          console.log('User check completed. used_id: ', user.sub);
+
+          await checkUserInDB(user); // Check or create user in the database
+          await updateUserActivity(user.sub); // Update user activity timestamp
           const isActive = await fetchProfileActiveStatus(user.sub);
           if (!isActive) {
-            navigate('/deactivated'); // Redirect to deactivated page if profile is inactive
+            navigate('/deaktivert'); // Redirect to deactivated page if profile is inactive
           }
-        } catch (error) {
-          console.error('Error checking/creating user:', error);
         }
+      } catch (error) {
+        console.error('Error during app initialization:', error);
+      } finally {
+        setIsLoading(false); // Stop the loading spinner
       }
     };
 
-    checkUser();  // Call the async function
-  }, [isAuthenticated, user]);  // Dependencies array to trigger effect
+    initializeApp();
+  }, [isAuthenticated, user, navigate, getAccessTokenSilently]);
+
+  if (isLoading) {
+    return (
+      <div className="loading-spinner">
+        <img src={Logo} alt="Loading..." className="spinner-logo" />
+      </div>
+    );
+  }
 
   return (
-    
-      <div className="app">
-        
-        <div className="main-content">
+    <div className="app">
+      <div className="main-content">
         {!hideNavbarOnRoutes.includes(location.pathname) && <Navbar />}
-          <Routes>
+        <Routes>
+          <Route path="/" element={isAuthenticated ? <IsProfileComplete><Explore /></IsProfileComplete> : <Home />} />
+          <Route path="/profile-setup" element={<IsAuthenticated><ProfileSetup /></IsAuthenticated>} />
+          <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><MessagesPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><LikesPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/bruker/:brukerId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/EmailVerification" element={<EmailVerification />} />
 
-            <Route path="/" element={isAuthenticated ? <IsProfileComplete><Explore /></IsProfileComplete> : <Home />} />
-            <Route path="/profile-setup" element={<IsAuthenticated><ProfileSetup /></IsAuthenticated>} />
-            <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><MessagesPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><LikesPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/bruker/:brukerId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/EmailVerification" element={<EmailVerification />} />
+          <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/personlig-info" element={<IsAuthenticated><IsProfileComplete><EditAccountPage /></IsProfileComplete></IsAuthenticated>} />
 
-            <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
-            <Route path="/personlig-info" element={<IsAuthenticated><IsProfileComplete><EditAccountPage /></IsProfileComplete></IsAuthenticated>} />
-
-            <Route path="/vilkår" element={<ConditionsPage />} />
-            <Route path="/om-oss" element={<AboutUsPage />} />
-            <Route path="/personvern" element={<PrivacyPolicyPage />} />
-            <Route path="/kontakt" element={<ContactPage />} />
-            <Route path="/faq" element={<FAQPage />} />
-            <Route path="/deaktivert" element={<DeactivatedPage />} />
-          </Routes>
-          {/* <SpeedInsights /> */}
-        </div>
-        {!hideFooterOnRoutes.includes(location.pathname) && <Footer />}
-        {!hideNavbarOnRoutes.includes(location.pathname) && <Navbar />}
+          <Route path="/vilkår" element={<ConditionsPage />} />
+          <Route path="/om-oss" element={<AboutUsPage />} />
+          <Route path="/personvern" element={<PrivacyPolicyPage />} />
+          <Route path="/kontakt" element={<ContactPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/deaktivert" element={<DeactivatedPage />} />
+        </Routes>
+        {/* <SpeedInsights /> */}
       </div>
+      {!hideFooterOnRoutes.includes(location.pathname) && <Footer />}
+    </div>
   );
 }
 
@@ -104,4 +110,4 @@ const App = () => (
   </Router>
 );
 
-export default App; 
+export default App;

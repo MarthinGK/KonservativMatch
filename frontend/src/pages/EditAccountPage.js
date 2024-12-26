@@ -180,7 +180,7 @@ const EditAccountPage = () => {
 
 
                       <p className="info-text">
-                        Kontakt support
+                        Kontakt support for å endre e-post
                       </p>
 
 
