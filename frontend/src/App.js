@@ -88,7 +88,7 @@ function AppLayout() {
             <Route path="/personvern" element={<PrivacyPolicyPage />} />
             <Route path="/kontakt" element={<ContactPage />} />
             <Route path="/faq" element={<FAQPage />} />
-            <Route path="/deactivated" element={<DeactivatedPage />} />
+            <Route path="/deaktivert" element={<DeactivatedPage />} />
           </Routes>
           {/* <SpeedInsights /> */}
         </div>

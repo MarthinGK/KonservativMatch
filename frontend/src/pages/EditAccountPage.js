@@ -177,13 +177,20 @@ const EditAccountPage = () => {
                 {field === 'epost' ? (
                   isDatabaseUser ? (
                     <div>
-                      <input
+
+
+                      <p className="info-text">
+                        Kontakt support
+                      </p>
+
+
+                      {/* <input
                         type="email"
                         value={emailTempValue}
                         onChange={(e) => setEmailTempValue(e.target.value)}
                         className="input-field"
-                      />
-                      <button
+                      /> */}
+                      {/* <button
                         className="save-button"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -191,7 +198,7 @@ const EditAccountPage = () => {
                         }}
                       >
                         Lagre
-                      </button>
+                      </button> */}
                     </div>
                   ) : (
                     <div>

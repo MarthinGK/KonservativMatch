@@ -10,7 +10,7 @@ const DeactivatedPage = () => {
   const reactivateProfile = async () => {
     try {
       await updateProfileActiveStatus(user.sub, true);
-      alert('Din profil er aktivert!');
+      alert('Profil aktivert');
       window.location.href = '/'; // Redirect to the home page
     } catch (error) {
       console.error('Error reactivating profile:', error);
@@ -25,7 +25,7 @@ const DeactivatedPage = () => {
         alt="Logo"
         className="deactivated-page-logo"
       />
-      <h1 className='deactivated-page-h1'>Din profil er deaktivert</h1>
+      <h1 className='deactivated-page-h1'>Profilen din er deaktivert</h1>
       <p className='deactivated-page-p'>Aktiver profilen din for å fortsette til KonservativMatch.</p>
       <button onClick={reactivateProfile} className="deactivated-page-reactivate-button">
         Aktiver Profil
