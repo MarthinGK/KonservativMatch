@@ -1,45 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
-import { checkIfProfileIsComplete, checkUserInDB } from '../api/UserAPI'; // Ensure you have the correct path
-
+import { checkIfProfileIsComplete, fetchProfileActiveStatus } from '../api/UserAPI'; // Ensure you have the correct path
 
 const IsProfileComplete = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const [isProfileComplete, setIsProfileComplete] = useState(
-    JSON.parse(localStorage.getItem('profile_complete')) || false
-  );
+  const [status, setStatus] = useState({
+    isProfileComplete: false,
+    isProfileActive: true,
+    loading: true,
+  });
 
   useEffect(() => {
-    const checkUser = async () => {
+    const checkUserStatus = async () => {
       if (isAuthenticated && user) {
         try {
-          // Await the result of the backend call
-          const isProfileComplete = await checkIfProfileIsComplete(user);
-          if(isProfileComplete) {
-            setIsProfileComplete(true);
-            localStorage.setItem('profile_complete', true);  // Store status in localStorage
-          }
-          console.log('User check completed');
+          const [isProfileComplete, isProfileActive] = await Promise.all([
+            checkIfProfileIsComplete(user),
+            fetchProfileActiveStatus(user.sub),
+          ]);
+
+          setStatus({
+            isProfileComplete,
+            isProfileActive,
+            loading: false,
+          });
+
+          // Cache the status in localStorage
+          localStorage.setItem('profile_complete', JSON.stringify(isProfileComplete));
+          localStorage.setItem('profile_active', JSON.stringify(isProfileActive));
         } catch (error) {
-          console.error('Error checking/creating user:', error);
+          console.error('Error checking user status:', error);
         }
+      } else {
+        setStatus((prev) => ({ ...prev, loading: false }));
       }
     };
-  
-    checkUser();  // Call the async function
-  }, [isAuthenticated, user]);  // Dependencies array to trigger effect 
 
-  if (isLoading) return <div>Loading...</div>;
+    checkUserStatus();
+  }, [isAuthenticated, user]);
 
-  return (
-    isProfileComplete ? (
-        children
-    ) : (
-        <Navigate to="/profile-setup" />
-    )
-  );
+  if (isLoading || status.loading) return <div>Loading...</div>;
+
+  if (!status.isProfileActive) {
+    return <Navigate to="/deactivated" />;
+  }
+
+  if (!status.isProfileComplete) {
+    return <Navigate to="/profile-setup" />;
+  }
+
+  return children;
 };
 
 export default IsProfileComplete;
-  

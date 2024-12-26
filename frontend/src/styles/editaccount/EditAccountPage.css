@@ -130,6 +130,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    opacity: 0.9;
   }
   
   .cancel-button {
@@ -139,13 +140,16 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    opacity: 0.9;
   }
   
   .confirm-button:hover {
-    background-color: #0056b3;
+    opacity: 1;
+    background-color: #c9302c;
   }
   
   .cancel-button:hover {
-    background-color: #c9302c;
+    opacity: 1;
+    background-color: #0056b3;
   }
   

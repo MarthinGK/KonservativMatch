@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './pages/Navbar';
 import Footer from './pages/footer/Footer';
 
@@ -12,7 +13,7 @@ import Search from './pages/SearchPage';
 import IsAuthenticated from './components/IsAuthenticated';
 import IsProfileComplete from './components/IsProfileComplete';
 import EmailVerification from './pages/EmailVerification';
-import { checkUserInDB, updateUserActivity } from './api/UserAPI';
+import { checkUserInDB, updateUserActivity, fetchProfileActiveStatus } from './api/UserAPI';
 
 import ProfilePage from './pages/ProfilePage';
 
@@ -27,12 +28,16 @@ import PrivacyPolicyPage from './pages/footer/PrivacyPolicyPage';
 import ContactPage from './pages/footer/ContactPage';
 import FAQPage from './pages/footer/FAQPage';
 
+import DeactivatedPage from './pages/DeactivatedPage';
+
 import './styles/App.css'; // Global CSS styles
 
 function AppLayout() {
   const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
   const location = useLocation();
-  const hideFooterOnRoutes = ['/messages', '/profile-setup']; // Add other paths if needed.
+  const hideFooterOnRoutes = ['/messages', '/profile-setup', '/deactivated']; // Add other paths if needed.
+  const hideNavbarOnRoutes = ['/deactivated']; // Add other paths if needed.
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -41,10 +46,15 @@ function AppLayout() {
         try {
           await getAccessTokenSilently();
           // Await the result of the backend call to check or create user
+          
           await checkUserInDB(user);
           await updateUserActivity(user.sub);  
           console.log('User check completed. given_name: ', user.given_name);
           console.log('User check completed. used_id: ', user.sub);
+          const isActive = await fetchProfileActiveStatus(user.sub);
+          if (!isActive) {
+            navigate('/deactivated'); // Redirect to deactivated page if profile is inactive
+          }
         } catch (error) {
           console.error('Error checking/creating user:', error);
         }
@@ -59,7 +69,7 @@ function AppLayout() {
       <div className="app">
         
         <div className="main-content">
-        <Navbar />
+        {!hideNavbarOnRoutes.includes(location.pathname) && <Navbar />}
           <Routes>
 
             <Route path="/" element={isAuthenticated ? <IsProfileComplete><Explore /></IsProfileComplete> : <Home />} />
@@ -78,12 +88,13 @@ function AppLayout() {
             <Route path="/personvern" element={<PrivacyPolicyPage />} />
             <Route path="/kontakt" element={<ContactPage />} />
             <Route path="/faq" element={<FAQPage />} />
-            
+            <Route path="/deactivated" element={<DeactivatedPage />} />
           </Routes>
-          <SpeedInsights />
+          {/* <SpeedInsights /> */}
         </div>
         {!hideFooterOnRoutes.includes(location.pathname) && <Footer />}
-      </div>    
+        {!hideNavbarOnRoutes.includes(location.pathname) && <Navbar />}
+      </div>
   );
 }
 

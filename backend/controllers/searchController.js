@@ -37,6 +37,7 @@ const searchProfiles = async (req, res) => {
       WHERE EXTRACT(YEAR FROM AGE(users.date_of_birth)) BETWEEN $1 AND $2
         AND users.gender != $3
         AND users.created_at IS NOT NULL
+        AND users.profile_active = TRUE -- Exclude inactive profiles
     `;
 
     const values = [minAge, maxAge, userGender];

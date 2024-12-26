@@ -357,6 +357,11 @@ const MessagesPage = ()  => {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Send a message..."
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSendMessage();
+                      }
+                    }}
                   />
                   <button onClick={handleSendMessage}>Send</button>
                 </div>

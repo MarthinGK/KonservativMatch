@@ -1,0 +1,48 @@
+body {
+    overflow: hidden;
+  }  
+
+.deactivated-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 20px;
+    margin-top: -4%;
+  }
+  
+  .deactivated-page-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .deactivated-page-h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .deactivated-page-p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .deactivated-page-reactivate-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .deactivated-page-reactivate-button:hover {
+    background-color: #0056b3;
+  }
+  

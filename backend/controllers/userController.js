@@ -327,45 +327,6 @@ const saveUserIntroduction = async (req, res) => {
   }
 };
 
-// const getUserProfileByUserId = async (req, res) => {
-//   const { user_id } = req.params;
-
-//   try {
-//     const userResult = await pool.query(
-//       `SELECT 
-//          users.first_name, 
-//          users.last_name, 
-//          users.location, 
-//          users.height, 
-//          users.alcohol, 
-//          users.smoking, 
-//          users.religion, 
-//          users.email,
-//          TO_CHAR(users.date_of_birth, 'YYYY-MM-DD') AS date_of_birth, 
-//          users.introduction, 
-//          (SELECT photo_url 
-//           FROM profile_photos 
-//           WHERE profile_photos.user_id = users.user_id 
-//           ORDER BY profile_photos.id ASC 
-//           LIMIT 1) AS profile_photo, -- Fetch the first photo as the profile photo
-//          array_agg(profile_photos.photo_url) AS photos -- All photos as an array
-//        FROM users
-//        LEFT JOIN profile_photos ON users.user_id = profile_photos.user_id
-//        WHERE users.user_id = $1
-//        GROUP BY users.user_id`,
-//       [user_id]
-//     );
-
-//     if (userResult.rows.length === 0) {
-//       return res.status(404).json({ error: 'User not found' });
-//     }
-
-//     res.json(userResult.rows[0]); // Return the user profile details
-//   } catch (err) {
-//     console.error('Error fetching user profile by user_id:', err);
-//     res.status(500).json({ error: 'Database error' });
-//   }
-// };
 const getUserProfileByUserId = async (req, res) => {
   const { user_id } = req.params;
 

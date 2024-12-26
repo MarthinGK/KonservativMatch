@@ -21,6 +21,7 @@ const EditAccountPage = () => {
   const [dobTemp, setDobTemp] = useState({ day: '', month: '', year: '' }); // Temp date of birth
   const [showConfirmation, setShowConfirmation] = useState(false); // Confirmation modal visibility
   const containerRef = useRef(null); // Reference to the container
+  const [dobError, setDobError] = useState('');
 
   // Fetch user account data and profile active status on load
   useEffect(() => {
@@ -95,6 +96,7 @@ const EditAccountPage = () => {
     try {
       await updateProfileActiveStatus(userId, value);
       setProfileActive(value);
+      localStorage.setItem('profile_active', JSON.stringify(false));
     } catch (error) {
       console.error('Error updating profile active status:', error);
     }
@@ -200,6 +202,7 @@ const EditAccountPage = () => {
                   )
                 ) : field === 'fødselsdato' ? (
                   <div className="dob-spacing">
+                    {dobError && <p className="dob-error">{dobError}</p>} {/* Error message */}
                     <select
                       value={dobTemp.day}
                       onChange={(e) => setDobTemp({ ...dobTemp, day: e.target.value })}
@@ -239,17 +242,35 @@ const EditAccountPage = () => {
                     </select>
                     <select
                       value={dobTemp.year}
-                      onChange={(e) => setDobTemp({ ...dobTemp, year: e.target.value })}
+                      onChange={(e) => {
+                        const selectedYear = parseInt(e.target.value, 10);
+                        const currentYear = new Date().getFullYear();
+                        const minYear = currentYear - 18;
+                
+                        if (selectedYear > minYear) {
+                          setDobError('You have to be 18 years or older'); // Show error message
+                          setDobTemp({ ...dobTemp, year: '' }); // Reset year
+                        } else {
+                          setDobError(''); // Clear error message
+                          setDobTemp({ ...dobTemp, year: e.target.value });
+                        }
+                      }}
                       className="dob-dropdown"
                     >
                       <option value="">År</option>
                       {Array.from({ length: 100 }, (_, i) => {
-                        const year = new Date().getFullYear() - i;
-                        return (
-                          <option key={year} value={year}>
-                            {year}
-                          </option>
-                        );
+                        const currentYear = new Date().getFullYear();
+                        const minYear = currentYear - 18; // Minimum valid year
+                        const year = currentYear - i;
+                
+                        if (year <= minYear) {
+                          return (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          );
+                        }
+                        return null; // Skip invalid years
                       })}
                     </select>
                     <button
@@ -292,7 +313,7 @@ const EditAccountPage = () => {
       ))}
       <div className="account-info-field">
         <div className="field-display">
-          <span className="field-name">Bruker aktiv:</span>
+          <span className="field-name">Bruker aktiv:</span> 
           <select
             value={profileActive ? 'yes' : 'no'}
             onChange={(e) => handleProfileActiveUpdate(e.target.value === 'yes')}
