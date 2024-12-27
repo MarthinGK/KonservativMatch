@@ -43,7 +43,7 @@ const IsProfileComplete = ({ children }) => {
   if (isLoading || status.loading) return <div>Loading...</div>;
 
   if (!status.isProfileActive) {
-    return <Navigate to="/deactivated" />;
+    return <Navigate to="/deaktivert" />;
   }
 
   if (!status.isProfileComplete) {

@@ -11,8 +11,8 @@ const pool = new Pool({
     rejectUnauthorized: false,
   },
   max: 100, // Maximum number of connections
-  idleTimeoutMillis: 30000, // 30 seconds idle timeout
-  connectionTimeoutMillis: 10000, // 10 seconds connection timeout
+  idleTimeoutMillis: 600000, // 10 minutes
+  connectionTimeoutMillis: 5000, // 5 seconds connection timeout
 });
 
 pool.on('error', (err) => {
