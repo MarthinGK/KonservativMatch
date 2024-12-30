@@ -10,7 +10,7 @@ const PrivacyPolicyPage = () => {
         <h2>Vårt engasjement for ditt personvern</h2>
         <p>
           Hos Klækken Nettjenester tar vi ditt personvern på alvor. Vi er forpliktet til å beskytte dine personlige
-          opplysninger og gi deg full kontroll over hvordan de brukes. Vår personvernerklæring beskriver hvordan vi samler
+          opplysninger i samsvar med GDPR og gi deg full kontroll over hvordan de brukes. Vår personvernerklæring beskriver hvordan vi samler
           inn, bruker og sikrer informasjonen din, i tråd med gjeldende lover og forskrifter.
         </p>
       </section>

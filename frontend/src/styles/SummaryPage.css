@@ -1,0 +1,110 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+}
+
+.summary-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5);
+  text-align: center;
+  margin-top: 6%;
+}
+
+.summary-header {
+  margin-bottom: 20px;
+}
+
+.summary-header h1 {
+  margin: 0;
+  font-size: 1.8em;
+  color: var(--text-color);
+}
+
+.summary-details {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between rows */
+  align-items: center;
+}
+
+.summary-details h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.summary-box {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  gap: 15px; /* Space between items */
+  font-size: 1em;
+
+  border: 1px solid #ddd; /* Restore the border */
+  border-radius: 8px; /* Add rounded corners */
+  padding: 10px 15px; /* Add padding inside the box */
+  
+  max-width: 70%;
+  width: 100%;
+}
+
+.summary-label {
+  flex: 1; /* Take up space on the left */
+  text-align: left; /* Align text to the left */
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.summary-value {
+  flex: 1; /* Take up space on the right */
+  text-align: left; /* Align text to the right */
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.summary-label-bold {
+  flex: 1; /* Take up space on the left */
+  text-align: left; /* Align text to the left */
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 1.2em;
+}
+
+.summary-value-bold {
+  flex: 1; /* Take up space on the right */
+  text-align: left; /* Align text to the right */
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 1.2em;
+}
+
+.summary-divider {
+  width: 1px; /* Thin vertical line */
+  height: 24px; /* Set a height for the divider */
+  background-color: #ccc; /* Light gray color for the divider */
+  margin: 0 10px; /* Space around the divider */
+}
+.summary-box span {
+  text-align: right; /* Align values to the right */
+  font-weight: bold;
+}
+
+.summary-button {
+  background-color: #007bff;
+  font-size: 1.2em;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.summary-button:hover {
+  background-color: #0056b3;
+}

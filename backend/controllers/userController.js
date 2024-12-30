@@ -135,6 +135,7 @@ const getNewMembers = async (req, res) => {
       WHERE profile_photos.position = 0 -- Only select the main photo
       AND users.created_at IS NOT NULL  -- Only include users with a created_at date
       AND users.gender != $1  -- Only show the opposite gender
+      AND users.profile_active = TRUE -- Exclude inactive profiles
       ORDER BY users.created_at DESC 
       LIMIT 9
     `, [userGender]);
@@ -176,6 +177,7 @@ const getActiveMembers = async (req, res) => {
       WHERE profile_photos.position = 0 -- Select the main photo
       AND users.created_at IS NOT NULL  -- Only include users with a created_at date
       AND users.gender != $1  -- Only show the opposite gender
+      AND users.profile_active = TRUE -- Exclude inactive profiles
       ORDER BY users.updated_at DESC  -- Order by updated_at for recent activity
       LIMIT 9
     `, [userGender]);
@@ -218,6 +220,7 @@ const getCloseMembers = async (req, res) => {
       AND users.created_at IS NOT NULL  -- Only include users with a created_at date
       AND users.gender != $1  -- Only show the opposite gender
       AND users.location = $2  -- Only show users from the same location
+      AND users.profile_active = TRUE -- Exclude inactive profiles
       ORDER BY users.created_at DESC 
       LIMIT 9
     `, [userGender, userLocation]);

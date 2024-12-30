@@ -18,6 +18,9 @@ import ProfileEditPage from './pages/EditProfilePage';
 import EditAccountPage from './pages/EditAccountPage';
 import LikesPage from './pages/LikesPage';
 import MessagesPage from './pages/MessagesPage';
+import SubscriptionPage from './pages/SubscriptionPage';
+import CheckoutPage from './pages/CheckoutPage';
+import SummaryPage from './pages/SummaryPage';
 
 import ConditionsPage from './pages/footer/ConditionsPage';
 import AboutUsPage from './pages/footer/AboutUsPage';
@@ -89,6 +92,9 @@ function AppLayout() {
 
           <Route path="/profil" element={<IsAuthenticated><IsProfileComplete><ProfileEditPage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/personlig-info" element={<IsAuthenticated><IsProfileComplete><EditAccountPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/abonnement" element={<IsAuthenticated><IsProfileComplete><SubscriptionPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/utsjekk" element={<IsAuthenticated><IsProfileComplete><CheckoutPage /></IsProfileComplete></IsAuthenticated>} />
+          <Route path="/oppsummering" element={<IsAuthenticated><IsProfileComplete><SummaryPage /></IsProfileComplete></IsAuthenticated>} />
 
           <Route path="/vilkår" element={<ConditionsPage />} />
           <Route path="/om-oss" element={<AboutUsPage />} />

@@ -1,0 +1,207 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .checkout-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5);
+    border-color: #0056b3;
+    text-align: center;
+    margin-top: 6%;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+  }
+
+  
+  .checkout-summary {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between rows */
+    align-items: center; /* Center the entire summary in the container */
+    text-align: center; /* Center text inside the boxes */
+  }
+  
+  .checkout-summary .summary-box {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    justify-content: space-between; /* Push content to far ends */
+    width: 100%;
+    max-width: 400px; /* Set a max width for the boxes */
+    padding: 10px 15px; /* Add some padding inside the boxes */
+    border: 1px solid #ddd; /* Light border for separation */
+    border-radius: 8px; /* Rounded corners */
+    background-color: var(--background-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    
+  }
+  
+  .checkout-summary .summary-box strong {
+    min-width: 150px; /* Consistent label width */
+    text-align: left; /* Align label text inside the box */
+    display: inline-block;
+    color: var(--text-color);
+  }
+  
+  .checkout-summary .summary-box span {
+    text-align: left; /* Ensure value text aligns */
+    font-weight: bold; /* Highlight the value */
+  }
+  
+  .checkout-summary h2 {
+    margin: 10px 0;
+  }
+
+  .checkout-total{
+    font-size: 1.15em;
+  }
+  
+  .payment-methods {
+    margin: 20px 0;
+  }
+  
+  .payment-methods .method {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+  
+  .payment-methods img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+  }
+  
+  .terms {
+    margin: 20px 0;
+    text-align: left;
+  }
+  
+  .terms a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .terms a:hover {
+    text-decoration: underline;
+  }
+
+  .payment-options {
+    display: flex;
+    flex-direction: column; /* Vertikal liste */
+    align-items: flex-start;
+    gap: 20px; /* Avstand mellom valgene */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .payment-option img {
+    width: 50px;
+    height: auto;
+  }
+  
+  .payment-option input {
+    display: none; /* Skjul standard radio-knapp */
+  }
+  
+  .payment-option.selected {
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5);
+    border-color: #0056b3;
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+
+  .checkout-button {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .checkout-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .checkout-divider {
+    width: 80%;            /* Adjust the width as needed */
+    margin: 20px auto;      /* Adds margin to give space around the divider */
+    border: 0;             /* Remove default border */
+    height: 1px;           /* Thickness of the line */
+    background-color: #ccc; /* Color of the line */
+  }
+
+  .checkout-button.disabled {
+    background-color: #ccc; /* Greyed out button */
+    cursor: not-allowed; /* Show 'not allowed' cursor */
+  }
+  
+  .checkout-button:not(.disabled):hover {
+    background-color: #0056b3;
+  }
+
+  .checkout-vipps-logo {
+    width: 40px !important;
+    height: auto !important;
+  }
+  
+  .checkout-stripe-logo {
+    width: 90px !important;
+    height: auto !important;
+  }
+
+  .error-message {
+    color: #ff0000; /* Red text for error */
+    margin-top: 10px;
+  }
+  
+  .auto-renewal {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .auto-renewal label {
+    font-size: 1em;
+    color: var(--text-color);
+  }
+  
+  .auto-renewal input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }

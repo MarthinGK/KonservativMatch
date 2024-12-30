@@ -148,7 +148,7 @@ const Navbar = () => {
                 <li><Link to="/profil">Profil</Link></li>
                 <li><Link to="/personlig-info">Brukerinfo</Link></li>
                 <li><Link to="/abonnement">Abonnement</Link></li>
-                <li><Link to="/sikkerhet">Sikkerhet</Link></li>
+                {/* <li><Link to="/sikkerhet">Sikkerhet</Link></li> */}
                 <li><Link to="/kontakt">Hjelp</Link></li>
                 <li>
                   <LogoutButton className="nav-logout-button" />
