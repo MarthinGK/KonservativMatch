@@ -6,7 +6,7 @@ const getSubscriptionStatus = async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT status, plan, start_date, end_date FROM subscriptions WHERE user_id = $1',
+      'SELECT status, start_date, end_date FROM subscriptions WHERE user_id = $1',
       [userId]
     );
 
@@ -28,7 +28,7 @@ const updateSubscriptionStatus = async (req, res) => {
 
   try {
     const result = await pool.query(
-      `INSERT INTO subscriptions (user_id, status, plan, start_date, end_date)
+      `INSERT INTO subscriptions (user_id, status, start_date, end_date)
        VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (user_id) DO UPDATE
        SET status = $2, plan = $3, start_date = $4, end_date = $5`,
