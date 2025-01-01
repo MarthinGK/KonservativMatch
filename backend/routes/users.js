@@ -63,6 +63,7 @@ const retryCheckProfileActive = async (userId, retries = 5, delay = 100) => {
   for (let i = 0; i < retries; i++) {
     try {
       const profileActive = await getProfileActiveStatus(userId); // Replace with your DB query function
+      console.log("profile active status: ", profileActive)
       if (profileActive !== null) {
         return profileActive;
       }
@@ -98,7 +99,7 @@ const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
   for (let i = 0; i < retries; i++) {
     try {
       const profileComplete = await getProfileComplete(userId);
-      console.log("profile complete status 15: ", profileComplete)
+      console.log("profile complete status: ", profileComplete)
       if (profileComplete !== null) {
         return profileComplete;
       }
