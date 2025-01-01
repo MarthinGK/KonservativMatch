@@ -20,24 +20,25 @@ const checkOrCreateUser = async (req, res) => {
       const existingUser = await pool.query('SELECT profile_complete FROM users WHERE user_id = $1', [userId]);
 
       // Return the existing user's profile_complete status
-      res.status(200).json({ message: 'User exists', profileComplete: existingUser.rows[0].profile_complete });
-    } else {
-      // User was created, now insert a default subscription
-      const subscriptionQuery = `
-        INSERT INTO subscriptions (user_id)
-        VALUES ($1)
-        ON CONFLICT (user_id) DO NOTHING;
-      `;
-
-      await pool.query(subscriptionQuery, [userResult.rows[0].user_id]);
-
-      res.status(201).json({ message: 'User and subscription created', data: userResult.rows[0] });
+      return res.status(200).json({ message: 'User exists', profileComplete: existingUser.rows[0].profile_complete });
     }
+
+    // User was created, now insert a default subscription
+    const subscriptionQuery = `
+      INSERT INTO subscriptions (user_id)
+      VALUES ($1)
+      ON CONFLICT (user_id) DO NOTHING;
+    `;
+
+    await pool.query(subscriptionQuery, [userResult.rows[0].user_id]);
+
+    res.status(201).json({ message: 'User and subscription created', data: userResult.rows[0] });
   } catch (error) {
     console.error('Error checking or creating user and subscription:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 // Function to get the profile completion status of a user
