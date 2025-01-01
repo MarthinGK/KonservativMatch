@@ -8,6 +8,7 @@ const searchRoutes = require('./routes/search');
 const likesRoutes = require('./routes/likes');
 const permissionsRoutes = require('./routes/permissions');
 const messagesRoutes = require('./routes/messages');
+const subscriptionRoutes = require('./routes/subscription');
 const pool = require('./db'); // Import the database pool configuration
 const rateLimit = require('express-rate-limit');
 const path = require('path');
@@ -48,6 +49,7 @@ app.use('/search', searchRoutes);
 app.use('/likes', likesRoutes);
 app.use('/permissions', permissionsRoutes);
 app.use('/messages', messagesRoutes);
+app.use('/subscription', subscriptionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
