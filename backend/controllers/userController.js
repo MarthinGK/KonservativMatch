@@ -24,32 +24,12 @@ const checkOrCreateUser = async (req, res) => {
     } else {
       // User was created, now insert a default subscription
       const subscriptionQuery = `
-        INSERT INTO subscriptions (
-          user_id, 
-          status, 
-          start_date, 
-          end_date, 
-          payment_method, 
-          amount, 
-          transaction_id, 
-          auto_renew
-        ) VALUES (
-          $1, 
-          $2, 
-          NULL, 
-          NULL, 
-          NULL, 
-          NULL, 
-          NULL, 
-          false
-        )
+        INSERT INTO subscriptions (user_id)
+        VALUES ($1)
         ON CONFLICT (user_id) DO NOTHING;
       `;
 
-      await pool.query(subscriptionQuery, [
-        userResult.rows[0].user_id, // Use the user_id from the newly created user
-        'inactive', // Default subscription status
-      ]);
+      await pool.query(subscriptionQuery, [userResult.rows[0].user_id]);
 
       res.status(201).json({ message: 'User and subscription created', data: userResult.rows[0] });
     }
@@ -58,6 +38,7 @@ const checkOrCreateUser = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Function to get the profile completion status of a user
 const getProfileComplete = async (userId) => {
