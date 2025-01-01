@@ -29,9 +29,9 @@ const updateSubscriptionStatus = async (req, res) => {
   try {
     const result = await pool.query(
       `INSERT INTO subscriptions (user_id, status, start_date, end_date)
-       VALUES ($1, $2, $3, $4, $5)
+       VALUES ($1, $2, $3, $4)
        ON CONFLICT (user_id) DO UPDATE
-       SET status = $2, plan = $3, start_date = $4, end_date = $5`,
+       SET status = $2, start_date = $3, end_date = $4`,
       [userId, status, plan, startDate, endDate]
     );
 
