@@ -5,7 +5,9 @@ const checkOrCreateUser = async (req, res) => {
   const { userId, email } = req.body;
 
   try {
-    // Use UPSERT to check or create user in one query
+    console.log("Received user ID:", userId);
+    console.log("Received email:", email);
+
     const userQuery = `
       INSERT INTO users (user_id, email, profile_complete)
       VALUES ($1, $2, $3)
@@ -14,19 +16,17 @@ const checkOrCreateUser = async (req, res) => {
     `;
 
     const userResult = await pool.query(userQuery, [userId, email, false]);
+    console.log("User query result:", userResult.rows);
 
     let userIdToUse;
-
     if (userResult.rows.length === 0) {
-      // User already exists, fetch their user_id
       const existingUser = await pool.query('SELECT user_id, profile_complete FROM users WHERE user_id = $1', [userId]);
+      console.log("Existing user:", existingUser.rows);
       userIdToUse = existingUser.rows[0].user_id;
     } else {
-      // New user created
       userIdToUse = userResult.rows[0].user_id;
     }
 
-    // Ensure a default subscription exists for the user
     const subscriptionQuery = `
       INSERT INTO subscriptions (
         user_id, 
@@ -50,17 +50,19 @@ const checkOrCreateUser = async (req, res) => {
       ON CONFLICT (user_id) DO NOTHING;
     `;
 
-    await pool.query(subscriptionQuery, [
-      userIdToUse, // Use the user_id (whether new or existing)
-      'inactive', // Default subscription status
+    const subscriptionResult = await pool.query(subscriptionQuery, [
+      userIdToUse,
+      'inactive',
     ]);
+    console.log("Subscription query result:", subscriptionResult.rows);
 
     res.status(200).json({ message: 'User and subscription ensured' });
   } catch (error) {
-    console.error('Error checking or creating user and subscription:', error);
+    console.error('Error checking or creating user and subscription:', error.message, error.stack);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 // Function to get the profile completion status of a user
