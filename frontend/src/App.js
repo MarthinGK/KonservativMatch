@@ -54,7 +54,8 @@ function AppLayout() {
         if (isAuthenticated && user) {
           await getAccessTokenSilently();
 
-          await checkUserInDB(user); // Check or create user in the database
+          const checkUser = await checkUserInDB(user); // Check or create user in the database
+          console.log("user check complete: ", checkUser)
           await updateUserActivity(user.sub); // Update user activity timestamp
           const isActive = await fetchProfileActiveStatus(user.sub);
           if (!isActive) {
