@@ -17,7 +17,7 @@ const IsProfileComplete = ({ children }) => {
         try {
           const [isProfileComplete, isProfileActive] = await Promise.all([
             checkIfProfileIsComplete(user),
-            fetchProfileActiveStatus(user.sub),
+            // fetchProfileActiveStatus(user.sub),
           ]);
 
           setStatus({
@@ -42,9 +42,9 @@ const IsProfileComplete = ({ children }) => {
 
   if (isLoading || status.loading) return <div>Loading...</div>;
 
-  if (!status.isProfileActive) {
-    return <Navigate to="/deaktivert" />;
-  }
+  // if (!status.isProfileActive) {
+  //   return <Navigate to="/deaktivert" />;
+  // }
 
   if (!status.isProfileComplete) {
     return <Navigate to="/profile-setup" />;
