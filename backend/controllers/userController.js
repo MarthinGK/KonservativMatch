@@ -15,49 +15,53 @@ const checkOrCreateUser = async (req, res) => {
 
     const userResult = await pool.query(userQuery, [userId, email, false]);
 
+    let userIdToUse;
+
     if (userResult.rows.length === 0) {
-      // User already exists, fetch profile_complete status
-      const existingUser = await pool.query('SELECT profile_complete FROM users WHERE user_id = $1', [userId]);
-
-      // Return the existing user's profile_complete status
-      res.status(200).json({ message: 'User exists', profileComplete: existingUser.rows[0].profile_complete });
+      // User already exists, fetch their user_id
+      const existingUser = await pool.query('SELECT user_id, profile_complete FROM users WHERE user_id = $1', [userId]);
+      userIdToUse = existingUser.rows[0].user_id;
     } else {
-      // User was created, now insert a default subscription
-      const subscriptionQuery = `
-        INSERT INTO subscriptions (
-          user_id, 
-          status, 
-          start_date, 
-          end_date, 
-          payment_method, 
-          amount, 
-          transaction_id, 
-          auto_renew
-        ) VALUES (
-          $1, 
-          $2, 
-          NULL, 
-          NULL, 
-          NULL, 
-          NULL, 
-          NULL, 
-          false
-        )
-        ON CONFLICT (user_id) DO NOTHING;
-      `;
-
-      await pool.query(subscriptionQuery, [
-        userResult.rows[0].user_id, // Use the user_id from the newly created user
-        'inactive', // Default subscription status
-      ]);
-
-      res.status(201).json({ message: 'User and subscription created', data: userResult.rows[0] });
+      // New user created
+      userIdToUse = userResult.rows[0].user_id;
     }
+
+    // Ensure a default subscription exists for the user
+    const subscriptionQuery = `
+      INSERT INTO subscriptions (
+        user_id, 
+        status, 
+        start_date, 
+        end_date, 
+        payment_method, 
+        amount, 
+        transaction_id, 
+        auto_renew
+      ) VALUES (
+        $1, 
+        $2, 
+        NULL, 
+        NULL, 
+        NULL, 
+        NULL, 
+        NULL, 
+        false
+      )
+      ON CONFLICT (user_id) DO NOTHING;
+    `;
+
+    await pool.query(subscriptionQuery, [
+      userIdToUse, // Use the user_id (whether new or existing)
+      'inactive', // Default subscription status
+    ]);
+
+    res.status(200).json({ message: 'User and subscription ensured' });
   } catch (error) {
     console.error('Error checking or creating user and subscription:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Function to get the profile completion status of a user
 const getProfileComplete = async (userId) => {
