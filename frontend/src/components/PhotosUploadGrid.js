@@ -46,7 +46,6 @@ const PhotosUploadGrid = ({ photosData, setPhotosData }) => {
     try {
       const response = await uploadProfilePhoto(photosData.userId, file);
       const uploadedPhotoUrl = response.photos[0]; // Assuming the backend returns an array of uploaded photos
-      console.log("RESPONSE 46: ", response.photos[0])
 
       // Update photoUrls state with the new photo URL
       const newPhotoUrls = [...photosData.photoUrls];

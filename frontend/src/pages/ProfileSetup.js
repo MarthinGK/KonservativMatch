@@ -199,7 +199,7 @@ const ProfileSetup = () => {
       // Fetch the photos from the database using the user's ID
       const uploadedPhotos = await fetchProfilePhotos(photosData.userId);
   
-      // Check if there are any photos in the database
+      // Check if there are any photos in the database 
       if (!uploadedPhotos || uploadedPhotos.length === 0) {
         setErrorMessage('Please upload at least one photo.');
         return;
