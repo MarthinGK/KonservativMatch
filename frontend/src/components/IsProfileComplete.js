@@ -17,15 +17,15 @@ const IsProfileComplete = ({ children }) => {
         try {
           const [isProfileComplete, isProfileActive] = await Promise.all([
             checkIfProfileIsComplete(user),
-            // fetchProfileActiveStatus(user.sub),
+            fetchProfileActiveStatus(user.sub), // Updated route with retry logic
           ]);
-
+    
           setStatus({
             isProfileComplete,
             isProfileActive,
             loading: false,
           });
-
+    
           // Cache the status in localStorage
           localStorage.setItem('profile_complete', JSON.stringify(isProfileComplete));
           localStorage.setItem('profile_active', JSON.stringify(isProfileActive));

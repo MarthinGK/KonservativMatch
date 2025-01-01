@@ -181,7 +181,9 @@ export const updateProfileActiveStatus = async (userId, profileActive) => {
 
 export const fetchProfileActiveStatus = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/profile-active/${userId}`);
+    const response = await axios.get(`${API_URL}/profile-active`, {
+      params: { userId }, // Send userId as a query parameter
+    });
     return response.data.profile_active; // Assuming the response has a profile_active field
   } catch (error) {
     console.error('Error fetching profile active status:', error);

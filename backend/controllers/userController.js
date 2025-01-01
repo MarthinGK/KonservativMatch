@@ -431,23 +431,21 @@ const updateProfileActiveStatus = async (req, res) => {
   }
 };
 
-const getProfileActiveStatus = async (req, res) => {
-  const { user_id } = req.params;
-
+const getProfileActiveStatus = async (userId) => {
   try {
     const result = await pool.query(
       'SELECT profile_active FROM users WHERE user_id = $1',
-      [user_id]
+      [userId]
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+    if (result.rows.length > 0) {
+      return result.rows[0].profile_active; // Returns true/false
+    } else {
+      return null; // User not found
     }
-
-    res.status(200).json({ profile_active: result.rows[0].profile_active });
   } catch (error) {
-    console.error('Error fetching profile active status:', error);
-    res.status(500).json({ error: 'Database error' });
+    console.error('Error fetching profile_active status:', error);
+    throw error; // Re-throw error for retry logic to handle
   }
 };
 

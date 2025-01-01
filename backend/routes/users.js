@@ -18,23 +18,6 @@ const { checkOrCreateUser,
         getUserIdById
       } = require('../controllers/userController');
 
-// Route to get profile complete status
-const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const profileComplete = await getProfileComplete(userId);
-      console.log("profile complete status 15: ", profileComplete)
-      if (profileComplete !== null) {
-        return profileComplete;
-      }
-    } catch (error) {
-      console.error('Error fetching profile_complete:', error);
-    }
-    await new Promise(resolve => setTimeout(resolve, delay)); // Delay between retries 
-  }
-  throw new Error('User not found after multiple retries');
-};
-
 // Route to check or create a user
 router.post('/check', checkOrCreateUser);
 
@@ -57,7 +40,39 @@ router.get('/userid/:id', getUserIdById);
 router.post('/update_activity', updateUserActivity);
 
 router.put('/profile-active/:user_id', updateProfileActiveStatus);
-router.get('/profile-active/:user_id', getProfileActiveStatus);
+router.get('/profile-active', async (req, res) => {
+  const { userId } = req.query;
+
+  if (!userId) {
+    return res.status(400).send('Missing user ID');
+  }
+
+  try {
+    const profileActive = await retryCheckProfileActive(userId);
+    if (profileActive !== null) {
+      res.status(200).json({ profile_active: profileActive });
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    res.status(500).send(`Error fetching profile_active status: ${error.message}`);
+  }
+});
+
+const retryCheckProfileActive = async (userId, retries = 5, delay = 100) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const profileActive = await getProfileActiveStatus(userId); // Replace with your DB query function
+      if (profileActive !== null) {
+        return profileActive;
+      }
+    } catch (error) {
+      console.error('Error fetching profile_active:', error);
+    }
+    await new Promise(resolve => setTimeout(resolve, delay)); // Delay between retries
+  }
+  throw new Error('User not found after multiple retries');
+};
 
 router.get('/profile_complete', async (req, res) => {
   const { userId } = req.query;
@@ -77,5 +92,23 @@ router.get('/profile_complete', async (req, res) => {
     res.status(500).send(`Error fetching profile_complete status: ${error.message}`);
   }
 });
+
+// Route to get profile complete status
+const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const profileComplete = await getProfileComplete(userId);
+      console.log("profile complete status 15: ", profileComplete)
+      if (profileComplete !== null) {
+        return profileComplete;
+      }
+    } catch (error) {
+      console.error('Error fetching profile_complete:', error);
+    }
+    await new Promise(resolve => setTimeout(resolve, delay)); // Delay between retries 
+  }
+  throw new Error('User not found after multiple retries');
+};
+
 
 module.exports = router;
