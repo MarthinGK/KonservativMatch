@@ -30,6 +30,8 @@ import FAQPage from './pages/footer/FAQPage';
 
 import DeactivatedPage from './pages/DeactivatedPage';
 
+import IsSubscribed from './components/IsSubscribed';
+
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 import Logo from './components/images/LogoTransparent.webp'; // Path to your logo
@@ -84,7 +86,20 @@ function AppLayout() {
         <Routes>
           <Route path="/" element={isAuthenticated ? <IsProfileComplete><Explore /></IsProfileComplete> : <Home />} />
           <Route path="/profile-setup" element={<IsAuthenticated><ProfileSetup /></IsAuthenticated>} />
-          <Route path="/messages" element={<IsAuthenticated><IsProfileComplete><MessagesPage /></IsProfileComplete></IsAuthenticated>} />
+
+          <Route 
+            path="/messages" 
+            element={
+              <IsAuthenticated>
+                <IsProfileComplete>
+                  <IsSubscribed>
+                    <MessagesPage />
+                  </IsSubscribed>
+                </IsProfileComplete>
+              </IsAuthenticated>
+            }
+          />
+
           <Route path="/likes" element={<IsAuthenticated><IsProfileComplete><LikesPage /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/search" element={<IsAuthenticated><IsProfileComplete><Search /></IsProfileComplete></IsAuthenticated>} />
           <Route path="/bruker/:brukerId" element={<IsAuthenticated><IsProfileComplete><ProfilePage /></IsProfileComplete></IsAuthenticated>} />
