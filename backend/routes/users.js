@@ -59,7 +59,7 @@ router.get('/profile-active', async (req, res) => {
   }
 });
 
-const retryCheckProfileActive = async (userId, retries = 5, delay = 100) => {
+const retryCheckProfileActive = async (userId, retries = 10, delay = 120) => {
   for (let i = 0; i < retries; i++) {
     try {
       const profileActive = await getProfileActiveStatus(userId); // Replace with your DB query function
@@ -95,7 +95,7 @@ router.get('/profile_complete', async (req, res) => {
 });
 
 // Route to get profile complete status
-const retryCheckProfileComplete = async (userId, retries = 5, delay = 100) => {
+const retryCheckProfileComplete = async (userId, retries = 10, delay = 120) => {
   for (let i = 0; i < retries; i++) {
     try {
       const profileComplete = await getProfileComplete(userId);
