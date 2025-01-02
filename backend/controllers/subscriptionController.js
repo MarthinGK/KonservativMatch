@@ -6,7 +6,7 @@ const getSubscriptionStatus = async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT status, start_date, end_date FROM subscriptions WHERE user_id = $1',
+      'SELECT start_date, end_date FROM subscriptions WHERE user_id = $1',
       [userId]
     );
 
@@ -14,12 +14,22 @@ const getSubscriptionStatus = async (req, res) => {
       return res.status(404).json({ message: 'No subscription found' });
     }
 
-    res.json(result.rows[0]);
+    // Calculate the status dynamically
+    const { start_date, end_date } = result.rows[0];
+    const currentTimestamp = new Date();
+    const status = end_date > currentTimestamp ? 'active' : 'inactive';
+
+    res.json({
+      status,
+      start_date,
+      end_date,
+    });
   } catch (error) {
     console.error('Error fetching subscription status:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 // Update subscription status
 const updateSubscriptionStatus = async (req, res) => {
