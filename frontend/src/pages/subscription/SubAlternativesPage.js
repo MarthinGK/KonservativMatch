@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/SubscriptionPage.css';
-import vippsLogo from '../components/images/VippsLogo.png';
-import stripeLogo from '../components/images/CardsLogo.png';
+import '../../styles/subscription/SubAlternativesPage.css';
+import vippsLogo from '../../components/images/VippsLogo.png';
+import stripeLogo from '../../components/images/CardsLogo.png';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-const SubscriptionPage = () => {
+const SubAlternativesPage = () => {
 
   const navigate = useNavigate();
 
@@ -99,4 +99,4 @@ const SubscriptionPage = () => {
   );
 };
 
-export default SubscriptionPage;
+export default SubAlternativesPage;

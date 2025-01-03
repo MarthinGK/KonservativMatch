@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/SummaryPage.css';
+import '../../styles/subscription/SummaryPage.css';
 
 const SummaryPage = () => {
   const location = useLocation();

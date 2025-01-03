@@ -24,6 +24,25 @@ export const updateSubscription = async (userId, subscriptionData) => {
   }
 };
 
-// Example usage in your app:
-// getSubscriptionStatus(userId)
-// updateSubscription(userId, { status: 'active', plan: 'Premium', startDate: '2023-01-01', endDate: '2023-03-31' })
+
+// Update auto-renewal status for a user
+export const updateAutoRenewal = async (userId, autoRenew) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/subscription/${userId}/auto-renew`, { autoRenew });
+    return response.data; // Returns success message
+  } catch (error) {
+    console.error('Error updating auto-renewal:', error);
+    throw error;
+  }
+};
+
+// Upgrade subscription plan for a user
+export const upgradeSubscription = async (userId, newPlan) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/subscription/${userId}/upgrade`, { newPlan });
+    return response.data; // Returns success message
+  } catch (error) {
+    console.error('Error upgrading subscription:', error);
+    throw error;
+  }
+};

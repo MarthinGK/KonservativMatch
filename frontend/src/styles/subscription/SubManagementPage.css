@@ -1,0 +1,72 @@
+.sub-man-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    margin-top: 5%;
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.5), inset 0 0 0 2px rgba(0, 86, 179, 0.5);
+  }
+  
+  .sub-man-container h1 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 20px;
+  }
+  
+  .sub-man-details {
+    background-color: var(--background-color);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .sub-man-details p {
+    margin: 10px 0;
+    font-size: 1em;
+    color: var(--text-color);
+  }
+  
+  .sub-man-auto-renew {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .sub-man-auto-renew label {
+    font-size: 1.1em;
+    color: var(--text-color);
+  }
+  
+  .sub-man-upgrade-options {
+    text-align: center;
+  }
+  
+  .sub-man-upgrade-options h2 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+  }
+  
+  .sub-man-upgrade-options button {
+    margin: 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  .sub-man-upgrade-options button.disabled,
+  .sub-man-upgrade-options button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .sub-man-upgrade-options button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  

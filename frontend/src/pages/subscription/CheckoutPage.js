@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/CheckoutPage.css';
-import vippsLogo from '../components/images/VippsLogo.png';
-import stripeLogo from '../components/images/CardsLogo.png';
+import '../../styles/subscription/CheckoutPage.css';
+import vippsLogo from '../../components/images/VippsLogo.png';
+import stripeLogo from '../../components/images/CardsLogo.png';
 
 const CheckoutPage = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');

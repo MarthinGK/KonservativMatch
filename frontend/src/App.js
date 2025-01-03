@@ -18,9 +18,9 @@ import ProfileEditPage from './pages/EditProfilePage';
 import EditAccountPage from './pages/EditAccountPage';
 import LikesPage from './pages/LikesPage';
 import MessagesPage from './pages/MessagesPage';
-import SubscriptionPage from './pages/SubscriptionPage';
-import CheckoutPage from './pages/CheckoutPage';
-import SummaryPage from './pages/SummaryPage';
+import SubscriptionPage from './pages/subscription/SubscriptionPage';
+import CheckoutPage from './pages/subscription/CheckoutPage';
+import SummaryPage from './pages/subscription/SummaryPage';
 
 import ConditionsPage from './pages/footer/ConditionsPage';
 import AboutUsPage from './pages/footer/AboutUsPage';
